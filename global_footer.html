@@ -1,0 +1,168 @@
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJW2LZP"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>-->
+    <script defer src="https://unpkg.com/@lottiefiles/lottie-player@0.4.0/dist/lottie-player.js"></script>
+    
+    <script>
+    console.log(`
+    We're the best. No cap.
+    
+    Sup beans!
+    Check out here if you want to join the team: https://psychoactive.co.nz/careers
+    
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@    .@@.     ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@                           @@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@                          @@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@      .@@@@@@@@@@.                         @@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@                                              @@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@                                                   @@@@@@@@@@@@@@@
+    @@@@@@@@@@@@                                                      @@@@@@@@@@@@@@
+    @@@@@@@@@@@                                                       @@@@@@@@@@@@@@
+    @@@@@@@@@.                                                       ,@@@@@@@@@@@@@@
+    @@@@@@@@              @                        @@@@@@@@@@        @@@@@@@@@@@@@@@
+    @@@@@@@@            .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@
+    @@@@@@@                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@.       @@@@@@@@@@     @@@@@
+    @@@@@@,                  @@@@@@@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@@@     @@@@@
+    @@@@@@                    @@@@@@@@@@@@@@@@@@@@@@     @@@@@@@@@@@@@@@@      @@@@@
+    @@@@@@                     @@@@@@@@@@@@@@@@@@@@.    @@@@@@@@@@@@@@@@@      @@@@@
+    @@@@@@                     @@@@@@@@@@@@@@@@@@@@,    @@@@@@@@@@@@@@@@       @@@@@
+    @@@@@@@                      @@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@        @@@@@
+    @@@@@@@                        @@@@@@@@@@@@@@@@@@       @@@@@@@@           @@@@@
+    @@@@@@@@                         @@@@@@@@@@@@@@@@@,                       @@@@@@
+    @@@@@@@@@                            @@@@@@@@@@@@@@@@                    @@@@@@@
+    @@@@@@@@@@                                  .@@@@@@                     @@@@@@@@
+    @@@@@@@@@@@                                                           .@@@@@@@@@
+    @@@@@@@@@@@@@                                                        @@@@@@@@@@@
+    @@@@@@@@@@@@@@@                                                    @@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@                                               ,@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@                                         ,@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@                                  @@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@.                      @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    `)
+    </script>
+    
+    <script>
+      /*function initLotties() {
+        // if this page contains project lotties, handle the loading of desktop and mobile optimised lotties
+        if (typeof initProjectLotties === "function") { 
+            initProjectLotties()
+          }
+      }
+      */
+      function copyToClipboard(copyText) {
+              // copies text to keyboard by creating then deleting selectable text area
+          const el = document.createElement('textarea');
+          el.value = copyText;
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand('copy');
+          document.body.removeChild(el);
+          
+          // change text of header
+          $('.footer-title-roller-down').each(function() {
+                  $(this).html('E-mail copied to clipboard');
+          })
+          
+          // reset text of header after 1000 ms
+          setTimeout(function() { 
+            $('.footer-title-roller-down').each(function() {
+                $(this).html('Copy email');
+            })
+          }, 1400);
+      };
+      
+      var helloBlock = document.getElementById("email-block-hello");    
+      helloBlock.addEventListener('click', function() {
+          copyToClipboard("hello@psychoactive.co.nz");
+      })
+      
+      var careersBlock = document.getElementById("careers");    
+      careersBlock.addEventListener('click', function() {
+          copyToClipboard("careers@psychoactive.co.nz");
+      })
+      
+      var internBlock = document.getElementById("intern");    
+      internBlock.addEventListener('click', function() {
+          copyToClipboard("intern@psychoactive.co.nz");
+      })
+     
+      // Old Footer Logic
+      /*var careersBlock = document.getElementById("email-block-careers");    
+      careersBlock.addEventListener('click', function() {
+          copyToClipboard("careers@psychoactive.co.nz");
+      })
+      
+      var internBlock = document.getElementById("email-block-intern");    
+      internBlock.addEventListener('click', function() {
+          copyToClipboard("intern@psychoactive.co.nz");
+      })*/
+    </script>
+    
+    <style>
+    
+     .cms-overlay{
+         z-index:98 !important;
+       }
+       
+    </style>
+    
+    <script>
+        var launchSite = false;
+        var cmsItem = document.getElementsByClassName('cms');
+                 for (var i = 0 ; i < cmsItem.length; i++) {
+                     cmsItem[i].addEventListener("mouseover", function (){
+                       $(this).addClass("cms-overlay");
+                       var item = $(this)
+                       //set the color from cms on inner content on hover
+                       var colorClass = $(this).find(".newColor").attr('class')
+                       if(colorClass){
+                               var color = "#" + colorClass.split(" ")[1]
+                       }
+                       $('.launch-site-wrapper').mouseover(function(){
+                         launchSite = true;
+                         item.find(".underline").css("background-image", "linear-gradient(transparent calc(100% - 2px), red 2px)")
+                         item.find(".underline").css("background-size", "0 100%")
+                       })
+                       $('.launch-site-wrapper').mouseout(function(){
+                         launchSite = false;
+                       })
+                           if (!launchSite) {
+                          $(this).find(".top-bottom-margin").css("color", color)
+                          $(this).find(".text-size-large.full-white").css("color", color)
+                          $(this).find(".h3").css("color", color)
+                          $(this).find(".button-text").css("color", color)
+                          $(this).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," +  color + " 2px)")
+                          $(this).find(".launch-site-icon").css("color", color)
+                        }
+                        });
+                     cmsItem[i].addEventListener("mouseout", function (){
+                        $(this).removeClass("cms-overlay");
+                        $(this).find(".text-size-large.full-white").css("color", "")
+                        $(this).find(".top-bottom-margin").css("color", "")
+                        $(this).find(".h3.gets-underlined").css("color", "")
+                        $(this).find(".button-text").css("color", "")
+                        $(this).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)")
+                        $(this).find(".launch-site-icon").css("color", "")
+                    });
+                }
+        </script>
+    
+    <script>
+    //news order number in the footer
+    var h1Number = document.querySelectorAll(".footer-news");
+    h1Number.forEach((num, i) => {
+      if(num.innerHTML.length <= 3){
+          num.innerHTML = String("0" + Number(i+1) + ".");
+      } else {
+          num.innerHTML = String(Number(i+1) + ".");
+      }
+    })
+    </script>
+    
