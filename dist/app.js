@@ -532,6 +532,8 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"igcvL":[function(require,module,exports) {
+const parceled = true;
+console.log("custom code runs");
 
 },{}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 
