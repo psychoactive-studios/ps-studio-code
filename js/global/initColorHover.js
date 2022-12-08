@@ -4,12 +4,13 @@ export default initColorHover = () => {
     var cmsItem = document.querySelectorAll('.cms');
     cmsItem.forEach( (e, i) => {
         console.log(e)
-        e.addEventListener("mouseover", el => {
+        e.addEventListener("mouseover", () => {
             console.log('heyooo')
-          $(el).addClass("cms-overlay");
-          var item = $(el)
+          $(e).addClass("cms-overlay");
+          var item = $(e)
           //set the color from cms on inner content on hover
-          var colorClass = $(el).find(".newColor").attr('class')
+          var colorClass = $(e).find(".newColor").attr('class')
+          console.log($(e))
           if(colorClass){
                   var color = "#" + colorClass.split(" ")[1]
           }
@@ -23,23 +24,23 @@ export default initColorHover = () => {
             launchSite = false;
           })
               if (!launchSite) {
-            $(el).find(".top-bottom-margin").css("color", color)
-            $(el).find(".text-size-large.full-white").css("color", color)
-            $(el).find(".h3").css("color", color)
-            $(el).find(".button-text").css("color", color)
-            $(el).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," +  color + " 2px)")
-            $(el).find(".launch-site-icon").css("color", color)
+            $(e).find(".top-bottom-margin").css("color", color)
+            $(e).find(".text-size-large.full-white").css("color", color)
+            $(e).find(".h3").css("color", color)
+            $(e).find(".button-text").css("color", color)
+            $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," +  color + " 2px)")
+            $(e).find(".launch-site-icon").css("color", color)
           }
           });
 
-        e.addEventListener("mouseout", el => {
-          $(el).removeClass("cms-overlay");
-          $(el).find(".text-size-large.full-white").css("color", "")
-          $(el).find(".top-bottom-margin").css("color", "")
-          $(el).find(".h3.gets-underlined").css("color", "")
-          $(el).find(".button-text").css("color", "")
-          $(el).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)")
-          $(el).find(".launch-site-icon").css("color", "")
+        e.addEventListener("mouseout", () => {
+          $(e).removeClass("cms-overlay");
+          $(e).find(".text-size-large.full-white").css("color", "")
+          $(e).find(".top-bottom-margin").css("color", "")
+          $(e).find(".h3.gets-underlined").css("color", "")
+          $(e).find(".button-text").css("color", "")
+          $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)")
+          $(e).find(".launch-site-icon").css("color", "")
       });
     })
 }
