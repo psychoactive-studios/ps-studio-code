@@ -883,7 +883,6 @@ exports.default = initCms = ()=>{
     var launchSite = false;
     var cmsItem = document.querySelectorAll(".cms");
     cmsItem.forEach((e, i)=>{
-        console.log(e);
         e.addEventListener("mouseover", ()=>{
             $(e).addClass("cms-overlay");
             var item = $(e);
