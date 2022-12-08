@@ -549,7 +549,6 @@ var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
-    pageLoaded = true;
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
     (0, _preloader.readyPreloader)() // hides preloader and add event listener for frog lottie
@@ -783,71 +782,69 @@ function stopLogoLoading() {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function initProjectLotties() {
-    if (document.querySelectorAll(".lottie-wrapper").length > 0) {
-        var allLotties = document.getElementsByClassName("lottie-wrapper");
-        var allLottiesHover = document.getElementsByClassName("hover-lottie-wrapper");
-        for(var i = 0; i < allLotties.length; i++)if (window.innerWidth < 428) {
-            var id = allLotties[i].id;
-            allLotties[i].load(lottiesDict[id][0]);
-        } else {
-            var id = allLotties[i].id;
-            allLotties[i].load(lottiesDict[id][1]);
-        }
-        for(var i = 0; i < allLottiesHover.length; i++){
-            var id = allLottiesHover[i].id;
-            if (window.innerWidth < 428 && lottiesDictHover[id][0] != "") //console.log("Init lotties")
-            allLottiesHover[i].load(lottiesDictHover[id][0]);
-            else if (lottiesDictHover[id][1] != "") //console.log("Init lotties")
-            //var id = allLottiesHover[i].id
-            allLottiesHover[i].load(lottiesDictHover[id][1]);
-        }
-    } else if (document.querySelectorAll("lottie-player").length > 0) {
-        // code for the work page
-        var allLotties = document.getElementsByTagName("lottie-player");
-        for(var i = 0; i < allLotties.length; i++)if (window.innerWidth < 428) {
-            var id = allLotties[i].id;
-            allLotties[i].load(lottiesDict[id][0]);
-            console.log(lottiesDict[id][0]);
-        } else {
-            var id = allLotties[i].id;
-            allLotties[i].load(lottiesDict[id][1]);
-        }
+    if (document.querySelectorAll("lottie-player").length > 0) {
+        var allLotties = document.querySelectorAll("lottie-player");
+        //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
+        let isMobile = window.innerWidth < 428;
+        allLotties.forEach((e)=>{
+            let source = isMobile ? e.getAttribute("mobile-source") : e.getAttribute("desktop-source");
+            if (source != "") e.load(source);
+        });
+        document.querySelectorAll(".safari-image").forEach((e)=>{
+            e.remove();
+        });
     }
-    // Play lotties one randomly and one at a time for performance
-    function isInViewport(el) {
-        var rect = el.getBoundingClientRect();
-        return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
-    }
-    // lotties only play when in viewport
-    var lottiesRemoved = false;
-    var x = 0;
-    // method 1, timeout
-    var deleteLottiesFunction = setInterval(function() {
-        deleteLotties();
-        if (++x === 50) clearInterval(deleteLottiesFunction);
-    }, 100);
-    //
-    //deleteLotties()
-    function deleteLotties() {
-        // Function runs every 4 seconds (the duration of the lottie animations)
-        if (pageLoaded) {
-            //availableLotties = []
-            //var lotties = document.getElementsByTagName("lottie-player");
-            var lottieBoxes = document.getElementsByClassName("lottie-box");
-            var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-            var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-            //console.log()
-            if (isSafari && isMac && !lottiesRemoved) {
-                lottieBoxes = document.getElementsByClassName("lottie-box");
-                lottieBoxes.length;
-                for(var i = 0; i < lottieBoxes.length; i++);
-            } else {
-                safariImages = document.getElementsByClassName("safari-image");
-                for(var i = 0; i < safariImages.length; i++)safariImages[i].remove();
-            }
-        }
-    }
-}
+} //   // Play lotties one randomly and one at a time for performance
+ //   function isInViewport(el) {
+ //     var rect = el.getBoundingClientRect()
+ //     return (
+ //       rect.top >= 0 &&
+ //       rect.left >= 0 &&
+ //       rect.bottom <=
+ //         (window.innerHeight || document.documentElement.clientHeight) &&
+ //       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+ //     )
+ //   }
+ //   // lotties only play when in viewport
+ //   var lottiesRemoved = false
+ //   var x = 0
+ //   // method 1, timeout
+ //   var deleteLottiesFunction = setInterval(function () {
+ //     deleteLotties()
+ //     if (++x === 50) {
+ //       clearInterval(deleteLottiesFunction)
+ //     }
+ //   }, 100)
+ //   //
+ //   //deleteLotties()
+ //   function deleteLotties() {
+ //     // Function runs every 4 seconds (the duration of the lottie animations)
+ //     if (pageLoaded) {
+ //       //availableLotties = []
+ //       //var lotties = document.getElementsByTagName("lottie-player");
+ //       var lottieBoxes = document.getElementsByClassName('lottie-box')
+ //       var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+ //       var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+ //       //console.log()
+ //       if (isSafari && isMac && !lottiesRemoved) {
+ //         lottieBoxes = document.getElementsByClassName('lottie-box')
+ //         if (lottieBoxes.length == 0) {
+ //           //clearInterval(deleteLottiesFunction);
+ //         }
+ //         for (var i = 0; i < lottieBoxes.length; i++) {
+ //           //lottieBoxes[i].remove()
+ //           //lottiesRemoved = true
+ //         }
+ //       } else {
+ //         safariImages = document.getElementsByClassName('safari-image')
+ //         for (var i = 0; i < safariImages.length; i++) {
+ //           safariImages[i].remove()
+ //           //lottiesRemoved = true
+ //         }
+ //       }
+ //     }
+ //   }
+ // }
 exports.default = initProjectLotties;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aI83l":[function(require,module,exports) {

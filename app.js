@@ -10,8 +10,6 @@ const parceled = true // for checking localhost vs github pages / CDN
 
 
 const onReady = () => {
-    pageLoaded = true
-
     logCareers() // logs a frog and message to the console
     readyPreloader() // hides preloader and add event listener for frog lottie
     initProjectLotties() // initiates project lotties for home and work pages

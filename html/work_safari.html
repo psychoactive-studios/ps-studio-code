@@ -1,0 +1,77 @@
+<script>
+	function isInViewport(el) {
+    var rect = el.getBoundingClientRect();
+
+    return rect.bottom > 0 &&
+        rect.right > 0 &&
+        rect.left < (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */ &&
+        rect.top < (window.innerHeight || document.documentElement.clientHeight) /* or $(window).height() */;
+	}
+
+	// lotties only play when in viewport
+  var lottiesRemoved = false
+  // method 1, timeout
+  var deleteLottiesFunction = setInterval(deleteLotties, 100)
+  
+  function deleteLotties() {
+  	// Function runs every 4 seconds (the duration of the lottie animations)
+  	if (pageLoaded) {        
+      availableLotties = []
+      
+      //var lotties = document.getElementsByTagName("lottie-player");
+      var lotties = document.getElementsByClassName("lottie-box-work");
+      
+      var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  		var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+
+     //console.log()
+      if (isSafari && isMac && !lottiesRemoved) {
+       lotties = document.getElementsByClassName("lottie-box-work");
+       if (lotties.length == 0) {
+       		clearInterval(deleteLottiesFunction);
+       }
+       
+       	console.log("remove lotties")
+      	for (var i = 0; i < lotties.length; i++) {
+        	lotties[i].remove()
+          //lottiesRemoved = true
+        }
+      } else {
+      	 safariImages = document.getElementsByClassName("safari-image");
+         for (var i = 0; i < safariImages.length; i++) {
+        	safariImages[i].remove()
+          //lottiesRemoved = true
+        }
+      }
+		}
+   }
+  // method 1, timeout
+  /*
+  setInterval(function() {
+  	console.log("check lotties")
+  	for (var i = 0; i < lotties.length; i++) {
+      var lottie = lotties[i]
+      if (isInViewport(lottie)) {
+      	lottie.play()
+      } else {
+      	lottie.stop()
+      }
+    }
+  }, 1000)
+  */
+  
+  
+  
+  /*
+  // method 2, on scroll (potentially less perfoarmant than 1)
+  window.addEventListener('scroll', function (event) {
+    for (var i = 0; i < lotties.length; i++) {
+      var lottie = lotties[i]
+      if (isInViewport(lottie)) {
+      	lottie.play()
+      } else {
+      	lottie.stop()
+      }
+    }
+  })*/
+</script>
