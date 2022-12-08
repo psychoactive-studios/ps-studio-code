@@ -544,6 +544,8 @@ var _projectLotties = require("./js/global/projectLotties");
 var _projectLottiesDefault = parcelHelpers.interopDefault(_projectLotties);
 var _loadAnim = require("./js/home/loadAnim");
 var _loadAnimDefault = parcelHelpers.interopDefault(_loadAnim);
+var _setLogoHref = require("./js/pitches/setLogoHref");
+var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
@@ -560,6 +562,7 @@ const onReady = ()=>{
     ;
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)() // for home page intro anim
     ;
+    document.querySelector(".client-link") && (0, _setLogoHrefDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -574,7 +577,7 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/home/loadAnim":"4gmyN"}],"DcFUA":[function(require,module,exports) {
+},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC"}],"DcFUA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = logCareers = ()=>console.log(`
@@ -2384,6 +2387,31 @@ anime.random = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 exports.default = anime;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1c4zC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = setLogoHref = ()=>{
+    console.log(`Checking out or code uh ? We'll write some for ya !`);
+    // macth link from the rich text list to each logo image
+    var linkArray = Array.from(document.querySelectorAll(".link-list ul li a"));
+    var allResourcesLink = Array.from(document.querySelectorAll(".client-link"));
+    linkArray.forEach((link, i)=>{
+        var href = link.getAttribute("href");
+        // Set logo link
+        allResourcesLink.forEach((resource, index)=>{
+            if (i === index) resource.setAttribute("href", href);
+        });
+    });
+    var all_links = document.querySelectorAll(".w-lightbox");
+    all_links.forEach((e)=>{
+        e.removeAttribute("href");
+    });
+//for(var i=0; i<all_links.length; i++){
+//    all_links[i].removeAttribute("href");
+//    console.log("remove");
+//}
+};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 

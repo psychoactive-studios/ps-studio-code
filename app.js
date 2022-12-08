@@ -4,6 +4,7 @@ import logCareers from "./js/global/logCareers"
 import { loopLogoLoading, readyPreloader } from "./js/global/preloader"
 import initProjectLotties from "./js/global/projectLotties"
 import loadAnim from "./js/home/loadAnim"
+import setLogoHref from "./js/pitches/setLogoHref"
 
 const parceled = true // for checking localhost vs github pages / CDN
 
@@ -17,6 +18,7 @@ const onReady = () => {
     copyEmail() // copies email to clipboard in footer
     initCms() // sets color hovers and cms filtering style for work page & content hub
     document.querySelector('.landing-video-container') && loadAnim() // for home page intro anim
+    document.querySelector('.client-link') && setLogoHref()
 }
 
 const onLoading = () => {
