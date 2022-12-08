@@ -30,19 +30,17 @@ anime.set('.landing-video-container', {
 
 const onOpen = (delay) =>{
 
-    $(".body-dark").css({ overflow: "visible" });
-    $(".preloader-background").animate({ opacity: 0 }, 1000);
-    $('#preloader').css({display: 'none'});
+    $(".body-dark").css({ overflow: "visible" })
+    $(".preloader-background").animate({ opacity: 0 }, 1000)
+    $('#preloader').css({display: 'none'})
 
-    
     anime({
     targets : '.landing-video-container',
     opacity: { value: 1, duration: 800, easing: 'easeOutSine'},
     delay: delay
     })
-     $('.navigation-bar').css({display: 'block'});
 
-
+     $('.navigation-bar').css({display: 'block'})
 
     anime({
     targets: '#hamburger, .logos-box',
@@ -61,12 +59,11 @@ const onOpen = (delay) =>{
 }
 const visited = (delay) =>{
 
-    $(".body-dark").css({ overflow: "visible" });
-    $('.preloader-background').css({display: 'none'});
-    $('#preloader').css({display: 'none'});
-    $('.navigation-bar').css({display: 'block'});
-
-
+    $(".body-dark").css({ overflow: "visible" })
+    $('.preloader-background').css({display: 'none'})
+    $('#preloader').css({display: 'none'})
+    $('.navigation-bar').css({display: 'block'})
+    
     anime({
     targets : '.landing-video-container',
     opacity: { value: 1, duration: 800, easing: 'easeOutSine'},
@@ -86,9 +83,6 @@ const visited = (delay) =>{
     translateY: { value:['0vh', '0vh'], duration: 1000, easing: 'easeOutQuad'},
     delay: anime.stagger(500, {start: delay + 1000}),
     })
-
-    
-
 }
 
 //if page has been visited - don't animate
@@ -99,42 +93,38 @@ if (hasVisited || $(window).width() <= 1024) {
         height: "40vh",
         position: "relative",
         opacity: 0
-    });
-
+    })
 
     visited(0)
 }
 // if page not visited - animate
 else {
-$("#trigger").click(function(){
-$(".landing-video-container")
+  $("#trigger").click(function(){
+  $(".landing-video-container")
+    .animate(
+        {
+          width: "100vw",
+          height: "100vh",
+          opacity: 1,
+        },
+        1000
+      )
+      .delay(1500)
+      .animate(
+        {
+          top: topMargin,
+          width: "80vw",
+          height: "40vh",
+          position: "relative",
+        },
+        1000,
+        function () {
+          onOpen(0)
+        })
 
-
-  .animate(
-      {
-        width: "100vw",
-        height: "100vh",
-        opacity: 1,
-      },
-      1000
-    )
-
-   .delay(1500).animate(
-      {
-        top: topMargin,
-        width: "80vw",
-        height: "40vh",
-        position: "relative",
-      },
-      1000,
-      function () {
-        onOpen(0)
-      }
-    );
-  // do stuff
-  console.log("Welcome, stranger !");
-  sessionStorage.setItem("washere", true);
-})
-  
+    // do stuff
+    console.log("Welcome, stranger !")
+    sessionStorage.setItem("washere", true)
+  })
 }
 </script>
