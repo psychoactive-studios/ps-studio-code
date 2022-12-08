@@ -1,5 +1,5 @@
 import copyEmail from "./js/global/copyEmail"
-import initColorHover from "./js/global/initColorHover"
+import initCms from "./js/global/initCms"
 import logCareers from "./js/global/logCareers"
 import { loopLogoLoading, readyPreloader } from "./js/global/preloader"
 import initProjectLotties from "./js/global/projectLotties"
@@ -16,7 +16,7 @@ const onReady = () => {
     readyPreloader()
     initProjectLotties()
     copyEmail()
-    initColorHover()
+    initCms()
 }
 
 const onLoading = () => {

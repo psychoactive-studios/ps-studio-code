@@ -535,8 +535,8 @@ function hmrAcceptRun(bundle, id) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _copyEmail = require("./js/global/copyEmail");
 var _copyEmailDefault = parcelHelpers.interopDefault(_copyEmail);
-var _initColorHover = require("./js/global/initColorHover");
-var _initColorHoverDefault = parcelHelpers.interopDefault(_initColorHover);
+var _initCms = require("./js/global/initCms");
+var _initCmsDefault = parcelHelpers.interopDefault(_initCms);
 var _logCareers = require("./js/global/logCareers");
 var _logCareersDefault = parcelHelpers.interopDefault(_logCareers);
 var _preloader = require("./js/global/preloader");
@@ -551,7 +551,7 @@ const onReady = ()=>{
     (0, _preloader.readyPreloader)();
     (0, _projectLottiesDefault.default)();
     (0, _copyEmailDefault.default)();
-    (0, _initColorHoverDefault.default)();
+    (0, _initCmsDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -564,7 +564,7 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initColorHover":"eE444"}],"DcFUA":[function(require,module,exports) {
+},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr"}],"DcFUA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = logCareers = ()=>console.log(`
@@ -876,13 +876,14 @@ exports.default = copyEmail = ()=>{
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eE444":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3jJBr":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-exports.default = initColorHover = ()=>{
+exports.default = initCms = ()=>{
     var launchSite = false;
     var cmsItem = document.querySelectorAll(".cms");
     cmsItem.forEach((e, i)=>{
+        console.log(e);
         e.addEventListener("mouseover", ()=>{
             $(e).addClass("cms-overlay");
             var item = $(e);
@@ -915,6 +916,17 @@ exports.default = initColorHover = ()=>{
             $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)");
             $(e).find(".launch-site-icon").css("color", "");
         });
+    });
+    //get the length of all the cms items
+    var total_items = cmsItem.length;
+    //on one of the filter buttons clicked check the length of the cms
+    //if its less than the total remove the active class from 'All' filter
+    if (document.querySelector(".sort-button") && document.querySelector(".reset-filter")) $(".sort-button").click(function() {
+        //adding a delay for finsweet to run its filter script
+        setTimeout(function() {
+            if ($(".cms").length < total_items) $(".reset-filter").removeClass("is-active");
+            if ($(".cms").length == total_items) $(".reset-filter").addClass("is-active");
+        }, 300);
     });
 };
 

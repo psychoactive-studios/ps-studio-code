@@ -1,8 +1,9 @@
-export default initColorHover = () => {
+export default initCms = () => {
 
     var launchSite = false;
     var cmsItem = document.querySelectorAll('.cms');
     cmsItem.forEach( (e, i) => {
+        console.log(e)
         e.addEventListener("mouseover", () => {
           $(e).addClass("cms-overlay");
           var item = $(e)
@@ -40,4 +41,22 @@ export default initColorHover = () => {
           $(e).find(".launch-site-icon").css("color", "")
       });
     })
+
+        //get the length of all the cms items
+        var total_items = cmsItem.length
+        //on one of the filter buttons clicked check the length of the cms
+        //if its less than the total remove the active class from 'All' filter
+        if(document.querySelector('.sort-button') && document.querySelector('.reset-filter')) {
+        $('.sort-button').click(function(){
+            //adding a delay for finsweet to run its filter script
+            setTimeout(function(){
+            if($('.cms').length < total_items){
+                $('.reset-filter').removeClass('is-active')
+            }
+            if($('.cms').length == total_items){
+                $('.reset-filter').addClass('is-active')
+            }
+          },300)
+        })
+      }
 }
