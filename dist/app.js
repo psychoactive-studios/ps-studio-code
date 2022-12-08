@@ -532,9 +532,394 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"igcvL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _copyEmail = require("./js/global/copyEmail");
+var _copyEmailDefault = parcelHelpers.interopDefault(_copyEmail);
+var _initColorHover = require("./js/global/initColorHover");
+var _initColorHoverDefault = parcelHelpers.interopDefault(_initColorHover);
+var _logCareers = require("./js/global/logCareers");
+var _logCareersDefault = parcelHelpers.interopDefault(_logCareers);
+var _preloader = require("./js/global/preloader");
+var _projectLotties = require("./js/global/projectLotties");
+var _projectLottiesDefault = parcelHelpers.interopDefault(_projectLotties);
 const parceled = true;
-console.log("custom code runs");
+// global dictionary of url of mobile and desktop lotties per slug id
+// structure: "slug" = ["mobile", "desktop"]
+const onReady = ()=>{
+    pageLoaded = true;
+    (0, _logCareersDefault.default)();
+    (0, _preloader.readyPreloader)();
+    (0, _projectLottiesDefault.default)();
+    (0, _copyEmailDefault.default)();
+    (0, _initColorHoverDefault.default)();
+};
+const onLoading = ()=>{
+    (0, _preloader.loopLogoLoading)();
+};
+if (document.readyState !== "loading") {
+    onLoading();
+    onReady();
+} else {
+    window.addEventListener("load", onReady);
+    document.addEventListener("DOMContentLoaded", onLoading);
+}
 
-},{}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
+},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initColorHover":"eE444"}],"DcFUA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = logCareers = ()=>console.log(`
+We're the best. No cap.
+
+Sup beans!
+Check out here if you want to join the team: https://psychoactive.co.nz/careers
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@    .@@.     ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@                           @@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@                          @@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@      .@@@@@@@@@@.                         @@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@                                              @@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@                                                   @@@@@@@@@@@@@@@
+@@@@@@@@@@@@                                                      @@@@@@@@@@@@@@
+@@@@@@@@@@@                                                       @@@@@@@@@@@@@@
+@@@@@@@@@.                                                       ,@@@@@@@@@@@@@@
+@@@@@@@@              @                        @@@@@@@@@@        @@@@@@@@@@@@@@@
+@@@@@@@@            .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@
+@@@@@@@                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@.       @@@@@@@@@@     @@@@@
+@@@@@@,                  @@@@@@@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@@@     @@@@@
+@@@@@@                    @@@@@@@@@@@@@@@@@@@@@@     @@@@@@@@@@@@@@@@      @@@@@
+@@@@@@                     @@@@@@@@@@@@@@@@@@@@.    @@@@@@@@@@@@@@@@@      @@@@@
+@@@@@@                     @@@@@@@@@@@@@@@@@@@@,    @@@@@@@@@@@@@@@@       @@@@@
+@@@@@@@                      @@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@        @@@@@
+@@@@@@@                        @@@@@@@@@@@@@@@@@@       @@@@@@@@           @@@@@
+@@@@@@@@                         @@@@@@@@@@@@@@@@@,                       @@@@@@
+@@@@@@@@@                            @@@@@@@@@@@@@@@@                    @@@@@@@
+@@@@@@@@@@                                  .@@@@@@                     @@@@@@@@
+@@@@@@@@@@@                                                           .@@@@@@@@@
+@@@@@@@@@@@@@                                                        @@@@@@@@@@@
+@@@@@@@@@@@@@@@                                                    @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@                                               ,@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@                                         ,@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@                                  @@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.                      @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+`);
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"gnoda":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "loopLogoLoading", ()=>loopLogoLoading);
+parcelHelpers.export(exports, "readyPreloader", ()=>readyPreloader);
+var anim;
+var logoWrap;
+var logoWrap_b;
+var anim_b;
+// triggers page and media is fully loaded
+window.addEventListener("load", ()=>{});
+const readyPreloader = ()=>{
+    stopLogoLoading();
+    pageOutTransitionLinks();
+    logoMouseEvents();
+};
+// This code delays the page going to the next URL for a moment so that we can fade the content out (page transition)
+function pageOutTransitionLinks() {
+    function link_is_external(link_element) {
+        return link_element.host !== window.location.host;
+    }
+    var links = document.getElementsByTagName("a");
+    for(var i = 0; i < links.length; i++){
+        if (!link_is_external(links[i])) // Only internal links trigger page out logo animation
+        {
+            if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box")) links[i].addEventListener("click", pageTransition);
+        }
+    }
+    function pageTransition(e) {
+        e.preventDefault();
+        // flip phrog once
+        logoWrap.querySelector("svg").style.opacity = "1";
+        logoWrap.querySelector("img").style.opacity = "0";
+        logoWrap_b.querySelector("svg").style.opacity = "1";
+        logoWrap_b.querySelector("img").style.opacity = "0";
+        // setting loop to false doesn't work above so:
+        anim.loop = true;
+        anim_b.loop = true;
+        anim.play();
+        anim_b.play();
+        setTimeout(function() {
+            anim.loop = false;
+            anim_b.loop = false;
+        }, 100);
+        var linkUrl = $(this).attr("href");
+        setTimeout(function(url) {
+            window.location = url;
+        }, 1150, linkUrl);
+    }
+}
+// The lottie of the phrog flipping acts as our loading indicator
+function loopLogoLoading() {
+    logoWrap = document.querySelector("#ps-logo-wrap");
+    logoWrap_b = document.querySelector("#ps-logo-wrap-black");
+    // White lottie
+    anim = lottie.loadAnimation({
+        container: logoWrap,
+        renderer: "svg",
+        autoplay: true,
+        loop: true,
+        name: "clocked",
+        // animationData: data
+        path: "https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/5fc454a806388fa94227b1ee_White-V01.json"
+    });
+    // Black lottie
+    anim_b = lottie.loadAnimation({
+        container: logoWrap_b,
+        renderer: "svg",
+        autoplay: false,
+        loop: false,
+        name: "clocked",
+        // animationData: data
+        path: "https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/5fc456d931e1effecaab008c_Black-V02.json"
+    });
+    // as soon as animation is ready (before other media on page)
+    anim.addEventListener("data_ready", ()=>{
+        anim.play();
+        logoWrap.querySelector("svg").style.opacity = "1";
+        logoWrap.querySelector("img").style.opacity = "0";
+    });
+    // as soon as animation is ready (before other media on page)
+    anim_b.addEventListener("data_ready", ()=>{
+        anim_b.play();
+        logoWrap_b.querySelector("svg").style.opacity = "0";
+        logoWrap_b.querySelector("img").style.opacity = "1";
+    });
+}
+// Makes the phrog flip when hovered
+function logoMouseEvents() {
+    logoWrap.addEventListener("mouseenter", ()=>{
+        anim.play();
+        anim.loop = true;
+        logoWrap.querySelector("svg").style.opacity = "1";
+        logoWrap.querySelector("img").style.opacity = "0";
+    });
+    logoWrap.addEventListener("mouseleave", ()=>{
+        anim.loop = false;
+        anim.addEventListener("complete", ()=>{
+            logoWrap.querySelector("svg").style.opacity = "0";
+            logoWrap.querySelector("img").style.opacity = "1";
+        }, {
+            once: true
+        });
+    });
+    logoWrap_b.addEventListener("mouseenter", ()=>{
+        anim_b.play();
+        anim_b.loop = true;
+        logoWrap_b.querySelector("svg").style.opacity = "1";
+        logoWrap_b.querySelector("img").style.opacity = "0";
+    });
+    logoWrap_b.addEventListener("mouseleave", ()=>{
+        anim_b.loop = false;
+        anim_b.addEventListener("complete", ()=>{
+            logoWrap_b.querySelector("svg").style.opacity = "0";
+            logoWrap_b.querySelector("img").style.opacity = "1";
+        }, {
+            once: true
+        });
+    });
+}
+function stopLogoLoading() {
+    anim.loop = false;
+    anim.addEventListener("complete", ()=>{
+        logoWrap.querySelector("svg").style.opacity = "0";
+        logoWrap.querySelector("img").style.opacity = "1";
+    }, {
+        once: true
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2KQxL":[function(require,module,exports) {
+// query breakpoint and load suitable lottie into player
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function initProjectLotties() {
+    if (document.querySelectorAll(".lottie-wrapper").length > 0) {
+        var allLotties = document.getElementsByClassName("lottie-wrapper");
+        var allLottiesHover = document.getElementsByClassName("hover-lottie-wrapper");
+        for(var i = 0; i < allLotties.length; i++)if (window.innerWidth < 428) {
+            var id = allLotties[i].id;
+            allLotties[i].load(lottiesDict[id][0]);
+        } else {
+            var id = allLotties[i].id;
+            allLotties[i].load(lottiesDict[id][1]);
+        }
+        for(var i = 0; i < allLottiesHover.length; i++){
+            var id = allLottiesHover[i].id;
+            if (window.innerWidth < 428 && lottiesDictHover[id][0] != "") //console.log("Init lotties")
+            allLottiesHover[i].load(lottiesDictHover[id][0]);
+            else if (lottiesDictHover[id][1] != "") //console.log("Init lotties")
+            //var id = allLottiesHover[i].id
+            allLottiesHover[i].load(lottiesDictHover[id][1]);
+        }
+    } else if (document.querySelectorAll("lottie-player").length > 0) {
+        // code for the work page
+        var allLotties = document.getElementsByTagName("lottie-player");
+        for(var i = 0; i < allLotties.length; i++)if (window.innerWidth < 428) {
+            var id = allLotties[i].id;
+            allLotties[i].load(lottiesDict[id][0]);
+            console.log(lottiesDict[id][0]);
+        } else {
+            var id = allLotties[i].id;
+            allLotties[i].load(lottiesDict[id][1]);
+        }
+    }
+    // Play lotties one randomly and one at a time for performance
+    function isInViewport(el) {
+        var rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+    }
+    // lotties only play when in viewport
+    var lottiesRemoved = false;
+    var x = 0;
+    // method 1, timeout
+    var deleteLottiesFunction = setInterval(function() {
+        deleteLotties();
+        if (++x === 50) clearInterval(deleteLottiesFunction);
+    }, 100);
+    //
+    //deleteLotties()
+    function deleteLotties() {
+        // Function runs every 4 seconds (the duration of the lottie animations)
+        if (pageLoaded) {
+            //availableLotties = []
+            //var lotties = document.getElementsByTagName("lottie-player");
+            var lottieBoxes = document.getElementsByClassName("lottie-box");
+            var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+            //console.log()
+            if (isSafari && isMac && !lottiesRemoved) {
+                lottieBoxes = document.getElementsByClassName("lottie-box");
+                lottieBoxes.length;
+                for(var i = 0; i < lottieBoxes.length; i++);
+            } else {
+                safariImages = document.getElementsByClassName("safari-image");
+                for(var i = 0; i < safariImages.length; i++)safariImages[i].remove();
+            }
+        }
+    }
+}
+exports.default = initProjectLotties;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aI83l":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = copyEmail = ()=>{
+    function copyToClipboard(copyText) {
+        // copies text to keyboard by creating then deleting selectable text area
+        const el = document.createElement("textarea");
+        el.value = copyText;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        // change text of header
+        $(".footer-title-roller-down").each(function() {
+            $(this).html("E-mail copied to clipboard");
+        });
+        // reset text of header after 1000 ms
+        setTimeout(function() {
+            $(".footer-title-roller-down").each(function() {
+                $(this).html("Copy email");
+            });
+        }, 1400);
+    }
+    var helloBlock = document.getElementById("email-block-hello");
+    helloBlock.addEventListener("click", function() {
+        copyToClipboard("hello@psychoactive.co.nz");
+    });
+    var careersBlock = document.getElementById("careers");
+    careersBlock.addEventListener("click", function() {
+        copyToClipboard("careers@psychoactive.co.nz");
+    });
+    var internBlock = document.getElementById("intern");
+    internBlock.addEventListener("click", function() {
+        copyToClipboard("intern@psychoactive.co.nz");
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eE444":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = initColorHover = ()=>{
+    var launchSite = false;
+    var cmsItem = document.querySelectorAll(".cms");
+    cmsItem.forEach((e, i)=>{
+        console.log(e);
+        e.addEventListener("mouseover", (el)=>{
+            console.log("heyooo");
+            $(el).addClass("cms-overlay");
+            var item = $(el);
+            //set the color from cms on inner content on hover
+            var colorClass = $(el).find(".newColor").attr("class");
+            if (colorClass) var color = "#" + colorClass.split(" ")[1];
+            $(".launch-site-wrapper").mouseover(function() {
+                launchSite = true;
+                item.find(".underline").css("background-image", "linear-gradient(transparent calc(100% - 2px), red 2px)");
+                item.find(".underline").css("background-size", "0 100%");
+            });
+            $(".launch-site-wrapper").mouseout(function() {
+                launchSite = false;
+            });
+            if (!launchSite) {
+                $(el).find(".top-bottom-margin").css("color", color);
+                $(el).find(".text-size-large.full-white").css("color", color);
+                $(el).find(".h3").css("color", color);
+                $(el).find(".button-text").css("color", color);
+                $(el).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," + color + " 2px)");
+                $(el).find(".launch-site-icon").css("color", color);
+            }
+        });
+        e.addEventListener("mouseout", (el)=>{
+            $(el).removeClass("cms-overlay");
+            $(el).find(".text-size-large.full-white").css("color", "");
+            $(el).find(".top-bottom-margin").css("color", "");
+            $(el).find(".h3.gets-underlined").css("color", "");
+            $(el).find(".button-text").css("color", "");
+            $(el).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)");
+            $(el).find(".launch-site-icon").css("color", "");
+        });
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 
 //# sourceMappingURL=app.js.map
