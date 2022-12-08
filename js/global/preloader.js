@@ -4,11 +4,6 @@ var logoWrap_b;
 var anim_b;
 
 
-  // triggers page and media is fully loaded
-  window.addEventListener('load', () => {
-
-  })
-
   const readyPreloader = () => {
     stopLogoLoading()
     pageOutTransitionLinks()

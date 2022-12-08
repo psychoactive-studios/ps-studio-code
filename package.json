@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/psychoactive-studios/ps-studio-code#readme",
   "dependencies": {
+    "animejs": "^3.2.1",
+    "jquery": "^3.6.1",
     "parcel": "^2.8.0"
   }
 }
