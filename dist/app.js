@@ -883,14 +883,11 @@ exports.default = initColorHover = ()=>{
     var launchSite = false;
     var cmsItem = document.querySelectorAll(".cms");
     cmsItem.forEach((e, i)=>{
-        console.log(e);
         e.addEventListener("mouseover", ()=>{
-            console.log("heyooo");
             $(e).addClass("cms-overlay");
             var item = $(e);
             //set the color from cms on inner content on hover
             var colorClass = $(e).find(".newColor").attr("class");
-            console.log($(e));
             if (colorClass) var color = "#" + colorClass.split(" ")[1];
             $(".launch-site-wrapper").mouseover(function() {
                 launchSite = true;
