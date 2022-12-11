@@ -17,6 +17,9 @@ const onReady = () => {
     initCms() // sets color hovers and cms filtering style for work page & content hub
     document.querySelector('.landing-video-container') && loadAnim() // for home page intro anim
     document.querySelector('.client-link') && setLogoHref()
+    document.querySelectorAll('.article-rich-text a').forEach(e => {
+      e.target = '_blank'  
+    })
 }
 
 const onLoading = () => {
