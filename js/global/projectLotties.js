@@ -1,10 +1,12 @@
 // query breakpoint and load suitable lottie into player
 export default function initProjectLotties() {
   if (document.querySelectorAll('lottie-player').length > 0) {
-    var allLotties = document.querySelectorAll('lottie-player')
+    var allLotties = [...document.querySelectorAll('lottie-player')]
     //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
 
     let isMobile = window.innerWidth < 428
+    
+    allLotties = allLotties.filter( l => !l.hasAttribute('src'))
 
     allLotties.forEach( e => {
       let source = isMobile ? e.getAttribute('mobile-source') : e.getAttribute('desktop-source')

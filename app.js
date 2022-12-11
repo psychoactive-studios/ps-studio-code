@@ -1,3 +1,4 @@
+import aboutLottie from "./js/global/about/aboutLottie"
 import copyEmail from "./js/global/copyEmail"
 import initCms from "./js/global/initCms"
 import logCareers from "./js/global/logCareers"
@@ -10,6 +11,8 @@ const parceled = true // for checking localhost vs github pages / CDN
 
 
 const onReady = () => {
+    const page = window.location.pathname.split("/").pop()
+    console.log(page)
     logCareers() // logs a frog and message to the console
     readyPreloader() // hides preloader and add event listener for frog lottie
     initProjectLotties() // initiates project lotties for home and work pages
@@ -20,6 +23,8 @@ const onReady = () => {
     document.querySelectorAll('.article-rich-text a').forEach(e => {
       e.target = '_blank'  
     })
+
+    page == 'about' && aboutLottie() 
 }
 
 const onLoading = () => {

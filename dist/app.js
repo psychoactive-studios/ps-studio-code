@@ -533,6 +533,8 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"igcvL":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _aboutLottie = require("./js/global/about/aboutLottie");
+var _aboutLottieDefault = parcelHelpers.interopDefault(_aboutLottie);
 var _copyEmail = require("./js/global/copyEmail");
 var _copyEmailDefault = parcelHelpers.interopDefault(_copyEmail);
 var _initCms = require("./js/global/initCms");
@@ -549,6 +551,8 @@ var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
+    const page = window.location.pathname.split("/").pop();
+    console.log(page);
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
     (0, _preloader.readyPreloader)() // hides preloader and add event listener for frog lottie
@@ -562,6 +566,10 @@ const onReady = ()=>{
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)() // for home page intro anim
     ;
     document.querySelector(".client-link") && (0, _setLogoHrefDefault.default)();
+    document.querySelectorAll(".article-rich-text a").forEach((e)=>{
+        e.target = "_blank";
+    });
+    page == "about" && (0, _aboutLottieDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -576,7 +584,7 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC"}],"DcFUA":[function(require,module,exports) {
+},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/about/aboutLottie":"8Krlv"}],"DcFUA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = logCareers = ()=>console.log(`
@@ -783,9 +791,12 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function initProjectLotties() {
     if (document.querySelectorAll("lottie-player").length > 0) {
-        var allLotties = document.querySelectorAll("lottie-player");
+        var allLotties = [
+            ...document.querySelectorAll("lottie-player")
+        ];
         //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
         let isMobile = window.innerWidth < 428;
+        allLotties = allLotties.filter((l)=>!l.hasAttribute("src"));
         allLotties.forEach((e)=>{
             let source = isMobile ? e.getAttribute("mobile-source") : e.getAttribute("desktop-source");
             if (source != "") e.load(source);
@@ -2408,6 +2419,59 @@ exports.default = setLogoHref = ()=>{
 //    all_links[i].removeAttribute("href");
 //    console.log("remove");
 //}
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+exports.default = aboutLottie = ()=>{
+    var availableLotties = [];
+    //var lastLottie = null
+    //var lastLotties = []
+    var lotties = [
+        ...document.querySelectorAll("lottie-player")
+    ];
+    availableLotties = lotties.filter((l)=>l.getAttribute("src") != "");
+    console.log(availableLotties);
+    // 		// Collect lotties which are currently in view
+    //   for (var i = 0; i < lotties.length; i++) {
+    //     var lottie = lotties[i];
+    //    if(lottie.getAttribute('src') != ""){
+    //      availableLotties.push(lottie)
+    //    }
+    //   }
+    // method 1, timeout
+    setInterval(function() {
+        // Function runs every 800 milliseconds (the duration of the lottie animations)     
+        if (availableLotties.length == 0) return;
+        //console.log(availableLotties.length)
+        // Select a random lottie
+        var selectedIndex = getRandomInt(availableLotties.length);
+        var selectedLottie = availableLotties[selectedIndex];
+        // play lottie
+        if (selectedLottie) {
+            selectedLottie.seek(0);
+            selectedLottie.play();
+        }
+        //remove the item from array as the lottie plays on loop
+        availableLotties.splice(selectedIndex, 1);
+    }, 500);
+    document.querySelectorAll(".team-box").forEach((e)=>{
+        const video = e.querySelector("video");
+        let isPlaying = false;
+        video.onplaying = ()=>isPlaying = true;
+        video.onpause = ()=>isPlaying = false;
+        video.pause();
+        e.addEventListener("mouseenter", ()=>{
+            video.paused && !isPlaying && video.play();
+        });
+        e.addEventListener("mouseleave", ()=>{
+            !video.paused && isPlaying && video.pause();
+        });
+    });
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
