@@ -552,7 +552,6 @@ const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
     const page = window.location.pathname.split("/").pop();
-    console.log(page);
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
     (0, _preloader.readyPreloader)() // hides preloader and add event listener for frog lottie
@@ -577,9 +576,9 @@ const onLoading = ()=>{
 if (document.readyState !== "loading") {
     onLoading();
     onReady();
-    console.log("readystate");
+//console.log('readystate')
 } else {
-    console.log("load");
+    //console.log('load')
     window.addEventListener("load", onReady);
     document.addEventListener("DOMContentLoaded", onLoading);
 }
@@ -2435,19 +2434,10 @@ exports.default = aboutLottie = ()=>{
         ...document.querySelectorAll("lottie-player")
     ];
     availableLotties = lotties.filter((l)=>l.getAttribute("src") != "");
-    console.log(availableLotties);
-    // 		// Collect lotties which are currently in view
-    //   for (var i = 0; i < lotties.length; i++) {
-    //     var lottie = lotties[i];
-    //    if(lottie.getAttribute('src') != ""){
-    //      availableLotties.push(lottie)
-    //    }
-    //   }
     // method 1, timeout
     setInterval(function() {
         // Function runs every 800 milliseconds (the duration of the lottie animations)     
         if (availableLotties.length == 0) return;
-        //console.log(availableLotties.length)
         // Select a random lottie
         var selectedIndex = getRandomInt(availableLotties.length);
         var selectedLottie = availableLotties[selectedIndex];

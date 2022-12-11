@@ -10,23 +10,12 @@
   
    var lotties = [...document.querySelectorAll("lottie-player")]
     availableLotties = lotties.filter( l => l.getAttribute('src') != "")
-    console.log(availableLotties)
-	// 		// Collect lotties which are currently in view
-    //   for (var i = 0; i < lotties.length; i++) {
-    //     var lottie = lotties[i];
-    //    if(lottie.getAttribute('src') != ""){
-    //      availableLotties.push(lottie)
-    //    }
-    //   }
-      
   
   // method 1, timeout
   setInterval(function() {
   	// Function runs every 800 milliseconds (the duration of the lottie animations)     
        
       if (availableLotties.length == 0) return
-      
-      //console.log(availableLotties.length)
       
       // Select a random lottie
       var selectedIndex = getRandomInt(availableLotties.length)		

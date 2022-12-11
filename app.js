@@ -12,7 +12,6 @@ const parceled = true // for checking localhost vs github pages / CDN
 
 const onReady = () => {
     const page = window.location.pathname.split("/").pop()
-    console.log(page)
     logCareers() // logs a frog and message to the console
     readyPreloader() // hides preloader and add event listener for frog lottie
     initProjectLotties() // initiates project lotties for home and work pages
@@ -34,9 +33,9 @@ const onLoading = () => {
 if (document.readyState !== 'loading') {
     onLoading()
     onReady()
-    console.log('readystate')
+    //console.log('readystate')
   } else {
-    console.log('load')
+    //console.log('load')
     window.addEventListener('load', onReady)
     document.addEventListener('DOMContentLoaded', onLoading)
 }
