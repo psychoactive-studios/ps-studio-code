@@ -10,8 +10,6 @@
       mutestate = muteState == 'true' ? muteState = true : muteState = false;
       isMuted = muteState;
     }
-    console.log('hey')
-
     // MUSIC ONLOAD
     music = new Audio();
     music.loop = true;
