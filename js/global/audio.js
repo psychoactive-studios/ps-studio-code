@@ -1,5 +1,6 @@
   export default function audioImplementation() {
-  // MUTE STATE
+
+    // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
 
@@ -15,77 +16,89 @@
     music.loop = true;
     music.src = "https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/Music/ps-website-music-v2.mp3";
     
-    const music_volume = 0.2;
+    const music_volume = 0.3;
     music.volume = music_volume;
 
     if (document.readyState !== 'loading') {
       if (musicState) {
         music.currentTime = (musicState + 10);
       }
-      console.log('loaded');
       fadeInMusic();  
     }
 
-    // MUSIC FADE-OUT
+    // MUSIC FADE-OUT & STORE SESSION STATE
     window.onbeforeunload = function(){
       sessionStorage.setItem('musicTime', music.currentTime);
       sessionStorage.setItem('muteState', isMuted);
       if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
     };
+
+    // MUTE AUDIO IF USER NAVIGATES AWAY
+    document.addEventListener("visibilitychange", function() {
+      if(mute_lottie.loop) {
+        if (document.hidden){
+          // fadeToggle(music, music_volume);
+          music.muted = true;
+        } else {
+          // fadeToggle(music, music_volume);
+          music.muted = false;
+        }  
+      }
+    });
     
 
     // UI AUDIO
     // open hamburger-menu sound
     frog_ui_open_menu = new Audio();
-    frog_ui_open_menu.volume = 0.5;
+    frog_ui_open_menu.volume = 1;
     addSrc(frog_ui_open_menu, 'frog_ui_open_WET');
 
     // close hamburger-menu sound
     frog_ui_close_menu = new Audio();
-    frog_ui_close_menu.volume = 0.4;
+    frog_ui_close_menu.volume = 1;
     addSrc(frog_ui_close_menu, 'frog_ui_close_WET');
 
     // menu click sounds
     frog_ui_single_click_1 = new Audio();
-    frog_ui_single_click_1.volume = 0.5;
+    frog_ui_single_click_1.volume = 1;
     addSrc(frog_ui_single_click_1, 'frog_ui_single_1_WET');
 
     frog_ui_single_click_2 = new Audio();
-    frog_ui_single_click_2.volume = 0.5;
+    frog_ui_single_click_2.volume = 1;
     addSrc(frog_ui_single_click_2, 'frog_ui_single_2_WET');
 
     // menu hover clack sound
     wood_clack_hover_menu = new Audio();
-    wood_clack_hover_menu.volume = 0.3;
+    wood_clack_hover_menu.volume = .9;
     addSrc(wood_clack_hover_menu, 'wood_clack');
 
     // project hover & click sounds
     project_hover = new Audio();
-    project_hover.volume = 0.2;
+    project_hover.volume = 0.4;
     addSrc(project_hover, 'ui_hover_WET');
 
     project_click = new Audio();
-    project_click.volume = 0.35;
+    project_click.volume = 0.8;
     addSrc(project_click, 'ui_click_WET');
 
     // text hover sound
     text_hover = new Audio();
-    text_hover.volume = 0.02;
+    text_hover.volume = 0.1;
     addSrc(text_hover, 'text_hover');
 
     // logo click sound
     home_ui = new Audio();
-    home_ui.volume = 0.5;
+    home_ui.volume = 1;
     addSrc(home_ui, 'home_ui');
     
     // logo hover sound
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
 
-    const logo_hover_volume = 0.8;
+    const logo_hover_volume = 1;
     ps_logo_hover.volume = logo_hover_volume;
 
-    addSrc(ps_logo_hover, 'logo_hover');
+    addSrc(ps_logo_hover, 'logo_hover_simple');
 
 
     // UI SOUNDS ARRAY
@@ -200,7 +213,7 @@
         if (!$(this).hasClass("close")) {
           wood_clack_hover_menu.currentTime = 0;
           const closeAudio = wood_clack_hover_menu;
-          closeAudio.volume = 0.2
+          closeAudio.volume = 0.9
           closeAudio.play();
         } 
       });    
@@ -214,21 +227,22 @@
         project_hover.pause();
         home_ui.play();
         fadeOutMusic();
+        ps_logo_hover.volume =  0;
       });
     
     // OPTIONAL PS-LOGO HOVER SOUNDS 
-    //  link.addEventListener('mouseenter', function() {
-    //    wood_clack_hover_menu.currentTime = 0
-        // wood_clack_hover_menu.loop = true;
-  //     wood_clack_hover_menu.volume =  0.2;
-  //     if (isMuted == false) wood_clack_hover_menu.muted = false;
-  //     wood_clack_hover_menu.play();
-  //   });
+     link.addEventListener('mouseenter', function() {
+        ps_logo_hover.currentTime = 0
+        ps_logo_hover.loop = true;
+        ps_logo_hover.volume =  1;
+        if (isMuted == false) ps_logo_hover.muted = false;
+        ps_logo_hover.play();
+      });
 
-    //  link.addEventListener('mouseleave', function() {
-        // project_hover.loop = false;
-      //	if (isMuted == false) fadeToggle(wood_clack_hover_menu,  0.2);
-    //  });
+     link.addEventListener('mouseleave', function() {
+        ps_logo_hover.loop = false;
+      	if (isMuted == false) fadeToggle(ps_logo_hover,  1);
+     });
     })
 
     // FUNCTIONS
