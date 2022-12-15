@@ -11,7 +11,6 @@
       mutestate = muteState == 'true' ? muteState = true : muteState = false;
       isMuted = muteState;
     }
-
     // MUSIC ONLOAD
     music = new Audio();
     music.loop = true;
