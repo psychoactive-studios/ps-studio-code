@@ -31,7 +31,7 @@
     window.onbeforeunload = function(){
       sessionStorage.setItem('musicTime', music.currentTime);
       sessionStorage.setItem('muteState', isMuted);
-      if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
+      if ((!isMuted) && (!linkClicked) && (!isMobile)) fadeToggle(music, music_volume)
     };
 
     // MUTE AUDIO IF USER NAVIGATES AWAY
@@ -48,9 +48,7 @@
     });
     
     // remove music src if device is mobile
-    if(isMobile) {
-      music.src = ''
-    }
+
 
     // UI AUDIO
     // open hamburger-menu sound
@@ -135,7 +133,7 @@
 
     if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
-        fadeToggle(music, music_volume);
+        if(!isMobile) fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
           mute_lottie.setSpeed(1)
@@ -158,13 +156,13 @@
     // MUTE ALL if user muted
     if ((muteState !== null) && (isMuted)) {
       muteAll(uiSounds);
-      fadeToggle(music, music_volume);
+      if(!isMobile) fadeToggle(music, music_volume);
       mute_lottie.autoplay = false;
     }  
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener('click', function() {
-      if ((!isMuted) && (music.paused)) {
+      if ((!isMuted) && (music.paused) && (!isMobile)) {
         music.play();
       }
     }); 
@@ -305,18 +303,22 @@
     }
 
     function fadeOutMusic() {
-      if (!isMuted) fadeToggle(music, music_volume);
-      linkedClicked = true;
+      if(!isMobile) {
+        if (!isMuted) fadeToggle(music, music_volume);
+        linkClicked = true;
+      }
     }
 
     function fadeInMusic() {
-      $(window).on('load', function () {
-        music.play();
-        if (!isMuted) {
-          music.volume = 0;
-          $(music).animate({volume: music_volume}, 2000, 'linear');	
-        }
-      });
+      if(!isMobile) {
+        $(window).on('load', function () {
+          music.play();
+          if (!isMuted) {
+            music.volume = 0;
+            $(music).animate({volume: music_volume}, 2000, 'linear');	
+          }
+        });
+      }
     }
     
     function fadeToggle(audio, maxVolume) {
