@@ -3,6 +3,7 @@
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
+    const isMobile = navigator.userAgentData.mobile;
 
     let muteState = sessionStorage.getItem('muteState');
     let musicState = sessionStorage.getItem('musicTime');
@@ -46,6 +47,10 @@
       }
     });
     
+    // remove music src if device is mobile
+    if(isMobile) {
+      music.src = ''
+    }
 
     // UI AUDIO
     // open hamburger-menu sound
