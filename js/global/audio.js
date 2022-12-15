@@ -95,10 +95,10 @@
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
 
-    const logo_hover_volume = 1;
+    const logo_hover_volume = .2;
     ps_logo_hover.volume = logo_hover_volume;
 
-    addSrc(ps_logo_hover, 'logo_hover_simple');
+    addSrc(ps_logo_hover, 'hover_sound');
 
 
     // UI SOUNDS ARRAY
@@ -128,19 +128,28 @@
       autoplay: true,
     });
 
+    if ((music.volume == music_volume) || (music.volume == 0)) {
+      mute_btn.addEventListener('click', function() {
+        fadeToggle(music, music_volume);
+        muteToggle();
+        if (!isMuted) {
+          mute_lottie.setSpeed(1)
+          mute_lottie.loop = true;
+          mute_lottie.play();
+        } else {
+          mute_lottie.setSpeed(1.5)
+          mute_lottie.loop = false;
+        }
+      })
+    }
+    // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
-      fadeToggle(music, music_volume);
-      muteToggle();
-      if (!isMuted) {
-        mute_lottie.setSpeed(1)
-        mute_lottie.loop = true;
-        mute_lottie.play();
+      if (!mute_lottie.loop) {
+        fadeOutMusic();
       } else {
-        mute_lottie.setSpeed(1.5)
-        mute_lottie.loop = false;
+        fadeInMusic()
       }
     })
-
     // MUTE ALL if user muted
     if ((muteState !== null) && (isMuted)) {
       muteAll(uiSounds);
@@ -232,18 +241,40 @@
     
     // OPTIONAL PS-LOGO HOVER SOUNDS 
      link.addEventListener('mouseenter', function() {
-        ps_logo_hover.currentTime = 0
+        ps_logo_hover.currentTime = 0.1
         ps_logo_hover.loop = true;
-        ps_logo_hover.volume =  1;
+        ps_logo_hover.volume = logo_hover_volume
         if (isMuted == false) ps_logo_hover.muted = false;
         ps_logo_hover.play();
       });
 
      link.addEventListener('mouseleave', function() {
         ps_logo_hover.loop = false;
-      	if (isMuted == false) fadeToggle(ps_logo_hover,  1);
+      	if (isMuted == false){
+          // fadeToggle(ps_logo_hover,  1);
+          ps_logo_hover.volume = 0
+        }
      });
     })
+
+    // const ps_logo = document.querySelector('.logo-img')
+    // const logoStyle = getComputedStyle(ps_logo)
+    // console.log(logoStyle.opacity);
+
+    // if (logoStyle.opacity === 0) {
+    //     ps_logo_hover.currentTime = 0
+    //     ps_logo_hover.loop = true;
+    //     ps_logo_hover.volume =  1;
+    //     if (isMuted == false) ps_logo_hover.muted = false;
+    //     ps_logo_hover.play();
+
+    // } else if (logoStyle.opacity == 1) {
+    //     ps_logo_hover.loop = false;
+    //   	if (isMuted == false){
+    //       // fadeToggle(ps_logo_hover,  1);
+    //       ps_logo_hover.volume = 0
+    //     }
+    // }
 
     // FUNCTIONS
     function addSrc(audio, file) {
@@ -278,7 +309,7 @@
         music.play();
         if (!isMuted) {
           music.volume = 0;
-          $(music).animate({volume: music_volume}, 3000, 'linear');	
+          $(music).animate({volume: music_volume}, 2000, 'linear');	
         }
       });
     }
@@ -314,4 +345,3 @@
       })
     }
   }
-  
