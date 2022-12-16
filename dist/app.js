@@ -587,7 +587,171 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/logCareers":"DcFUA","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/about/aboutLottie":"8Krlv","./js/global/audio":"bc3EI"}],"DcFUA":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+exports.default = aboutLottie = ()=>{
+    var availableLotties = [];
+    //var lastLottie = null
+    //var lastLotties = []
+    var lotties = [
+        ...document.querySelectorAll("lottie-player")
+    ];
+    availableLotties = lotties.filter((l)=>l.getAttribute("src") != "");
+    // method 1, timeout
+    setInterval(function() {
+        // Function runs every 800 milliseconds (the duration of the lottie animations)     
+        if (availableLotties.length == 0) return;
+        // Select a random lottie
+        var selectedIndex = getRandomInt(availableLotties.length);
+        var selectedLottie = availableLotties[selectedIndex];
+        // play lottie
+        if (selectedLottie) {
+            selectedLottie.seek(0);
+            selectedLottie.play();
+        }
+        //remove the item from array as the lottie plays on loop
+        availableLotties.splice(selectedIndex, 1);
+    }, 500);
+    document.querySelectorAll(".team-box").forEach((e)=>{
+        const video = e.querySelector("video");
+        let isPlaying = false;
+        video.onplaying = ()=>isPlaying = true;
+        video.onpause = ()=>isPlaying = false;
+        video.pause();
+        e.addEventListener("mouseenter", ()=>{
+            video.paused && !isPlaying && video.play();
+        });
+        e.addEventListener("mouseleave", ()=>{
+            !video.paused && isPlaying && video.pause();
+        });
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"aI83l":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = copyEmail = ()=>{
+    function copyToClipboard(copyText) {
+        // copies text to keyboard by creating then deleting selectable text area
+        const el = document.createElement("textarea");
+        el.value = copyText;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        // change text of header
+        $(".footer-title-roller-down").each(function() {
+            $(this).html("E-mail copied to clipboard");
+        });
+        // reset text of header after 1000 ms
+        setTimeout(function() {
+            $(".footer-title-roller-down").each(function() {
+                $(this).html("Copy email");
+            });
+        }, 1400);
+    }
+    var helloBlock = document.getElementById("email-block-hello");
+    helloBlock.addEventListener("click", function() {
+        copyToClipboard("hello@psychoactive.co.nz");
+    });
+    var careersBlock = document.getElementById("careers");
+    careersBlock.addEventListener("click", function() {
+        copyToClipboard("careers@psychoactive.co.nz");
+    });
+    var internBlock = document.getElementById("intern");
+    internBlock.addEventListener("click", function() {
+        copyToClipboard("intern@psychoactive.co.nz");
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3jJBr":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+exports.default = initCms = ()=>{
+    var launchSite = false;
+    var cmsItem = document.querySelectorAll(".cms");
+    cmsItem.forEach((e, i)=>{
+        e.addEventListener("mouseover", ()=>{
+            $(e).addClass("cms-overlay");
+            var item = $(e);
+            //set the color from cms on inner content on hover
+            var colorClass = $(e).find(".newColor").attr("class");
+            if (colorClass) var color = "#" + colorClass.split(" ")[1];
+            $(".launch-site-wrapper").mouseover(function() {
+                launchSite = true;
+                item.find(".underline").css("background-image", "linear-gradient(transparent calc(100% - 2px), red 2px)");
+                item.find(".underline").css("background-size", "0 100%");
+            });
+            $(".launch-site-wrapper").mouseout(function() {
+                launchSite = false;
+            });
+            if (!launchSite) {
+                $(e).find(".top-bottom-margin").css("color", color);
+                $(e).find(".text-size-large.full-white").css("color", color);
+                $(e).find(".h3").css("color", color);
+                $(e).find(".button-text").css("color", color);
+                $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," + color + " 2px)");
+                $(e).find(".launch-site-icon").css("color", color);
+            }
+        });
+        e.addEventListener("mouseout", ()=>{
+            $(e).removeClass("cms-overlay");
+            $(e).find(".text-size-large.full-white").css("color", "");
+            $(e).find(".top-bottom-margin").css("color", "");
+            $(e).find(".h3.gets-underlined").css("color", "");
+            $(e).find(".button-text").css("color", "");
+            $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)");
+            $(e).find(".launch-site-icon").css("color", "");
+        });
+    });
+    //get the length of all the cms items
+    var total_items = cmsItem.length;
+    //on one of the filter buttons clicked check the length of the cms
+    //if its less than the total remove the active class from 'All' filter
+    if (document.querySelector(".sort-button") && document.querySelector(".reset-filter")) $(".sort-button").click(function() {
+        //adding a delay for finsweet to run its filter script
+        setTimeout(function() {
+            if ($(".cms").length < total_items) $(".reset-filter").removeClass("is-active");
+            if ($(".cms").length == total_items) $(".reset-filter").addClass("is-active");
+        }, 300);
+    });
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"DcFUA":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = logCareers = ()=>console.log(`
@@ -630,37 +794,7 @@ Check out here if you want to join the team: https://psychoactive.co.nz/careers
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 `);
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"gnoda":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gnoda":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loopLogoLoading", ()=>loopLogoLoading);
@@ -860,96 +994,6 @@ function initProjectLotties() {
  //   }
  // }
 exports.default = initProjectLotties;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aI83l":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-exports.default = copyEmail = ()=>{
-    function copyToClipboard(copyText) {
-        // copies text to keyboard by creating then deleting selectable text area
-        const el = document.createElement("textarea");
-        el.value = copyText;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand("copy");
-        document.body.removeChild(el);
-        // change text of header
-        $(".footer-title-roller-down").each(function() {
-            $(this).html("E-mail copied to clipboard");
-        });
-        // reset text of header after 1000 ms
-        setTimeout(function() {
-            $(".footer-title-roller-down").each(function() {
-                $(this).html("Copy email");
-            });
-        }, 1400);
-    }
-    var helloBlock = document.getElementById("email-block-hello");
-    helloBlock.addEventListener("click", function() {
-        copyToClipboard("hello@psychoactive.co.nz");
-    });
-    var careersBlock = document.getElementById("careers");
-    careersBlock.addEventListener("click", function() {
-        copyToClipboard("careers@psychoactive.co.nz");
-    });
-    var internBlock = document.getElementById("intern");
-    internBlock.addEventListener("click", function() {
-        copyToClipboard("intern@psychoactive.co.nz");
-    });
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3jJBr":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-exports.default = initCms = ()=>{
-    var launchSite = false;
-    var cmsItem = document.querySelectorAll(".cms");
-    cmsItem.forEach((e, i)=>{
-        e.addEventListener("mouseover", ()=>{
-            $(e).addClass("cms-overlay");
-            var item = $(e);
-            //set the color from cms on inner content on hover
-            var colorClass = $(e).find(".newColor").attr("class");
-            if (colorClass) var color = "#" + colorClass.split(" ")[1];
-            $(".launch-site-wrapper").mouseover(function() {
-                launchSite = true;
-                item.find(".underline").css("background-image", "linear-gradient(transparent calc(100% - 2px), red 2px)");
-                item.find(".underline").css("background-size", "0 100%");
-            });
-            $(".launch-site-wrapper").mouseout(function() {
-                launchSite = false;
-            });
-            if (!launchSite) {
-                $(e).find(".top-bottom-margin").css("color", color);
-                $(e).find(".text-size-large.full-white").css("color", color);
-                $(e).find(".h3").css("color", color);
-                $(e).find(".button-text").css("color", color);
-                $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px)," + color + " 2px)");
-                $(e).find(".launch-site-icon").css("color", color);
-            }
-        });
-        e.addEventListener("mouseout", ()=>{
-            $(e).removeClass("cms-overlay");
-            $(e).find(".text-size-large.full-white").css("color", "");
-            $(e).find(".top-bottom-margin").css("color", "");
-            $(e).find(".h3.gets-underlined").css("color", "");
-            $(e).find(".button-text").css("color", "");
-            $(e).find(".h3.gets-underlined").css("background-image", "linear-gradient(transparent calc(100% - 2px), #FFFFFF 2px)");
-            $(e).find(".launch-site-icon").css("color", "");
-        });
-    });
-    //get the length of all the cms items
-    var total_items = cmsItem.length;
-    //on one of the filter buttons clicked check the length of the cms
-    //if its less than the total remove the active class from 'All' filter
-    if (document.querySelector(".sort-button") && document.querySelector(".reset-filter")) $(".sort-button").click(function() {
-        //adding a delay for finsweet to run its filter script
-        setTimeout(function() {
-            if ($(".cms").length < total_items) $(".reset-filter").removeClass("is-active");
-            if ($(".cms").length == total_items) $(".reset-filter").addClass("is-active");
-        }, 300);
-    });
-};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4gmyN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2424,64 +2468,22 @@ exports.default = setLogoHref = ()=>{
 //}
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-exports.default = aboutLottie = ()=>{
-    var availableLotties = [];
-    //var lastLottie = null
-    //var lastLotties = []
-    var lotties = [
-        ...document.querySelectorAll("lottie-player")
-    ];
-    availableLotties = lotties.filter((l)=>l.getAttribute("src") != "");
-    // method 1, timeout
-    setInterval(function() {
-        // Function runs every 800 milliseconds (the duration of the lottie animations)     
-        if (availableLotties.length == 0) return;
-        // Select a random lottie
-        var selectedIndex = getRandomInt(availableLotties.length);
-        var selectedLottie = availableLotties[selectedIndex];
-        // play lottie
-        if (selectedLottie) {
-            selectedLottie.seek(0);
-            selectedLottie.play();
-        }
-        //remove the item from array as the lottie plays on loop
-        availableLotties.splice(selectedIndex, 1);
-    }, 500);
-    document.querySelectorAll(".team-box").forEach((e)=>{
-        const video = e.querySelector("video");
-        let isPlaying = false;
-        video.onplaying = ()=>isPlaying = true;
-        video.onpause = ()=>isPlaying = false;
-        video.pause();
-        e.addEventListener("mouseenter", ()=>{
-            video.paused && !isPlaying && video.play();
-        });
-        e.addEventListener("mouseleave", ()=>{
-            !video.paused && isPlaying && video.pause();
-        });
-    });
-};
-
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc3EI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _detectGpu = require("detect-gpu");
 function audioImplementation() {
     // FIND OUT IF USER'S DEVICE IS MOBILE
-    async function getGPU() {
-        const gpuTier = await (0, _detectGpu.getGPUTier)();
-        const isMobile = gpuTier.isMobile;
-        return isMobile;
-    }
-    getGPU().then((isMobile)=>{
-        if (isMobile) isMobile = true;
-    });
+    // async function getGPU() {
+    //    const gpuTier = await getGPUTier();
+    //    const isMobile = gpuTier.isMobile;
+    //    return isMobile
+    // };
+    // getGPU().then(isMobile => {
+    //   if (isMobile) {
+    //     isMobile = true;
+    //   }
+    // })
     // const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     // console.log(isMobile)
     window.mobileCheck = function() {
@@ -2491,11 +2493,9 @@ function audioImplementation() {
         })(navigator.userAgent || navigator.vendor || window.opera);
         return check;
     };
-    console.log(mobileCheck());
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
-    let isMobile = false;
     let muteState = sessionStorage.getItem("muteState");
     let musicState = sessionStorage.getItem("musicTime");
     if (muteState) {
@@ -2508,15 +2508,18 @@ function audioImplementation() {
     music.src = "https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/Music/ps-website-music-v2.mp3";
     const music_volume = 0.3;
     music.volume = music_volume;
+    // console.log(mobileCheck());
     if (document.readyState !== "loading") {
         if (musicState) music.currentTime = musicState + 10;
-        fadeInMusic();
+        if (mobileCheck() == false) fadeInMusic();
     }
     // MUSIC FADE-OUT & STORE SESSION STATE
     window.onbeforeunload = function() {
         sessionStorage.setItem("musicTime", music.currentTime);
         sessionStorage.setItem("muteState", isMuted);
-        if (!isMuted && !linkClicked) fadeToggle(music, music_volume);
+        if (mobileCheck() == false) {
+            if (!isMuted && !linkClicked) fadeToggle(music, music_volume);
+        }
     };
     // MUTE AUDIO IF USER NAVIGATES AWAY
     document.addEventListener("visibilitychange", function() {
@@ -2601,7 +2604,7 @@ function audioImplementation() {
         // if (!isMobile) fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
-            music.volume = music_volume;
+            if (mobileCheck() == false) music.volume = music_volume;
             mute_lottie.setSpeed(1);
             mute_lottie.loop = true;
             mute_lottie.play();
@@ -2614,18 +2617,20 @@ function audioImplementation() {
     // }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener("click", function() {
-        if (!mute_lottie.loop) fadeOutMusic();
-        else fadeInMusic();
+        if (mobileCheck() == false) {
+            if (!mute_lottie.loop) fadeOutMusic();
+            else fadeInMusic();
+        }
     });
     // MUTE ALL if user muted
     if (muteState !== null && isMuted) {
         muteAll(uiSounds);
-        fadeToggle(music, music_volume);
+        if (mobileCheck() == false) fadeToggle(music, music_volume);
         mute_lottie.autoplay = false;
     }
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener("click", function() {
-        if (!isMuted && music.paused) music.play();
+        if (!isMuted && music.paused && mobileCheck() == false) music.play();
     });
     // PRELOADER TRIGGER
     //const preloader_trigger = document.querySelectorAll('#trigger');
@@ -2721,7 +2726,7 @@ function audioImplementation() {
         });
     }
     function fadeOutMusic() {
-        if (!isMuted) fadeToggle(music, music_volume);
+        if (!isMuted && mobileCheck() == false) fadeToggle(music, music_volume);
         linkClicked = true;
     }
     function fadeInMusic() {

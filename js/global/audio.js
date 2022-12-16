@@ -3,16 +3,16 @@
   export default function audioImplementation() {
 
     // FIND OUT IF USER'S DEVICE IS MOBILE
-    async function getGPU() {
-       const gpuTier = await getGPUTier();
-       const isMobile = gpuTier.isMobile;
-       return isMobile
-    };
-    getGPU().then(isMobile => {
-      if (isMobile) {
-        isMobile = true;
-      }
-    })
+    // async function getGPU() {
+    //    const gpuTier = await getGPUTier();
+    //    const isMobile = gpuTier.isMobile;
+    //    return isMobile
+    // };
+    // getGPU().then(isMobile => {
+    //   if (isMobile) {
+    //     isMobile = true;
+    //   }
+    // })
     // const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     // console.log(isMobile)
     window.mobileCheck = function() {
@@ -21,13 +21,9 @@
       return check;
     };
 
-    console.log(mobileCheck());
-
-
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
-    let isMobile = false;
 
     let muteState = sessionStorage.getItem('muteState');
     let musicState = sessionStorage.getItem('musicTime');
@@ -44,18 +40,24 @@
     const music_volume = 0.3;
     music.volume = music_volume;
 
+    // console.log(mobileCheck());
+
     if (document.readyState !== 'loading') {
       if (musicState) {
         music.currentTime = (musicState + 10);
       }
-      fadeInMusic();  
+      if (mobileCheck() == false) {        
+        fadeInMusic();  
+      }
     }
 
     // MUSIC FADE-OUT & STORE SESSION STATE
     window.onbeforeunload = function(){
       sessionStorage.setItem('musicTime', music.currentTime);
       sessionStorage.setItem('muteState', isMuted);
-      if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
+      if (mobileCheck() == false) {
+        if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
+      }
     };
 
     // MUTE AUDIO IF USER NAVIGATES AWAY
@@ -162,7 +164,9 @@
         // if (!isMobile) fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
-          music.volume = music_volume
+          if (mobileCheck() == false) {
+            music.volume = music_volume
+          }
           mute_lottie.setSpeed(1)
           mute_lottie.loop = true;
           mute_lottie.play();
@@ -175,23 +179,27 @@
     // }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
-      if (!mute_lottie.loop) {
-        fadeOutMusic();
-      } else {
-        fadeInMusic()
+      if (mobileCheck() == false) {
+        if (!mute_lottie.loop) {
+          fadeOutMusic();
+        } else {
+          fadeInMusic()
+        }
       }
     })
 
     // MUTE ALL if user muted
     if ((muteState !== null) && (isMuted)) {
       muteAll(uiSounds);
-      fadeToggle(music, music_volume);
+      if (mobileCheck() == false) {
+        fadeToggle(music, music_volume);
+      }
       mute_lottie.autoplay = false;
     }  
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener('click', function() {
-      if ((!isMuted) && (music.paused)) {
+      if ((!isMuted) && (music.paused) && (mobileCheck() == false)) {
         music.play();
       }
     }); 
@@ -313,7 +321,7 @@
     }
 
     function fadeOutMusic() {
-      if ((!isMuted))  {
+      if ((!isMuted) && (mobileCheck() == false))  {
         fadeToggle(music, music_volume);
       }
       linkClicked = true;
