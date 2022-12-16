@@ -3,7 +3,6 @@
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
-    const isMobile = navigator.userAgentData.mobile;
 
     let muteState = sessionStorage.getItem('muteState');
     let musicState = sessionStorage.getItem('musicTime');
@@ -31,7 +30,7 @@
     window.onbeforeunload = function(){
       sessionStorage.setItem('musicTime', music.currentTime);
       sessionStorage.setItem('muteState', isMuted);
-      if ((!isMuted) && (!linkClicked) && (!isMobile)) fadeToggle(music, music_volume)
+      if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
     };
 
     // MUTE AUDIO IF USER NAVIGATES AWAY
@@ -47,9 +46,6 @@
       }
     });
     
-    // remove music src if device is mobile
-
-
     // UI AUDIO
     // open hamburger-menu sound
     frog_ui_open_menu = new Audio();
@@ -133,7 +129,7 @@
 
     if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
-        if(!isMobile) fadeToggle(music, music_volume);
+        fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
           mute_lottie.setSpeed(1)
@@ -156,13 +152,13 @@
     // MUTE ALL if user muted
     if ((muteState !== null) && (isMuted)) {
       muteAll(uiSounds);
-      if(!isMobile) fadeToggle(music, music_volume);
+      fadeToggle(music, music_volume);
       mute_lottie.autoplay = false;
     }  
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener('click', function() {
-      if ((!isMuted) && (music.paused) && (!isMobile)) {
+      if ((!isMuted) && (music.paused)) {
         music.play();
       }
     }); 
@@ -303,22 +299,18 @@
     }
 
     function fadeOutMusic() {
-      if(!isMobile) {
-        if (!isMuted) fadeToggle(music, music_volume);
-        linkClicked = true;
-      }
+      if (!isMuted) fadeToggle(music, music_volume);
+      linkedClicked = true;
     }
 
     function fadeInMusic() {
-      if(!isMobile) {
-        $(window).on('load', function () {
-          music.play();
-          if (!isMuted) {
-            music.volume = 0;
-            $(music).animate({volume: music_volume}, 2000, 'linear');	
-          }
-        });
-      }
+      $(window).on('load', function () {
+        music.play();
+        if (!isMuted) {
+          music.volume = 0;
+          $(music).animate({volume: music_volume}, 2000, 'linear');	
+        }
+      });
     }
     
     function fadeToggle(audio, maxVolume) {
