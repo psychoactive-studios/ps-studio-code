@@ -1,14 +1,29 @@
+ import { getGPUTier } from 'detect-gpu'; 
+ 
   export default function audioImplementation() {
+
+    // FIND OUT IF USER'S DEVICE IS MOBILE
+    async function getGPU() {
+       const gpuTier = await getGPUTier();
+       const isMobile = gpuTier.isMobile;
+       return isMobile
+    };
+    getGPU().then(isMobile => {
+      if (isMobile) {
+        isMobile = true;
+      }
+    })
 
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
+    let isMobile = false;
 
     let muteState = sessionStorage.getItem('muteState');
     let musicState = sessionStorage.getItem('musicTime');
 
     if (muteState) {
-      mutestate = muteState == 'true' ? muteState = true : muteState = false;
+      muteState = muteState == 'true' ? muteState = true : muteState = false;
       isMuted = muteState;
     }
     // MUSIC ONLOAD
@@ -23,14 +38,14 @@
       if (musicState) {
         music.currentTime = (musicState + 10);
       }
-      fadeInMusic();  
+      if (!isMobile) fadeInMusic();  
     }
 
     // MUSIC FADE-OUT & STORE SESSION STATE
     window.onbeforeunload = function(){
       sessionStorage.setItem('musicTime', music.currentTime);
       sessionStorage.setItem('muteState', isMuted);
-      if ((!isMuted) && (!linkClicked)) fadeToggle(music, music_volume)
+      if ((!isMuted) && (!linkClicked) && (!isMobile)) fadeToggle(music, music_volume)
     };
 
     // MUTE AUDIO IF USER NAVIGATES AWAY
@@ -94,10 +109,10 @@
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
 
-    const logo_hover_volume = .2;
+    const logo_hover_volume = .1;
     ps_logo_hover.volume = logo_hover_volume;
 
-    addSrc(ps_logo_hover, 'hover_sound');
+    addSrc(ps_logo_hover, 'hover_sound_short');
 
 
     // UI SOUNDS ARRAY
@@ -121,26 +136,33 @@
     // need bodymovin cdn for this to work
     const mute_lottie = bodymovin.loadAnimation({
       container: mute_btn,
-      path: 'https://uploads-ssl.webflow.com/636c26b00ea4fb2b2333fb0e/637d4ee86ce1a663a05bb9e5_audio_wave_updated.json',
+      path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
       renderer: 'svg',
       loop: true,
       autoplay: true,
     });
 
-    if ((music.volume == music_volume) || (music.volume == 0)) {
+    // if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
-        fadeToggle(music, music_volume);
+        // if (music.volume !== 0) {
+        //   if (!isMobile) fadeInMusic()
+        // } else {
+        //   if (!isMobile) fadeOutMusic()
+        // }
+        // if (!isMobile) fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
+          music.volume = music_volume
           mute_lottie.setSpeed(1)
           mute_lottie.loop = true;
           mute_lottie.play();
         } else {
+          music.volume = 0
           mute_lottie.setSpeed(1.5)
           mute_lottie.loop = false;
         }
       })
-    }
+    // }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
       if (!mute_lottie.loop) {
@@ -149,6 +171,7 @@
         fadeInMusic()
       }
     })
+
     // MUTE ALL if user muted
     if ((muteState !== null) && (isMuted)) {
       muteAll(uiSounds);
@@ -158,7 +181,7 @@
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener('click', function() {
-      if ((!isMuted) && (music.paused)) {
+      if ((!isMuted) && (music.paused) && (!isMobile)) {
         music.play();
       }
     }); 
@@ -249,31 +272,12 @@
 
      link.addEventListener('mouseleave', function() {
         ps_logo_hover.loop = false;
-      	if (isMuted == false){
-          // fadeToggle(ps_logo_hover,  1);
-          ps_logo_hover.volume = 0
-        }
+
+      	// if (isMuted == false){
+        //   ps_logo_hover.volume = 0
+        // }
      });
     })
-
-    // const ps_logo = document.querySelector('.logo-img')
-    // const logoStyle = getComputedStyle(ps_logo)
-    // console.log(logoStyle.opacity);
-
-    // if (logoStyle.opacity === 0) {
-    //     ps_logo_hover.currentTime = 0
-    //     ps_logo_hover.loop = true;
-    //     ps_logo_hover.volume =  1;
-    //     if (isMuted == false) ps_logo_hover.muted = false;
-    //     ps_logo_hover.play();
-
-    // } else if (logoStyle.opacity == 1) {
-    //     ps_logo_hover.loop = false;
-    //   	if (isMuted == false){
-    //       // fadeToggle(ps_logo_hover,  1);
-    //       ps_logo_hover.volume = 0
-    //     }
-    // }
 
     // FUNCTIONS
     function addSrc(audio, file) {
@@ -299,16 +303,18 @@
     }
 
     function fadeOutMusic() {
-      if (!isMuted) fadeToggle(music, music_volume);
-      linkedClicked = true;
+      if ((!isMuted) && (!isMobile))  {
+        fadeToggle(music, music_volume);
+      }
+      linkClicked = true;
     }
 
     function fadeInMusic() {
       $(window).on('load', function () {
-        music.play();
+        if (!isMobile) music.play();
         if (!isMuted) {
           music.volume = 0;
-          $(music).animate({volume: music_volume}, 2000, 'linear');	
+          $(music).animate({volume: music_volume}, 1500, 'linear');	
         }
       });
     }
@@ -317,7 +323,7 @@
       let muted = audio.muted;
       if (muted) audio.muted = false;
 
-      $(audio).animate({volume: muted ? maxVolume : 0}, 1500, function() {
+      $(audio).animate({volume: muted ? maxVolume : 0}, 1000, function() {
         audio.muted = !muted;
       });	
     }

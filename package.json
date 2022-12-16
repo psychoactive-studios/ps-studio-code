@@ -20,6 +20,7 @@
   "dependencies": {
     "animejs": "^3.2.1",
     "bodymovin": "^4.13.0",
+    "detect-gpu": "^5.0.2",
     "jquery": "^3.6.1",
     "parcel": "^2.8.0"
   }
