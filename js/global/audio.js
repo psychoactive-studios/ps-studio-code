@@ -220,6 +220,10 @@
       })
     })
     
+    // ABOUT DEFINITION CARD - AMPHIBIOUS LANGUAGE
+    const amphibious_lang = document.querySelectorAll('.logo-sound');
+    playSound(amphibious_lang, project_click, home_ui);
+
     // TEAM CARDS
     const team_links = document.querySelectorAll('.team-link-box');
     playSound(team_links, project_click, project_hover);
