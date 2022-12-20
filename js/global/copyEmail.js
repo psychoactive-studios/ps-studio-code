@@ -26,6 +26,10 @@ export default copyEmail = () => {
       copyToClipboard("hello@psychoactive.co.nz");
     })
     
+    var remoteHelloBlock = document.getElementById("remote-hello");    
+    remoteHelloBlock.addEventListener('click', function() {
+      copyToClipboard("hello@psychoactive.co.nz");
+    })
     var careersBlock = document.getElementById("careers");    
     careersBlock.addEventListener('click', function() {
       copyToClipboard("careers@psychoactive.co.nz");

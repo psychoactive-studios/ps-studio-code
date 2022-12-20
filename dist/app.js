@@ -688,6 +688,10 @@ exports.default = copyEmail = ()=>{
     helloBlock.addEventListener("click", function() {
         copyToClipboard("hello@psychoactive.co.nz");
     });
+    var remoteHelloBlock = document.getElementById("remote-hello");
+    remoteHelloBlock.addEventListener("click", function() {
+        copyToClipboard("hello@psychoactive.co.nz");
+    });
     var careersBlock = document.getElementById("careers");
     careersBlock.addEventListener("click", function() {
         copyToClipboard("careers@psychoactive.co.nz");
@@ -2648,23 +2652,35 @@ function audioImplementation() {
     // TEAM CARDS
     const team_links = document.querySelectorAll(".team-link-box");
     playSound(team_links, project_click, project_hover);
-    // PROJECT LINKS
-    const project_links = document.querySelectorAll(".project-link-wrapper, .project-link");
+    // PROJECT LINKS & ALL ELEMENTS WITH CLASS NAME CARD SOUND
+    const project_links = document.querySelectorAll(".project-link-wrapper, .project-link, .card-sound");
     playSound(project_links, project_click, project_hover);
     // UNDERLINED TEXT 
-    const underline_links = document.querySelectorAll(".gets-underlined, .underlined");
+    const underline_links = document.querySelectorAll(".gets-underlined, .underlined, .underline-sound");
     playSound(underline_links, project_click, project_hover);
-    // TAG-TEXT
-    const tag_text = document.querySelectorAll(".tag-text, .button-text");
+    // ARTICLE LINKS 
+    const article_links = document.querySelectorAll(".article-rich-text a");
+    playSound(article_links, project_click, project_hover);
+    // TAG-TEXT & ALL ELEMENTS WITH CLASS NAME TAG SOUND
+    const tag_text = document.querySelectorAll(".tag-text, .button-text, .tag-sound");
     playSound(tag_text, frog_ui_single_click_2, text_hover);
+    // FOOTER 
+    const footer_sound = document.querySelectorAll(".footer-sound");
+    playSound(footer_sound, frog_ui_single_click_2, text_hover);
+    // MUTE BTN 
+    const mute_btn_container = document.querySelectorAll("#mute-btn-container");
+    playSound(mute_btn_container, frog_ui_single_click_2, text_hover);
     // CAREERS ACCORDION
     const careers_accordion = document.querySelectorAll(".career-subtitle-box");
-    playSound(careers_accordion, frog_ui_single_click_1);
+    playSound(careers_accordion, frog_ui_single_click_1, text_hover);
     // CAREERS ARROW-BTNS
     const arrow_btns = document.querySelectorAll(".arrow");
-    playSound(arrow_btns, frog_ui_single_click_2);
+    playSound(arrow_btns, frog_ui_single_click_2, text_hover);
     // HAMBURGER-MENU OPEN & CLOSE
     const hamburger_menu = document.querySelectorAll(".hamburger-box");
+    // ABOUT DEFINITION CARD
+    const about_definition = document.querySelectorAll(".see-more-button");
+    playSound(about_definition, project_click, project_hover);
     hamburger_menu.forEach((menu)=>{
         menu.addEventListener("click", function() {
             if ($(this).hasClass("close")) {
