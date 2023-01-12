@@ -2,6 +2,8 @@
  
   export default function audioImplementation() {
 
+    // console.log('live server is running');
+
     // FIND OUT IF USER'S DEVICE IS MOBILE
     // async function getGPU() {
     //    const gpuTier = await getGPUTier();
@@ -39,8 +41,6 @@
     
     const music_volume = 0.3;
     music.volume = music_volume;
-
-    // console.log(mobileCheck());
 
     if (document.readyState !== 'loading') {
       if (musicState) {
@@ -231,10 +231,13 @@
     // PROJECT LINKS & ALL ELEMENTS WITH CLASS NAME CARD SOUND
     const project_links = document.querySelectorAll('.project-link-wrapper, .project-link, .card-sound');
     playSound(project_links, project_click, project_hover);
-    
-    // UNDERLINED TEXT 
+
+    // UNDERLINED TEXT SOUND
     const underline_links = document.querySelectorAll('.gets-underlined, .underlined, .underline-sound');
-    playSound(underline_links, project_click, project_hover);
+    
+    // FILTER OUT HOVER SOUND FOR 'OPEN POSITIONS' CAREERS CARDS and CONTENT HUB cards 
+    const filter_Out = ['sml', 'content-hub-heading'];
+    playSound(underline_links, project_click, project_hover, filter_Out);
 
     // ARTICLE LINKS 
     const article_links = document.querySelectorAll('.article-rich-text a');
@@ -266,7 +269,8 @@
     // ABOUT DEFINITION CARD
     const about_definition = document.querySelectorAll('.see-more-button');
     playSound(about_definition, project_click, project_hover);
-    
+
+    // NAV MENU SOUNDS
     hamburger_menu.forEach(menu => {
       menu.addEventListener('click', function() {
         if ($(this).hasClass("close")) {
@@ -322,7 +326,7 @@
       audio.src = `https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/UI/${file}.mp3`
     }
 
-    function playSound(triggerLink, clickSound, hoverSound ) {
+    function playSound(triggerLink, clickSound, hoverSound, filteredClass ) {
         triggerLink.forEach(trigger => {
           
         trigger.addEventListener('click', function() {
@@ -334,10 +338,31 @@
         });
 
         trigger.addEventListener('mouseenter', function() {
-          hoverSound.currentTime = 0;
-          hoverSound.play();
+          // check if a filtered class exists
+          if (filteredClass == undefined) {
+            hoverSound.currentTime = 0;
+            hoverSound.play();   
+          } else {
+            // if it exists, exit, if it doesn't play sound
+            if (filterOut(trigger, filteredClass)) {
+              return
+            } else {
+              hoverSound.currentTime = 0;
+              hoverSound.play();
+            }         
+          }
         });
       })
+    }
+
+    const filterOut = (trigger, filteredClass) => {
+      let isFiltered = false
+      filteredClass.forEach(className => {
+        if (trigger.classList.contains(className)){
+          isFiltered = true
+        }
+      })
+      return isFiltered
     }
 
     function fadeOutMusic() {
