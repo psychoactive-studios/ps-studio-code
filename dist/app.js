@@ -2569,6 +2569,10 @@ function audioImplementation() {
     home_ui = new Audio();
     home_ui.volume = 1;
     addSrc(home_ui, "home_ui");
+    // define metamorphosis sound
+    metamorphosis_ui = new Audio();
+    metamorphosis_ui.volume = 1;
+    addSrc(metamorphosis_ui, "frog_sfx");
     // logo hover sound
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
@@ -2689,6 +2693,9 @@ function audioImplementation() {
     // ABOUT DEFINITION CARD
     const about_definition = document.querySelectorAll(".see-more-button");
     playSound(about_definition, project_click, project_hover);
+    // DEFINE METAMORPHOSIS BUTTON
+    const metamorphosis_btn = document.querySelectorAll("#metamorphosis-btn");
+    playSound(metamorphosis_btn, metamorphosis_ui);
     // NAV MENU SOUNDS
     hamburger_menu.forEach((menu)=>{
         menu.addEventListener("click", function() {
