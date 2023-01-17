@@ -148,16 +148,30 @@
 
 
     // MUTE LOTTIE FUNCTIONALITY 
+    const soundwave = document.querySelector('.soundwave-svg')
+    const wave = document.querySelectorAll('.wave')
+
+    soundwave.addEventListener('click', function() {
+      wave.forEach(e =>{
+        const style = getComputedStyle(e)
+        if (style["animation-iteration-count"] == "infinite") {     
+          e.setAttribute("style", "animation-iteration-count: 1!important;")
+        } else {
+            e.setAttribute("style", "animation-iteration-count: infinite!important;");
+        }
+      })
+    })
+
     const mute_btn = document.querySelector('#mute-btn-container');
 
-    // need bodymovin cdn for this to work
-    const mute_lottie = bodymovin.loadAnimation({
-      container: mute_btn,
-      path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
-      renderer: 'svg',
-      loop: true,
-      autoplay: true 
-    });
+    // need bodymovin cdn for this to work <-- old lottie version
+    // const mute_lottie = bodymovin.loadAnimation({
+    //   container: mute_btn,
+    //   path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
+    //   renderer: 'svg',
+    //   loop: true,
+    //   autoplay: true 
+    // });
 
     // if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
@@ -227,7 +241,7 @@
     
     // ABOUT DEFINITION CARD - AMPHIBIOUS LANGUAGE
     const amphibious_lang = document.querySelectorAll('.logo-sound');
-    playSound(amphibious_lang, project_click, home_ui);
+    playSound(amphibious_lang, project_click, project_hover);
 
     // TEAM CARDS
     const team_links = document.querySelectorAll('.team-link-box');

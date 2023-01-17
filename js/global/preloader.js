@@ -15,22 +15,23 @@ var anim_b;
 
         function link_is_external(link_element) {
           return (link_element.host !== window.location.host);
-      }
+        }
     
         var links = document.getElementsByTagName('a');
-
-      for (var i = 0; i < links.length; i++) {
-          if (!link_is_external(links[i])) {
-              // Only internal links trigger page out logo animation
-                if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box")) {
-                links[i].addEventListener('click', pageTransition)
-              };
-          }
-      }
+        
+        for (var i = 0; i < links.length; i++) {
+            // console.log();
+            if (!link_is_external(links[i])) {
+                // Only internal links trigger page out logo animation
+                // with the exception of content-hub inner page internal links
+                if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box") && (!links[i].target == '_blank')) {
+                    links[i].addEventListener('click', pageTransition)
+                };
+            }
+        }
 
       function pageTransition(e) {
           e.preventDefault()
-                      
           // flip phrog once
           logoWrap.querySelector('svg').style.opacity = '1'
           logoWrap.querySelector('img').style.opacity = '0'

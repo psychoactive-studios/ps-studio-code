@@ -819,9 +819,11 @@ function pageOutTransitionLinks() {
     }
     var links = document.getElementsByTagName("a");
     for(var i = 0; i < links.length; i++){
+        // console.log();
         if (!link_is_external(links[i])) // Only internal links trigger page out logo animation
+        // with the exception of content-hub inner page internal links
         {
-            if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box")) links[i].addEventListener("click", pageTransition);
+            if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box") && !links[i].target == "_blank") links[i].addEventListener("click", pageTransition);
         }
     }
     function pageTransition(e) {
@@ -2593,15 +2595,24 @@ function audioImplementation() {
         home_ui
     ];
     // MUTE LOTTIE FUNCTIONALITY 
-    const mute_btn = document.querySelector("#mute-btn-container");
-    // need bodymovin cdn for this to work
-    const mute_lottie = bodymovin.loadAnimation({
-        container: mute_btn,
-        path: "https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json",
-        renderer: "svg",
-        loop: true,
-        autoplay: true
+    const soundwave = document.querySelector(".soundwave-svg");
+    const wave = document.querySelectorAll(".wave");
+    soundwave.addEventListener("click", function() {
+        wave.forEach((e)=>{
+            const style = getComputedStyle(e);
+            if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
+            else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+        });
     });
+    const mute_btn = document.querySelector("#mute-btn-container");
+    // need bodymovin cdn for this to work <-- old lottie version
+    // const mute_lottie = bodymovin.loadAnimation({
+    //   container: mute_btn,
+    //   path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
+    //   renderer: 'svg',
+    //   loop: true,
+    //   autoplay: true 
+    // });
     // if ((music.volume == music_volume) || (music.volume == 0)) {
     mute_btn.addEventListener("click", function() {
         // if (music.volume !== 0) {
@@ -2655,7 +2666,7 @@ function audioImplementation() {
     });
     // ABOUT DEFINITION CARD - AMPHIBIOUS LANGUAGE
     const amphibious_lang = document.querySelectorAll(".logo-sound");
-    playSound(amphibious_lang, project_click, home_ui);
+    playSound(amphibious_lang, project_click, project_hover);
     // TEAM CARDS
     const team_links = document.querySelectorAll(".team-link-box");
     playSound(team_links, project_click, project_hover);
