@@ -62,7 +62,7 @@
 
     // MUTE AUDIO IF USER NAVIGATES AWAY
     document.addEventListener("visibilitychange", function() {
-      if(mute_lottie.loop) {
+      if(isMute_btn_playing()) {
         if (document.hidden){
           // fadeToggle(music, music_volume);
           music.muted = true;
@@ -161,21 +161,30 @@
         }
       })
     })
-        
+
+    function isMute_btn_playing() {
+      let isPlaying = true
+      wave.forEach(e =>{
+        const style = getComputedStyle(e)
+        if (style["animation-iteration-count"] == "infinite") {
+          isPlaying = true        
+        } else {
+          isPlaying = false
+        }
+      })
+      return isPlaying
+    }
+
     const mute_btn = document.querySelector('#mute-btn-container');
 
-    // need bodymovin cdn for this to work
-    const mute_lottie = bodymovin.loadAnimation({
-      container: mute_btn,
-      path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
-      renderer: 'svg',
-      loop: true,
-      autoplay: true ,
-      renderSettings: {
-        className: "hidden-audio-lottie;",
-        id: "hidden-audio-lottie;"
-      }
-    });
+    // need bodymovin cdn for this to work <-- old lottie version
+    // const mute_lottie = bodymovin.loadAnimation({
+    //   container: mute_btn,
+    //   path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
+    //   renderer: 'svg',
+    //   loop: true,
+    //   autoplay: true 
+    // });
 
     // if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
@@ -190,20 +199,20 @@
           if (mobileCheck() == false) {
             music.volume = music_volume
           }
-          mute_lottie.setSpeed(1)
-          mute_lottie.loop = true;
-          mute_lottie.play();
+          // mute_lottie.setSpeed(1)
+          // mute_lottie.loop = true;
+          // mute_lottie.play();
         } else {
-          music.volume = 0
-          mute_lottie.setSpeed(1.5)
-          mute_lottie.loop = false;
+          // music.volume = 0
+          // mute_lottie.setSpeed(1.5)
+          // mute_lottie.loop = false;
         }
       })
     // }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
       if (mobileCheck() == false) {
-        if (!mute_lottie.loop) {
+        if (isMute_btn_playing()) {
           fadeOutMusic();
         } else {
           fadeInMusic()
@@ -217,7 +226,7 @@
       if (mobileCheck() == false) {
         fadeToggle(music, music_volume);
       }
-      mute_lottie.autoplay = false;
+      // mute_lottie.autoplay = false;
     }  
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)

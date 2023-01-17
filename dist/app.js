@@ -2605,14 +2605,18 @@ function audioImplementation() {
         });
     });
     const mute_btn = document.querySelector("#mute-btn-container");
-    // need bodymovin cdn for this to work <-- old lottie version
-    // const mute_lottie = bodymovin.loadAnimation({
-    //   container: mute_btn,
-    //   path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
-    //   renderer: 'svg',
-    //   loop: true,
-    //   autoplay: true 
-    // });
+    // need bodymovin cdn for this to work
+    const mute_lottie = bodymovin.loadAnimation({
+        container: mute_btn,
+        path: "https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json",
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        renderSettings: {
+            className: "hidden-audio-lottie;",
+            id: "hidden-audio-lottie;"
+        }
+    });
     // if ((music.volume == music_volume) || (music.volume == 0)) {
     mute_btn.addEventListener("click", function() {
         // if (music.volume !== 0) {
