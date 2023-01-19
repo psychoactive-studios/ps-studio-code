@@ -170,21 +170,10 @@
       path: 'https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json',
       renderer: 'svg',
       loop: true,
-      autoplay: true ,
-      renderSettings: {
-        className: "hidden-audio-lottie;",
-        id: "hidden-audio-lottie;"
-      }
+      autoplay: true
     });
 
-    // if ((music.volume == music_volume) || (music.volume == 0)) {
       mute_btn.addEventListener('click', function() {
-        // if (music.volume !== 0) {
-        //   if (!isMobile) fadeInMusic()
-        // } else {
-        //   if (!isMobile) fadeOutMusic()
-        // }
-        // if (!isMobile) fadeToggle(music, music_volume);
         muteToggle();
         if (!isMuted) {
           if (mobileCheck() == false) {
@@ -199,7 +188,6 @@
           mute_lottie.loop = false;
         }
       })
-    // }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
       if (mobileCheck() == false) {

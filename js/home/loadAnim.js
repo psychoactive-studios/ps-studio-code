@@ -98,7 +98,7 @@ if (hasVisited || $(window).width() <= 1024) {
 }
 // if page not visited - animate
 else {
-  $("#trigger").click(function(){
+  $("#trigger,#enter-btn").on('click', function(){
   $(".landing-video-container")
     .animate(
         {

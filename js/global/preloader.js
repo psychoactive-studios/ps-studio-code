@@ -20,7 +20,6 @@ var anim_b;
         var links = document.getElementsByTagName('a');
         
         for (var i = 0; i < links.length; i++) {
-            // console.log();
             if (!link_is_external(links[i])) {
                 // Only internal links trigger page out logo animation
                 // with the exception of content-hub inner page internal links
