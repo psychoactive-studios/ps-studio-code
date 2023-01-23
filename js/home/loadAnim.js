@@ -18,7 +18,7 @@ anime.set(targetQuery, {
   translateY: '4vh'
 })
 
-anime.set('#hamburger, .logos-box', {
+anime.set('#hamburger, .logos-box, #mute-btn-container', {
   opacity: 0,
   translateY: '-4vh'
 })
@@ -39,10 +39,10 @@ const onOpen = (delay) =>{
     delay: delay
     })
 
-     $('.navigation-bar').css({display: 'block'})
+     $('.navigation-bar, #mute-btn-container').css({display: 'block'})
 
     anime({
-    targets: '#hamburger, .logos-box',
+    targets: '#hamburger, .logos-box, #mute-btn-container',
     opacity: { value: 1, duration: 800, easing: 'easeOutSine'},
     translateY: { value:['-4vh', '0vh'], duration: 1000, easing: 'easeOutQuad'},
     delay: anime.stagger(500, {start: delay}),
@@ -61,7 +61,7 @@ const visited = (delay) =>{
     $(".body-dark").css({ overflow: "visible" })
     $('.preloader-background').css({display: 'none'})
     $('#preloader').css({display: 'none'})
-    $('.navigation-bar').css({display: 'block'})
+    $('.navigation-bar, #mute-btn-container').css({display: 'block'})
     
     anime({
     targets : '.landing-video-container',
@@ -70,7 +70,7 @@ const visited = (delay) =>{
     })
     
     anime({
-    targets: '#hamburger, .logos-box',
+    targets: '#hamburger, .logos-box, #mute-btn-container',
     opacity: { value: 1, duration: 0, easing: 'easeOutSine'},
     translateY: { value:['0', '0vh'], duration: 0, easing: 'easeOutQuad'},
     delay: anime.stagger(500, {start: delay}),
@@ -98,7 +98,9 @@ if (hasVisited || $(window).width() <= 1024) {
 }
 // if page not visited - animate
 else {
-  $("#trigger,#enter-btn").on('click', function(){
+  // TEMP-CHANGE: replaced triggered preloader with onload func
+  // $("#trigger,#enter-btn").on('click', function(){
+  $(function() {
   $(".landing-video-container")
     .animate(
         {

@@ -1016,7 +1016,7 @@ exports.default = loadAnim = ()=>{
         opacity: 0,
         translateY: "4vh"
     });
-    (0, _animejsDefault.default).set("#hamburger, .logos-box", {
+    (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container", {
         opacity: 0,
         translateY: "-4vh"
     });
@@ -1042,11 +1042,11 @@ exports.default = loadAnim = ()=>{
             },
             delay: delay
         });
-        $(".navigation-bar").css({
+        $(".navigation-bar, #mute-btn-container").css({
             display: "block"
         });
         (0, _animejsDefault.default)({
-            targets: "#hamburger, .logos-box",
+            targets: "#hamburger, .logos-box, #mute-btn-container",
             opacity: {
                 value: 1,
                 duration: 800,
@@ -1091,7 +1091,7 @@ exports.default = loadAnim = ()=>{
         $("#preloader").css({
             display: "none"
         });
-        $(".navigation-bar").css({
+        $(".navigation-bar, #mute-btn-container").css({
             display: "block"
         });
         (0, _animejsDefault.default)({
@@ -1104,7 +1104,7 @@ exports.default = loadAnim = ()=>{
             delay: delay
         });
         (0, _animejsDefault.default)({
-            targets: "#hamburger, .logos-box",
+            targets: "#hamburger, .logos-box, #mute-btn-container",
             opacity: {
                 value: 1,
                 duration: 0,
@@ -1152,7 +1152,9 @@ exports.default = loadAnim = ()=>{
             opacity: 0
         });
         visited(0);
-    } else $("#trigger,#enter-btn").on("click", function() {
+    } else // TEMP-CHANGE: replaced triggered preloader with onload func
+    // $("#trigger,#enter-btn").on('click', function(){
+    $(function() {
         $(".landing-video-container").animate({
             width: "100vw",
             height: "100vh",
