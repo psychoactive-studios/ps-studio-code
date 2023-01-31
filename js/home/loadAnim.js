@@ -32,6 +32,7 @@ const onOpen = (delay) =>{
     $(".body-dark").css({ overflow: "visible" })
     $(".preloader-background").animate({ opacity: 0 }, 1000)
     $('#preloader').css({display: 'none'})
+    $('#mute-btn-container').css({display: 'none'})
 
     anime({
     targets : '.landing-video-container',
@@ -61,8 +62,9 @@ const visited = (delay) =>{
     $(".body-dark").css({ overflow: "visible" })
     $('.preloader-background').css({display: 'none'})
     $('#preloader').css({display: 'none'})
-    $('.navigation-bar, #mute-btn-container').css({display: 'block'})
-    
+    $('.navigation-bar').css({display: 'block;'})
+    $('#mute-btn-container').css({display: 'block;'})
+
     anime({
     targets : '.landing-video-container',
     opacity: { value: 1, duration: 800, easing: 'easeOutSine'},

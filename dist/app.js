@@ -553,6 +553,9 @@ var _audioDefault = parcelHelpers.interopDefault(_audio);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
+    // const muteBtn = $('#mute-btn-container')
+    // $('#mute-btn-container').css({display: 'block;!important'})
+    // console.log('test', muteBtn);
     const page = window.location.pathname.split("/").pop();
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
@@ -1033,6 +1036,9 @@ exports.default = loadAnim = ()=>{
         $("#preloader").css({
             display: "none"
         });
+        $("#mute-btn-container").css({
+            display: "none"
+        });
         (0, _animejsDefault.default)({
             targets: ".landing-video-container",
             opacity: {
@@ -1091,8 +1097,11 @@ exports.default = loadAnim = ()=>{
         $("#preloader").css({
             display: "none"
         });
-        $(".navigation-bar, #mute-btn-container").css({
-            display: "block"
+        $(".navigation-bar").css({
+            display: "block;"
+        });
+        $("#mute-btn-container").css({
+            display: "block;"
         });
         (0, _animejsDefault.default)({
             targets: ".landing-video-container",
