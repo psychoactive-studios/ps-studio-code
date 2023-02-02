@@ -40,7 +40,8 @@ const onOpen = (delay) =>{
     delay: delay
     })
 
-     $('.navigation-bar, #mute-btn-container').css({display: 'block'})
+    $('#mute-btn-container').css({display: 'block'})
+    $('.navigation-bar').css({display: 'block'})
 
     anime({
     targets: '#hamburger, .logos-box, #mute-btn-container',

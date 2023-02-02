@@ -151,15 +151,9 @@
     const soundwave = document.querySelector('.soundwave-svg')
     const wave = document.querySelectorAll('.wave')
 
+    // toggle css animation on click
     soundwave.addEventListener('click', function() {
-      wave.forEach(e =>{
-        const style = getComputedStyle(e)
-        if (style["animation-iteration-count"] == "infinite") {     
-          e.setAttribute("style", "animation-iteration-count: 1!important;")
-        } else {
-            e.setAttribute("style", "animation-iteration-count: infinite!important;");
-        }
-      })
+      toggleCssAnim(wave)
     })
         
     const mute_btn = document.querySelector('#mute-btn-container');
@@ -173,21 +167,23 @@
       autoplay: true
     });
 
-      mute_btn.addEventListener('click', function() {
-        muteToggle();
-        if (!isMuted) {
-          if (mobileCheck() == false) {
-            music.volume = music_volume
-          }
-          mute_lottie.setSpeed(1)
-          mute_lottie.loop = true;
-          mute_lottie.play();
-        } else {
-          music.volume = 0
-          mute_lottie.setSpeed(1.5)
-          mute_lottie.loop = false;
+    mute_btn.addEventListener('click', function() {
+      muteToggle();
+      if (!isMuted) {
+        if (mobileCheck() == false) {
+          music.volume = music_volume
+          music.muted = false;
+          // console.log(music.muted);
         }
-      })
+        mute_lottie.setSpeed(1)
+        mute_lottie.loop = true;
+        mute_lottie.play();
+      } else {
+        music.volume = 0
+        mute_lottie.setSpeed(1.5)
+        mute_lottie.loop = false;
+      }
+    })
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener('click', function() {
       if (mobileCheck() == false) {
@@ -205,7 +201,12 @@
       if (mobileCheck() == false) {
         fadeToggle(music, music_volume);
       }
+      // stop mute-btn lottie from playing - OLD
       mute_lottie.autoplay = false;
+      // stop mute-btn lottie from playing - NEW
+      wave.forEach(e =>{
+        e.setAttribute("style", "animation-iteration-count: 0!important;")
+      })
     }  
     
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
@@ -427,4 +428,15 @@
         audio.muted = false;
       })
     }
+  }
+
+  function toggleCssAnim (wave) {
+    wave.forEach(e =>{
+      const style = getComputedStyle(e)
+      if (style["animation-iteration-count"] == "infinite") {     
+        e.setAttribute("style", "animation-iteration-count: 1!important;")
+      } else {
+          e.setAttribute("style", "animation-iteration-count: infinite!important;");
+      }
+    })
   }

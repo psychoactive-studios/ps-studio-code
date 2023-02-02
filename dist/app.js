@@ -553,9 +553,6 @@ var _audioDefault = parcelHelpers.interopDefault(_audio);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
-    // const muteBtn = $('#mute-btn-container')
-    // $('#mute-btn-container').css({display: 'block;!important'})
-    // console.log('test', muteBtn);
     const page = window.location.pathname.split("/").pop();
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
@@ -1048,7 +1045,10 @@ exports.default = loadAnim = ()=>{
             },
             delay: delay
         });
-        $(".navigation-bar, #mute-btn-container").css({
+        $("#mute-btn-container").css({
+            display: "block"
+        });
+        $(".navigation-bar").css({
             display: "block"
         });
         (0, _animejsDefault.default)({
@@ -2607,12 +2607,9 @@ function audioImplementation() {
     // MUTE LOTTIE FUNCTIONALITY 
     const soundwave = document.querySelector(".soundwave-svg");
     const wave = document.querySelectorAll(".wave");
+    // toggle css animation on click
     soundwave.addEventListener("click", function() {
-        wave.forEach((e)=>{
-            const style = getComputedStyle(e);
-            if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
-            else e.setAttribute("style", "animation-iteration-count: infinite!important;");
-        });
+        toggleCssAnim(wave);
     });
     const mute_btn = document.querySelector("#mute-btn-container");
     // need bodymovin cdn for this to work
@@ -2626,7 +2623,11 @@ function audioImplementation() {
     mute_btn.addEventListener("click", function() {
         muteToggle();
         if (!isMuted) {
-            if (mobileCheck() == false) music.volume = music_volume;
+            if (mobileCheck() == false) {
+                music.volume = music_volume;
+                music.muted = false;
+            // console.log(music.muted);
+            }
             mute_lottie.setSpeed(1);
             mute_lottie.loop = true;
             mute_lottie.play();
@@ -2647,7 +2648,12 @@ function audioImplementation() {
     if (muteState !== null && isMuted) {
         muteAll(uiSounds);
         if (mobileCheck() == false) fadeToggle(music, music_volume);
+        // stop mute-btn lottie from playing - OLD
         mute_lottie.autoplay = false;
+        // stop mute-btn lottie from playing - NEW
+        wave.forEach((e)=>{
+            e.setAttribute("style", "animation-iteration-count: 0!important;");
+        });
     }
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
     document.body.addEventListener("click", function() {
@@ -2832,6 +2838,13 @@ function audioImplementation() {
     }
 }
 exports.default = audioImplementation;
+function toggleCssAnim(wave) {
+    wave.forEach((e)=>{
+        const style = getComputedStyle(e);
+        if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
+        else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+    });
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","detect-gpu":"dAC0i"}],"dAC0i":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
