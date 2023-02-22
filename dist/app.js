@@ -2520,7 +2520,10 @@ function audioImplementation() {
     // IF MUSIC STATE IS PRESENT, FADE IN (IF IT'S NOT MOBILE)
     if (document.readyState !== "loading") {
         if (musicState) music.currentTime = musicState + 10;
-        if (mobileCheck() == false) fadeInMusic();
+        if (mobileCheck() == false && muteState == false) {
+            console.log("triggered");
+            fadeInMusic();
+        }
     }
     // FADE MUSIC OUT & STORE IN SESSION STATE BEFORE UNLOAD
     window.onbeforeunload = function() {
@@ -2761,7 +2764,6 @@ function audioImplementation() {
             trigger.addEventListener("click", function() {
                 if (trigger.nodeName == "A") fadeOutMusic();
                 clickSound.currentTime = 0;
-                console.log(trigger, "clicked");
                 clickSound.play();
             });
             if (hoverSound) trigger.addEventListener("mouseenter", function() {

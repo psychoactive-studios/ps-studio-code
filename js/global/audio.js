@@ -34,7 +34,8 @@
       if (musicState) {
         music.currentTime = (musicState + 10);
       }
-      if (mobileCheck() == false) {        
+      if ((mobileCheck() == false) && (muteState == false)) {  
+        console.log('triggered');      
         fadeInMusic();  
       }
     }
@@ -352,7 +353,6 @@
             fadeOutMusic(); 
           }
           clickSound.currentTime = 0;
-          console.log(trigger, "clicked");
           clickSound.play();
         });
 
