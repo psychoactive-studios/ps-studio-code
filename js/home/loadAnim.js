@@ -1,7 +1,8 @@
 import anime from "animejs";
 
 export default loadAnim = () => {
-    var topMargin
+var topMargin
+
 if ($(window).width() <= 1024) {
     topMargin = "15vh";
 } else {
@@ -28,7 +29,6 @@ anime.set('.landing-video-container', {
 })
 
 const onOpen = (delay) =>{
-
     $(".body-dark").css({ overflow: "visible" })
     $(".preloader-background").animate({ opacity: 0 }, 1000)
     $('#preloader').css({display: 'none'})
@@ -59,7 +59,6 @@ const onOpen = (delay) =>{
 
 }
 const visited = (delay) =>{
-
     $(".body-dark").css({ overflow: "visible" })
     $('.preloader-background').css({display: 'none'})
     $('#preloader').css({display: 'none'})
@@ -89,7 +88,9 @@ const visited = (delay) =>{
 
 //if page has been visited - don't animate
 if (hasVisited || $(window).width() <= 1024) {
-		//console.log("visited");
+    // remove black cover from DOM if user has visited site
+    $('#black-cover').remove();
+
     $(".landing-video-container").css({
         width: "80vw",
         height: "40vh",
@@ -101,34 +102,37 @@ if (hasVisited || $(window).width() <= 1024) {
 }
 // if page not visited - animate
 else {
-  // TEMP-CHANGE: replaced triggered preloader with onload func
-  // $("#trigger,#enter-btn").on('click', function(){
-  $(function() {
-  $(".landing-video-container")
-    .animate(
-        {
-          width: "100vw",
-          height: "100vh",
-          opacity: 1,
-        },
-        1000
-      )
-      .delay(1500)
-      .animate(
-        {
-          top: topMargin,
-          width: "80vw",
-          height: "40vh",
-          position: "relative",
-        },
-        1000,
-        function () {
-          onOpen(0)
-        })
+  $('#preloader').css({display: 'block'})
 
-    // do stuff
-    console.log("Welcome, stranger !")
-    sessionStorage.setItem("washere", true)
+  $("#trigger,#enter-btn").on('click', function(){
+    // remove black cover from DOM if user has visited site
+    $('#black-cover').remove();
+    
+    $(".landing-video-container")
+      .animate(
+          {
+            width: "100vw",
+            height: "100vh",
+            opacity: 1,
+          },
+          1000
+        )
+        .delay(2000)
+        .animate(
+          {
+            top: topMargin,
+            width: "80vw",
+            height: "40vh",
+            position: "relative",
+          },
+          1000,
+          function () {
+            onOpen(0)
+          })
+
+      // do stuff
+      console.log("Welcome, stranger !")
+      sessionStorage.setItem("washere", true)
   })
 }
 }

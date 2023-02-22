@@ -553,6 +553,8 @@ var _audioDefault = parcelHelpers.interopDefault(_audio);
 const parceled = true // for checking localhost vs github pages / CDN
 ;
 const onReady = ()=>{
+    (0, _audioDefault.default)() // adds music, ui-sounds and mute-lottie functionality
+    ;
     const page = window.location.pathname.split("/").pop();
     (0, _logCareersDefault.default)() // logs a frog and message to the console
     ;
@@ -563,8 +565,6 @@ const onReady = ()=>{
     (0, _copyEmailDefault.default)() // copies email to clipboard in footer
     ;
     (0, _initCmsDefault.default)() // sets color hovers and cms filtering style for work page & content hub
-    ;
-    (0, _audioDefault.default)() // adds music, ui-sounds and mute-lottie functionality
     ;
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)() // for home page intro anim
     ;
@@ -1153,7 +1153,8 @@ exports.default = loadAnim = ()=>{
     };
     //if page has been visited - don't animate
     if (hasVisited || $(window).width() <= 1024) {
-        //console.log("visited");
+        // remove black cover from DOM if user has visited site
+        $("#black-cover").remove();
         $(".landing-video-container").css({
             width: "80vw",
             height: "40vh",
@@ -1161,25 +1162,30 @@ exports.default = loadAnim = ()=>{
             opacity: 0
         });
         visited(0);
-    } else // TEMP-CHANGE: replaced triggered preloader with onload func
-    // $("#trigger,#enter-btn").on('click', function(){
-    $(function() {
-        $(".landing-video-container").animate({
-            width: "100vw",
-            height: "100vh",
-            opacity: 1
-        }, 1000).delay(1500).animate({
-            top: topMargin,
-            width: "80vw",
-            height: "40vh",
-            position: "relative"
-        }, 1000, function() {
-            onOpen(0);
+    } else {
+        $("#preloader").css({
+            display: "block"
         });
-        // do stuff
-        console.log("Welcome, stranger !");
-        sessionStorage.setItem("washere", true);
-    });
+        $("#trigger,#enter-btn").on("click", function() {
+            // remove black cover from DOM if user has visited site
+            $("#black-cover").remove();
+            $(".landing-video-container").animate({
+                width: "100vw",
+                height: "100vh",
+                opacity: 1
+            }, 1000).delay(2000).animate({
+                top: topMargin,
+                width: "80vw",
+                height: "40vh",
+                position: "relative"
+            }, 1000, function() {
+                onOpen(0);
+            });
+            // do stuff
+            console.log("Welcome, stranger !");
+            sessionStorage.setItem("washere", true);
+        });
+    }
 };
 
 },{"animejs":"jokr5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jokr5":[function(require,module,exports) {
@@ -2487,22 +2493,8 @@ exports.default = setLogoHref = ()=>{
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc3EI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _detectGpu = require("detect-gpu");
 function audioImplementation() {
-    // console.log('live server is running');
-    // FIND OUT IF USER'S DEVICE IS MOBILE
-    // async function getGPU() {
-    //    const gpuTier = await getGPUTier();
-    //    const isMobile = gpuTier.isMobile;
-    //    return isMobile
-    // };
-    // getGPU().then(isMobile => {
-    //   if (isMobile) {
-    //     isMobile = true;
-    //   }
-    // })
-    // const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    // console.log(isMobile)
+    // MOBILE CHECK
     window.mobileCheck = function() {
         let check = false;
         (function(a) {
@@ -2519,17 +2511,18 @@ function audioImplementation() {
         muteState = muteState == "true" ? muteState = true : muteState = false;
         isMuted = muteState;
     }
-    // MUSIC ONLOAD
+    // LOAD BG MUSIC
     music = new Audio();
-    music.loop = true;
-    music.src = "https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/Music/ps-website-music-v2.mp3";
     const music_volume = 0.3;
     music.volume = music_volume;
+    music.loop = true;
+    music.src = "https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/Music/ps-website-music-v2.mp3";
+    // IF MUSIC STATE IS PRESENT, FADE IN (IF IT'S NOT MOBILE)
     if (document.readyState !== "loading") {
         if (musicState) music.currentTime = musicState + 10;
         if (mobileCheck() == false) fadeInMusic();
     }
-    // MUSIC FADE-OUT & STORE SESSION STATE
+    // FADE MUSIC OUT & STORE IN SESSION STATE BEFORE UNLOAD
     window.onbeforeunload = function() {
         sessionStorage.setItem("musicTime", music.currentTime);
         sessionStorage.setItem("muteState", isMuted);
@@ -2537,30 +2530,27 @@ function audioImplementation() {
             if (!isMuted && !linkClicked) fadeToggle(music, music_volume);
         }
     };
-    // MUTE AUDIO IF USER NAVIGATES AWAY
+    // MUTE AUDIO IF USER NAVIGATES AWAY FROM BROWSER-TAB
     document.addEventListener("visibilitychange", function() {
         if (mute_lottie.loop) {
-            if (document.hidden) // fadeToggle(music, music_volume);
-            music.muted = true;
-            else // fadeToggle(music, music_volume);
-            music.muted = false;
+            if (document.hidden) music.muted = true;
+            else music.muted = false;
         }
     });
-    // UI AUDIO
+    // ************ UI AUDIO ************
+    // preloader sound <-- currently using html audio from webflow instead
+    // preloader_sound = new Audio();
+    // addSrc(preloader_sound, 'preloader_sound');
     // open hamburger-menu sound
     frog_ui_open_menu = new Audio();
-    frog_ui_open_menu.volume = 1;
     addSrc(frog_ui_open_menu, "frog_ui_open_WET");
     // close hamburger-menu sound
     frog_ui_close_menu = new Audio();
-    frog_ui_close_menu.volume = 1;
     addSrc(frog_ui_close_menu, "frog_ui_close_WET");
     // menu click sounds
     frog_ui_single_click_1 = new Audio();
-    frog_ui_single_click_1.volume = 1;
     addSrc(frog_ui_single_click_1, "frog_ui_single_1_WET");
     frog_ui_single_click_2 = new Audio();
-    frog_ui_single_click_2.volume = 1;
     addSrc(frog_ui_single_click_2, "frog_ui_single_2_WET");
     // menu hover clack sound
     wood_clack_hover_menu = new Audio();
@@ -2579,16 +2569,14 @@ function audioImplementation() {
     addSrc(text_hover, "text_hover");
     // logo click sound
     home_ui = new Audio();
-    home_ui.volume = 1;
     addSrc(home_ui, "home_ui");
     // define metamorphosis sound
     metamorphosis_ui = new Audio();
-    metamorphosis_ui.volume = 1;
     addSrc(metamorphosis_ui, "frog_sfx");
     // logo hover sound
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
-    const logo_hover_volume = .1;
+    const logo_hover_volume = .2;
     ps_logo_hover.volume = logo_hover_volume;
     addSrc(ps_logo_hover, "hover_sound_short");
     // UI SOUNDS ARRAY
@@ -2604,14 +2592,16 @@ function audioImplementation() {
         ps_logo_hover,
         home_ui
     ];
-    // MUTE LOTTIE FUNCTIONALITY 
+    // ^ADD AUDIO VARIABLES HERE IF YOU WANT THEM TO BE INCLUDED IN MUTE FUNCTIONALITY
+    // MUTE FUNCTIONALITY 
+    const mute_btn = document.querySelector("#mute-btn-container");
     const soundwave = document.querySelector(".soundwave-svg");
     const wave = document.querySelectorAll(".wave");
     // toggle css animation on click
     soundwave.addEventListener("click", function() {
         toggleCssAnim(wave);
     });
-    const mute_btn = document.querySelector("#mute-btn-container");
+    // ALTERNATE VERSION USING LOTTIE, INSTEAD OF CSS ANIME (NOT CURRENTLY USED)
     // need bodymovin cdn for this to work
     const mute_lottie = bodymovin.loadAnimation({
         container: mute_btn,
@@ -2620,13 +2610,13 @@ function audioImplementation() {
         loop: true,
         autoplay: true
     });
+    // MUTE BUTTON TOGGLE ON CLICK 
     mute_btn.addEventListener("click", function() {
         muteToggle();
         if (!isMuted) {
             if (mobileCheck() == false) {
                 music.volume = music_volume;
                 music.muted = false;
-            // console.log(music.muted);
             }
             mute_lottie.setSpeed(1);
             mute_lottie.loop = true;
@@ -2636,6 +2626,7 @@ function audioImplementation() {
             mute_lottie.setSpeed(1.5);
             mute_lottie.loop = false;
         }
+        if (muteState) music.play();
     });
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener("click", function() {
@@ -2656,13 +2647,16 @@ function audioImplementation() {
         });
     }
     // PLAY MUSIC WHEN CLICKED ANYWHERE (IF NO PRELOADER)
-    document.body.addEventListener("click", function() {
+    if (muteState == false) document.body.addEventListener("click", function() {
         if (!isMuted && music.paused && mobileCheck() == false) music.play();
     });
+    // ************ AUDIO TRIGGERS ************
     // PRELOADER TRIGGER
-    //const preloader_trigger = document.querySelectorAll('#trigger');
-    //playSound(preloader_trigger, music);
-    //playSound(preloader_trigger, home_ui);
+    const preloader_trigger = document.querySelectorAll("#trigger");
+    // get audio object from html in webflow instead, to improve loadtime
+    const preloader_sound = document.querySelector("#preloader_sound");
+    playSound(preloader_trigger, preloader_sound);
+    playSound(preloader_trigger, music);
     // MENU NAV-LINKS
     const menu_links = document.querySelectorAll(".menu-link-box");
     playSound(menu_links, frog_ui_single_click_1, wood_clack_hover_menu);
@@ -2744,7 +2738,7 @@ function audioImplementation() {
             fadeOutMusic();
             ps_logo_hover.volume = 0;
         });
-        // OPTIONAL PS-LOGO HOVER SOUNDS 
+        // PS-LOGO HOVER SOUNDS 
         link.addEventListener("mouseenter", function() {
             ps_logo_hover.currentTime = 0.1;
             ps_logo_hover.loop = true;
@@ -2754,23 +2748,23 @@ function audioImplementation() {
         });
         link.addEventListener("mouseleave", function() {
             ps_logo_hover.loop = false;
-        // if (isMuted == false){
-        //   ps_logo_hover.volume = 0
-        // }
         });
     });
-    // FUNCTIONS
+    // ************ CUSTOM FUNCTIONS ************
+    // func to add src url to audio variable
     function addSrc(audio, file) {
         audio.src = `https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/UI/${file}.mp3`;
     }
+    // func to play a specified sound either click or hover, with the option to filter out a class 
     function playSound(triggerLink, clickSound, hoverSound, filteredClass) {
         triggerLink.forEach((trigger)=>{
             trigger.addEventListener("click", function() {
                 if (trigger.nodeName == "A") fadeOutMusic();
                 clickSound.currentTime = 0;
+                console.log(trigger, "clicked");
                 clickSound.play();
             });
-            trigger.addEventListener("mouseenter", function() {
+            if (hoverSound) trigger.addEventListener("mouseenter", function() {
                 // check if a filtered class exists
                 if (filteredClass == undefined) {
                     hoverSound.currentTime = 0;
@@ -2786,6 +2780,7 @@ function audioImplementation() {
             });
         });
     }
+    // func to filer out a class from nodelist
     const filterOut = (trigger, filteredClass)=>{
         let isFiltered = false;
         filteredClass.forEach((className)=>{
@@ -2793,10 +2788,12 @@ function audioImplementation() {
         });
         return isFiltered;
     };
+    // func to fade out music smoothly
     function fadeOutMusic() {
         if (!isMuted && mobileCheck() == false) fadeToggle(music, music_volume);
         linkClicked = true;
     }
+    //func to fade in music smoothly
     function fadeInMusic() {
         $(window).on("load", function() {
             music.play();
@@ -2808,6 +2805,7 @@ function audioImplementation() {
             }
         });
     }
+    // func to toggle volume
     function fadeToggle(audio, maxVolume) {
         let muted = audio.muted;
         if (muted) audio.muted = false;
@@ -2817,6 +2815,7 @@ function audioImplementation() {
             audio.muted = !muted;
         });
     }
+    // func to toggle mute state
     function muteToggle() {
         if (isMuted) {
             unmuteAll(uiSounds);
@@ -2826,11 +2825,13 @@ function audioImplementation() {
             isMuted = true;
         }
     }
+    // func to mute all sounds
     function muteAll(audioArr) {
         audioArr.forEach((audio)=>{
             audio.muted = true;
         });
     }
+    // func to unmute all sounds
     function unmuteAll(audioArr) {
         audioArr.forEach((audio)=>{
             audio.muted = false;
@@ -2838,6 +2839,7 @@ function audioImplementation() {
     }
 }
 exports.default = audioImplementation;
+// func to toggle the css animation of the soundwave (mute-btn)
 function toggleCssAnim(wave) {
     wave.forEach((e)=>{
         const style = getComputedStyle(e);
@@ -2845,379 +2847,6 @@ function toggleCssAnim(wave) {
         else e.setAttribute("style", "animation-iteration-count: infinite!important;");
     });
 }
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","detect-gpu":"dAC0i"}],"dAC0i":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getGPUTier", ()=>f);
-function e(e, t, n, r) {
-    return new (n || (n = Promise))(function(o, a) {
-        function i(e) {
-            try {
-                d(r.next(e));
-            } catch (e1) {
-                a(e1);
-            }
-        }
-        function c(e) {
-            try {
-                d(r.throw(e));
-            } catch (e1) {
-                a(e1);
-            }
-        }
-        function d(e) {
-            var t;
-            e.done ? o(e.value) : (t = e.value, t instanceof n ? t : new n(function(e) {
-                e(t);
-            })).then(i, c);
-        }
-        d((r = r.apply(e, t || [])).next());
-    });
-}
-const t = [
-    "geforce 320m",
-    "geforce 8600",
-    "geforce 8600m gt",
-    "geforce 8800 gs",
-    "geforce 8800 gt",
-    "geforce 9400",
-    "geforce 9400m g",
-    "geforce 9400m",
-    "geforce 9600m gt",
-    "geforce 9600m",
-    "geforce fx go5200",
-    "geforce gt 120",
-    "geforce gt 130",
-    "geforce gt 330m",
-    "geforce gtx 285",
-    "google swiftshader",
-    "intel g41",
-    "intel g45",
-    "intel gma 4500mhd",
-    "intel gma x3100",
-    "intel hd 3000",
-    "intel q45",
-    "legacy",
-    "mali-2",
-    "mali-3",
-    "mali-4",
-    "quadro fx 1500",
-    "quadro fx 4",
-    "quadro fx 5",
-    "radeon hd 2400",
-    "radeon hd 2600",
-    "radeon hd 4670",
-    "radeon hd 4850",
-    "radeon hd 4870",
-    "radeon hd 5670",
-    "radeon hd 5750",
-    "radeon hd 6290",
-    "radeon hd 6300",
-    "radeon hd 6310",
-    "radeon hd 6320",
-    "radeon hd 6490m",
-    "radeon hd 6630m",
-    "radeon hd 6750m",
-    "radeon hd 6770m",
-    "radeon hd 6970m",
-    "sgx 543",
-    "sgx543"
-];
-function n(e) {
-    return e = e.toLowerCase().replace(/.*angle ?\((.+)\)(?: on vulkan [0-9.]+)?$/i, "$1").replace(/\s(\d{1,2}gb|direct3d.+$)|\(r\)| \([^)]+\)$/g, "").replace(/(?:vulkan|opengl) \d+\.\d+(?:\.\d+)?(?: \((.*)\))?/, "$1");
-}
-const r = "undefined" == typeof window, o = (()=>{
-    if (r) return;
-    const { userAgent: e , platform: t , maxTouchPoints: n  } = window.navigator, o = /(iphone|ipod|ipad)/i.test(e), a = "iPad" === t || "MacIntel" === t && n > 0 && !window.MSStream;
-    return {
-        isIpad: a,
-        isMobile: /android/i.test(e) || o || a,
-        isSafari12: /Version\/12.+Safari/.test(e)
-    };
-})();
-function a(e, t, n) {
-    if (!n) return [
-        t
-    ];
-    const r = function(e) {
-        const t = "\n    precision highp float;\n    attribute vec3 aPosition;\n    varying float vvv;\n    void main() {\n      vvv = 0.31622776601683794;\n      gl_Position = vec4(aPosition, 1.0);\n    }\n  ", n = "\n    precision highp float;\n    varying float vvv;\n    void main() {\n      vec4 enc = vec4(1.0, 255.0, 65025.0, 16581375.0) * vvv;\n      enc = fract(enc);\n      enc -= enc.yzww * vec4(1.0 / 255.0, 1.0 / 255.0, 1.0 / 255.0, 0.0);\n      gl_FragColor = enc;\n    }\n  ", r = e.createShader(35633), o = e.createShader(35632), a = e.createProgram();
-        if (!(o && r && a)) return;
-        e.shaderSource(r, t), e.shaderSource(o, n), e.compileShader(r), e.compileShader(o), e.attachShader(a, r), e.attachShader(a, o), e.linkProgram(a), e.detachShader(a, r), e.detachShader(a, o), e.deleteShader(r), e.deleteShader(o), e.useProgram(a);
-        const i = e.createBuffer();
-        e.bindBuffer(34962, i), e.bufferData(34962, new Float32Array([
-            -1,
-            -1,
-            0,
-            3,
-            -1,
-            0,
-            -1,
-            3,
-            0
-        ]), 35044);
-        const c = e.getAttribLocation(a, "aPosition");
-        e.vertexAttribPointer(c, 3, 5126, !1, 0, 0), e.enableVertexAttribArray(c), e.clearColor(1, 1, 1, 1), e.clear(16384), e.viewport(0, 0, 1, 1), e.drawArrays(4, 0, 3);
-        const d = new Uint8Array(4);
-        return e.readPixels(0, 0, 1, 1, 6408, 5121, d), e.deleteProgram(a), e.deleteBuffer(i), d.join("");
-    }(e), a = "801621810", i = "8016218135", c = "80162181161", d = (null == o ? void 0 : o.isIpad) ? [
-        [
-            "a7",
-            c,
-            12
-        ],
-        [
-            "a8",
-            i,
-            15
-        ],
-        [
-            "a8x",
-            i,
-            15
-        ],
-        [
-            "a9",
-            i,
-            15
-        ],
-        [
-            "a9x",
-            i,
-            15
-        ],
-        [
-            "a10",
-            i,
-            15
-        ],
-        [
-            "a10x",
-            i,
-            15
-        ],
-        [
-            "a12",
-            a,
-            15
-        ],
-        [
-            "a12x",
-            a,
-            15
-        ],
-        [
-            "a12z",
-            a,
-            15
-        ],
-        [
-            "a14",
-            a,
-            15
-        ],
-        [
-            "m1",
-            a,
-            15
-        ]
-    ] : [
-        [
-            "a7",
-            c,
-            12
-        ],
-        [
-            "a8",
-            i,
-            12
-        ],
-        [
-            "a9",
-            i,
-            15
-        ],
-        [
-            "a10",
-            i,
-            15
-        ],
-        [
-            "a11",
-            a,
-            15
-        ],
-        [
-            "a12",
-            a,
-            15
-        ],
-        [
-            "a13",
-            a,
-            15
-        ],
-        [
-            "a14",
-            a,
-            15
-        ]
-    ];
-    let l;
-    "80162181255" === r ? l = d.filter(([, , e])=>e >= 14) : (l = d.filter(([, e])=>e === r), l.length || (l = d));
-    return l.map(([e])=>`apple ${e} gpu`);
-}
-class i extends Error {
-    constructor(e){
-        super(e), Object.setPrototypeOf(this, new.target.prototype);
-    }
-}
-const c = [], d = [];
-function l(e, t) {
-    if (e === t) return 0;
-    const n = e;
-    e.length > t.length && (e = t, t = n);
-    let r = e.length, o = t.length;
-    for(; r > 0 && e.charCodeAt(~-r) === t.charCodeAt(~-o);)r--, o--;
-    let a, i = 0;
-    for(; i < r && e.charCodeAt(i) === t.charCodeAt(i);)i++;
-    if (r -= i, o -= i, 0 === r) return o;
-    let l, s, f = 0, u = 0, h = 0;
-    for(; u < r;)d[u] = e.charCodeAt(i + u), c[u] = ++u;
-    for(; h < o;)for(a = t.charCodeAt(i + h), l = h++, f = h, u = 0; u < r; u++)s = a === d[u] ? l : l + 1, l = c[u], f = c[u] = l > f ? s > f ? f + 1 : s : s > l ? l + 1 : s;
-    return f;
-}
-function s(e) {
-    return null != e;
-}
-const f = ({ mobileTiers: c = [
-    0,
-    15,
-    30,
-    60
-] , desktopTiers: d = [
-    0,
-    15,
-    30,
-    60
-] , override: f = {} , glContext: u , failIfMajorPerformanceCaveat: h = !1 , benchmarksURL: g = "https://unpkg.com/detect-gpu@5.0.2/dist/benchmarks"  } = {})=>e(void 0, void 0, void 0, function*() {
-        const p = {};
-        if (r) return {
-            tier: 0,
-            type: "SSR"
-        };
-        const { isIpad: m = !!(null == o ? void 0 : o.isIpad) , isMobile: v = !!(null == o ? void 0 : o.isMobile) , screenSize: w = window.screen , loadBenchmarks: x = (t)=>e(void 0, void 0, void 0, function*() {
-                const e = yield fetch(`${g}/${t}`).then((e)=>e.json());
-                if (parseInt(e.shift().split(".")[0], 10) < 4) throw new i("Detect GPU benchmark data is out of date. Please update to version 4x");
-                return e;
-            })  } = f;
-        let { renderer: A  } = f;
-        const P = (e, t, n, r, o)=>({
-                device: o,
-                fps: r,
-                gpu: n,
-                isMobile: v,
-                tier: e,
-                type: t
-            });
-        let b, S = "";
-        if (A) A = n(A), b = [
-            A
-        ];
-        else {
-            const e1 = u || function(e, t = !1) {
-                const n = {
-                    alpha: !1,
-                    antialias: !1,
-                    depth: !1,
-                    failIfMajorPerformanceCaveat: t,
-                    powerPreference: "high-performance",
-                    stencil: !1
-                };
-                e && delete n.powerPreference;
-                const r = window.document.createElement("canvas"), o = r.getContext("webgl", n) || r.getContext("experimental-webgl", n);
-                return null != o ? o : void 0;
-            }(null == o ? void 0 : o.isSafari12, h);
-            if (!e1) return P(0, "WEBGL_UNSUPPORTED");
-            const t1 = e1.getExtension("WEBGL_debug_renderer_info");
-            if (t1 && (A = e1.getParameter(t1.UNMASKED_RENDERER_WEBGL)), !A) return P(1, "FALLBACK");
-            S = A, A = n(A), b = function(e, t, n) {
-                return "apple gpu" === t ? a(e, t, n) : [
-                    t
-                ];
-            }(e1, A, v);
-        }
-        const y = (yield Promise.all(b.map(function(t) {
-            var n;
-            return e(this, void 0, void 0, function*() {
-                const e = ((e)=>{
-                    const t = v ? [
-                        "adreno",
-                        "apple",
-                        "mali-t",
-                        "mali",
-                        "nvidia",
-                        "powervr",
-                        "samsung"
-                    ] : [
-                        "intel",
-                        "apple",
-                        "amd",
-                        "radeon",
-                        "nvidia",
-                        "geforce"
-                    ];
-                    for (const n of t)if (e.includes(n)) return n;
-                })(t);
-                if (!e) return;
-                const r = `${v ? "m" : "d"}-${e}${m ? "-ipad" : ""}.json`, o = p[r] = null !== (n = p[r]) && void 0 !== n ? n : x(r);
-                let a;
-                try {
-                    a = yield o;
-                } catch (e1) {
-                    if (e1 instanceof i) throw e1;
-                    return;
-                }
-                const c = function(e) {
-                    var t;
-                    const n = (e = e.replace(/\([^)]+\)/, "")).match(/\d+/) || e.match(/(\W|^)([A-Za-z]{1,3})(\W|$)/g);
-                    return null !== (t = null == n ? void 0 : n.join("").replace(/\W|amd/g, "")) && void 0 !== t ? t : "";
-                }(t);
-                let d = a.filter(([, e])=>e === c);
-                d.length || (d = a.filter(([e])=>e.includes(t)));
-                const s = d.length;
-                if (0 === s) return;
-                const f = t.split(/[.,()\[\]/\s]/g).sort().filter((e, t, n)=>0 === t || e !== n[t - 1]).join(" ");
-                let u, [h, , , , g] = s > 1 ? d.map((e)=>[
-                        e,
-                        l(f, e[2])
-                    ]).sort(([, e], [, t])=>e - t)[0][0] : d[0], A = Number.MAX_VALUE;
-                const { devicePixelRatio: P  } = window, b = w.width * P * w.height * P;
-                for (const e2 of g){
-                    const [t1, n1] = e2, r1 = t1 * n1, o1 = Math.abs(b - r1);
-                    o1 < A && (A = o1, u = e2);
-                }
-                if (!u) return;
-                const [, , S, y] = u;
-                return [
-                    A,
-                    S,
-                    h,
-                    y
-                ];
-            });
-        }))).filter(s).sort(([e = Number.MAX_VALUE, t], [n = Number.MAX_VALUE, r])=>e === n ? t - r : e - n);
-        if (!y.length) {
-            const e2 = t.find((e)=>A.includes(e));
-            return e2 ? P(0, "BLOCKLISTED", e2) : P(1, "FALLBACK", `${A} (${S})`);
-        }
-        const [, C, E, L] = y[0];
-        if (-1 === C) return P(0, "BLOCKLISTED", E, C, L);
-        const M = v ? c : d;
-        let $ = 0;
-        for(let e3 = 0; e3 < M.length; e3++)C >= M[e3] && ($ = e3);
-        return P($, "BENCHMARK", E, C, L);
-    });
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 
