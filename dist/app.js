@@ -550,29 +550,23 @@ var _setLogoHref = require("./js/pitches/setLogoHref");
 var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 var _audio = require("./js/global/audio");
 var _audioDefault = parcelHelpers.interopDefault(_audio);
-const parceled = true // for checking localhost vs github pages / CDN
-;
+var _bugFixes = require("./js/global/bugFixes");
+const parceled = true; // for checking localhost vs github pages / CDN
 const onReady = ()=>{
-    (0, _audioDefault.default)() // adds music, ui-sounds and mute-lottie functionality
-    ;
+    (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
     const page = window.location.pathname.split("/").pop();
-    (0, _logCareersDefault.default)() // logs a frog and message to the console
-    ;
-    (0, _preloader.readyPreloader)() // hides preloader and add event listener for frog lottie
-    ;
-    (0, _projectLottiesDefault.default)() // initiates project lotties for home and work pages
-    ;
-    (0, _copyEmailDefault.default)() // copies email to clipboard in footer
-    ;
-    (0, _initCmsDefault.default)() // sets color hovers and cms filtering style for work page & content hub
-    ;
-    document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)() // for home page intro anim
-    ;
+    (0, _logCareersDefault.default)(); // logs a frog and message to the console
+    (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
+    (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
+    (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
+    (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
+    document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
     document.querySelector(".client-link") && (0, _setLogoHrefDefault.default)();
     document.querySelectorAll(".article-rich-text a").forEach((e)=>{
         e.target = "_blank";
     });
     page == "about" && (0, _aboutLottieDefault.default)();
+    (0, _bugFixes.stopCmdClick)(); // prevent command click from triggering page transition
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -587,7 +581,7 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function getRandomInt(max) {
@@ -2847,6 +2841,21 @@ function toggleCssAnim(wave) {
         const style = getComputedStyle(e);
         if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
         else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "stopCmdClick", ()=>stopCmdClick);
+function stopCmdClick() {
+    document.addEventListener("click", function(e) {
+        if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
+            element.setAttribute("style", "visibility:hidden !important");
+        });
+        else document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
+            element.setAttribute("style", "visibility:visible !important");
+        });
     });
 }
 
