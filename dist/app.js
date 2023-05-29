@@ -550,23 +550,8 @@ var _setLogoHref = require("./js/pitches/setLogoHref");
 var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 var _audio = require("./js/global/audio");
 var _audioDefault = parcelHelpers.interopDefault(_audio);
+var _bugFixes = require("./js/global/bugFixes");
 const parceled = true; // for checking localhost vs github pages / CDN
-// prevent command click
-// let cmdClick = false;
-// document.addEventListener("click", logKey);
-// function logKey(e) {
-//   cmdClick = e.metaKey;
-//   console.log(cmdClick);
-//   // console.log(`The meta key is pressed: ${e.metaKey}`);
-// }
-// function pageTransition(e) {
-// if(e.ctrlKey || e.metaKey){
-// return //aborts function execution and regular open in new tab behavior will happen
-// }
-// //rest of code
-// e.preventDefault()
-// etc....
-// }
 const onReady = ()=>{
     (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
     const page = window.location.pathname.split("/").pop();
@@ -581,7 +566,7 @@ const onReady = ()=>{
         e.target = "_blank";
     });
     page == "about" && (0, _aboutLottieDefault.default)();
-    stopCmdClick(); // prevent command click from triggering page transition
+    (0, _bugFixes.stopCmdClick)(); // prevent command click from triggering page transition
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -595,18 +580,8 @@ if (document.readyState !== "loading") {
     window.addEventListener("load", onReady);
     document.addEventListener("DOMContentLoaded", onLoading);
 }
-function stopCmdClick() {
-    document.addEventListener("click", function(e) {
-        if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
-            element.setAttribute("style", "visibility:hidden !important");
-        });
-        else document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
-            element.setAttribute("style", "visibility:visible !important");
-        });
-    });
-}
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function getRandomInt(max) {
@@ -2866,6 +2841,21 @@ function toggleCssAnim(wave) {
         const style = getComputedStyle(e);
         if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
         else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "stopCmdClick", ()=>stopCmdClick);
+function stopCmdClick() {
+    document.addEventListener("click", function(e) {
+        if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
+            element.setAttribute("style", "visibility:hidden !important");
+        });
+        else document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
+            element.setAttribute("style", "visibility:visible !important");
+        });
     });
 }
 

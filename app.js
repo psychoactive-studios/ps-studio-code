@@ -7,30 +7,9 @@ import initProjectLotties from "./js/global/projectLotties";
 import loadAnim from "./js/home/loadAnim";
 import setLogoHref from "./js/pitches/setLogoHref";
 import audioImplementation from "./js/global/audio";
+import { stopCmdClick } from "./js/global/bugFixes";
 
 const parceled = true; // for checking localhost vs github pages / CDN
-
-// prevent command click
-// let cmdClick = false;
-// document.addEventListener("click", logKey);
-// function logKey(e) {
-//   cmdClick = e.metaKey;
-//   console.log(cmdClick);
-//   // console.log(`The meta key is pressed: ${e.metaKey}`);
-// }
-
-// function pageTransition(e) {
-
-// if(e.ctrlKey || e.metaKey){
-// return //aborts function execution and regular open in new tab behavior will happen
-// }
-
-// //rest of code
-
-// e.preventDefault()
-
-// etc....
-// }
 
 const onReady = () => {
   audioImplementation(); // adds music, ui-sounds and mute-lottie functionality
@@ -61,18 +40,4 @@ if (document.readyState !== "loading") {
   //console.log('load')
   window.addEventListener("load", onReady);
   document.addEventListener("DOMContentLoaded", onLoading);
-}
-
-function stopCmdClick() {
-  document.addEventListener("click", function (e) {
-    if (e.ctrlKey || e.metaKey) {
-      document.querySelectorAll(".menu-transition-cover").forEach((element) => {
-        element.setAttribute("style", "visibility:hidden !important");
-      });
-    } else {
-      document.querySelectorAll(".menu-transition-cover").forEach((element) => {
-        element.setAttribute("style", "visibility:visible !important");
-      });
-    }
-  });
 }
