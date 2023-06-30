@@ -12,10 +12,10 @@ import { stopCmdClick } from "./js/global/bugFixes";
 const parceled = true; // for checking localhost vs github pages / CDN
 
 const onReady = () => {
+  readyPreloader(); // hides preloader and add event listener for frog lottie
   audioImplementation(); // adds music, ui-sounds and mute-lottie functionality
   const page = window.location.pathname.split("/").pop();
   logCareers(); // logs a frog and message to the console
-  readyPreloader(); // hides preloader and add event listener for frog lottie
   initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer
   initCms(); // sets color hovers and cms filtering style for work page & content hub

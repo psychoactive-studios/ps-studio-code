@@ -553,10 +553,10 @@ var _audioDefault = parcelHelpers.interopDefault(_audio);
 var _bugFixes = require("./js/global/bugFixes");
 const parceled = true; // for checking localhost vs github pages / CDN
 const onReady = ()=>{
+    (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
     const page = window.location.pathname.split("/").pop();
     (0, _logCareersDefault.default)(); // logs a frog and message to the console
-    (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
@@ -811,14 +811,25 @@ function pageOutTransitionLinks() {
     function link_is_external(link_element) {
         return link_element.host !== window.location.host;
     }
-    var links = document.getElementsByTagName("a");
-    for(var i = 0; i < links.length; i++){
-        if (!link_is_external(links[i])) // Only internal links trigger page out logo animation
-        // with the exception of content-hub inner page internal links
-        {
-            if (!links[i].classList.contains("hamburger-box") && !links[i].classList.contains("close-menu-box") && !links[i].target == "_blank") links[i].addEventListener("click", pageTransition);
-        }
-    }
+    var links = document.querySelectorAll("a");
+    //   for (var i = 0; i < links.length; i++) {
+    //     if (!link_is_external(links[i])) {
+    //       // Only internal links trigger page out logo animation
+    //       // with the exception of content-hub inner page internal links
+    //       console.log(links[i]);
+    //       links[i].addEventListener("click", pageTransition);
+    //       if (
+    //         !links[i].classList.contains("hamburger-box") &&
+    //         !links[i].classList.contains("close-menu-box") &&
+    //         !links[i].target == "_blank"
+    //       ) {
+    //         //   links[i].addEventListener("click", pageTransition);
+    //       }
+    //     }
+    //   }
+    links.forEach((link)=>{
+        if (!link_is_external(link)) link.addEventListener("click", pageTransition);
+    });
     function pageTransition(e) {
         e.preventDefault();
         // flip phrog once
