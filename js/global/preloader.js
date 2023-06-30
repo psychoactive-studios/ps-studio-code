@@ -15,37 +15,20 @@ function pageOutTransitionLinks() {
     return link_element.host !== window.location.host;
   }
 
-  var links = document.querySelectorAll("a");
-
-  //   for (var i = 0; i < links.length; i++) {
-  //     if (!link_is_external(links[i])) {
-  //       // Only internal links trigger page out logo animation
-  //       // with the exception of content-hub inner page internal links
-  //       console.log(links[i]);
-  //       links[i].addEventListener("click", pageTransition);
-
-  //       if (
-  //         !links[i].classList.contains("hamburger-box") &&
-  //         !links[i].classList.contains("close-menu-box") &&
-  //         !links[i].target == "_blank"
-  //       ) {
-  //         //   links[i].addEventListener("click", pageTransition);
-  //       }
-  //     }
-  //   }
+  const links = document.querySelectorAll("a");
 
   links.forEach((link) => {
     if (!link_is_external(link)) {
       link.addEventListener("click", pageTransition);
       // Only internal links trigger page out logo animation
       // with the exception of content-hub inner page internal links
-      //   if (
-      //     (!link.classList.contains("hamburger-box")) &&
-      //     (!link.classList.contains("close-menu-box")) &&
-      //     (!link.target == "_blank")
-      //   ) {
-      //     link.addEventListener("click", pageTransition);
-      //   }
+      //     if (
+      //       (!link.classList.contains("hamburger-box")) &&
+      //       (!link.classList.contains("close-menu-box")) &&
+      //       (!link.target == "_blank")
+      //     ) {
+      //       link.addEventListener("click", pageTransition);
+      //     }
     }
   });
 
@@ -68,14 +51,18 @@ function pageOutTransitionLinks() {
     }, 100);
 
     var linkUrl = $(this).attr("href");
-    
-    setTimeout(
-      function (url) {
-        window.location = url;
-      },
-      1150,
-      linkUrl
-    );
+
+    if (e.ctrlKey || e.metaKey) {
+      window.open(linkUrl, "_blank");
+    } else {
+      setTimeout(
+        function (url) {
+          window.location = url;
+        },
+        1150,
+        linkUrl
+      );
+    }
   }
 }
 
