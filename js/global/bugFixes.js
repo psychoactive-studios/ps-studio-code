@@ -4,11 +4,12 @@ function stopCmdClick() {
       document.querySelectorAll(".menu-transition-cover").forEach((element) => {
         element.setAttribute("style", "visibility:hidden !important");
       });
-    } else {
-      document.querySelectorAll(".menu-transition-cover").forEach((element) => {
-        element.setAttribute("style", "visibility:visible !important");
-      });
-    }
+    } 
+    // else {
+    //   document.querySelectorAll(".menu-transition-cover").forEach((element) => {
+    //     element.setAttribute("style", "visibility:visible !important");
+    //   });
+    // }
   });
 }
 export { stopCmdClick };
