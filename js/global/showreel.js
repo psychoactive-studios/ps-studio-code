@@ -1,9 +1,12 @@
 export function showreelHome(audio) {
   const fadeMusicToggle = audio.fadeToggle;
+  const showreelMuteState = audio.getShowreelMuteState;
 
   const showreelDivs = document.querySelectorAll(
     ".hero-background_video-block.showreel,.showreel-ui-wrapper"
   );
+
+  const homeBlock = document.querySelector("#showreel_block_home");
 
   const showreelVideo = document.querySelector("#showreel_home");
   const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
@@ -13,26 +16,34 @@ export function showreelHome(audio) {
 
   let clickedOnce = false;
   let clickedTwice = false;
+  let outOfView = false;
 
   showreelDivs.forEach((div) => {
     div.addEventListener("click", () => {
+      console.log(showreelMuteState());
       if (!clickedOnce) {
         showreelVideo.muted = false;
         showreelVideo.currentTime = 0;
+        clickToUnmuteUI.style.display = "none";
+        clickToMuteUI.style.opacity = 0;
         clickedOnce = true;
-        fadeMusicToggle();
+        if (!showreelMuteState()) fadeMusicToggle();
+        outOfView = false;
         // console.log("once");
       } else if (!clickedTwice && clickedOnce) {
-        clickToUnmuteUI.style.display = "flex";
         clickToUnmuteUI.style.opacity = "100";
-        // console.log("twice");
+        console.log("twice");
         secondClickCode();
       } else if (clickedOnce && clickedTwice) {
-        // console.log("thrice");
-        clickToUnmuteUI.style.opacity = 0;
+        console.log("thrice");
+        clickToUnmuteUI.style.display = "none";
         showreelVideo.muted = false;
         clickedTwice = false;
-        fadeMusicToggle();
+        outOfView = false;
+        if (!showreelMuteState()) {
+          console.log("ran thre")
+          fadeMusicToggle();
+        }
       }
     });
   });
@@ -45,7 +56,12 @@ export function showreelHome(audio) {
   function secondClickCode() {
     showreelVideo.muted = true;
     clickedTwice = true;
-    fadeMusicToggle();
+    console.log(showreelMuteState());
+    if (!showreelMuteState()) {
+      console.log("ran");
+      fadeMusicToggle();
+    }
+    clickToUnmuteUI.style.display = "flex";
     clickToMuteUI.style.display = "none";
   }
 
@@ -53,14 +69,23 @@ export function showreelHome(audio) {
   showreelVideo.addEventListener(
     "pause",
     function () {
+      outOfView = true;
       if (
         showreelVideo.muted == false &&
         document.visibilityState == "visible"
       ) {
-        fadeMusicToggle();
+        // homeBlock.click();
+        clickToUnmuteUI.style.display = "flex";
+        clickToUnmuteUI.style.opacity = "100";
+        secondClickCode();
+        clickToMuteUI.style.display = "none";
+        clickToMuteUI.style.opacity = 0;
+        console.log(showreelMuteState());
+        if (!showreelMuteState()) fadeMusicToggle();
         showreelVideo.muted = true;
         clickedOnce = false;
         clickedTwice = false;
+        console.log(clickToMuteUI.style.display);
       }
     },
     false
@@ -68,9 +93,10 @@ export function showreelHome(audio) {
 
   // catch if user hovers off showreel, after clicking once
   showreelVideo.addEventListener("mouseout", function () {
-    if (clickedOnce && !clickedTwice) {
-      console.log("hovered off ");
+    // console.log(outOfView);
+    if (clickedOnce && !clickedTwice && !outOfView) {
       setTimeout(() => {
+        // console.log("hovered off ");
         clickToMuteUI.style.display = "flex";
       }, 500);
     }
@@ -79,6 +105,7 @@ export function showreelHome(audio) {
 
 export function showreelNav(audio) {
   const fadeMusicToggle = audio.fadeToggle;
+  const showreelMuteState = audio.getShowreelMuteState;
 
   const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
   const wave = document.querySelectorAll(".wave");
@@ -152,7 +179,7 @@ export function showreelNav(audio) {
         showreelVideo.muted == false &&
         document.visibilityState == "visible"
       ) {
-        fadeMusicToggle();
+        if (!showreelMuteState()) fadeMusicToggle();
         showreelVideo.muted = true;
         clickedOnce = false;
         clickedTwice = false;

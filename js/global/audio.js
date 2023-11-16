@@ -1,4 +1,7 @@
 export default function audioImplementation() {
+  const showreelHome = document.querySelector("#showreel_home");
+  const showreelNav = document.querySelector("#showreel_nav");
+
   // MOBILE CHECK
   window.mobileCheck = function () {
     let check = false;
@@ -141,7 +144,6 @@ export default function audioImplementation() {
 
   // MUTE FUNCTIONALITY
   const mute_btn = document.querySelector("#mute-btn-container");
-  const showreelVideo = document.querySelector("#showreel_home");
 
   const soundwave = document.querySelector(".soundwave-svg");
   const wave = document.querySelectorAll(".wave");
@@ -161,19 +163,32 @@ export default function audioImplementation() {
     autoplay: true,
   });
 
+  let showreelMuteState = false;
+
   // MUTE BUTTON TOGGLE ON CLICK
   mute_btn.addEventListener("click", function () {
     // if (showreelVideo == null || showreelVideo.muted || showreelVideo.paused) {
     muteToggle();
+
     if (!isMuted) {
       if (mobileCheck() == false) {
-        music.volume = music_volume;
-        music.muted = false;
+        if (!showreelHome.muted || !showreelNav.muted) {
+          console.log("user unmuted during video playback");
+          showreelMuteState = false;
+        } else {
+          console.log("custom mute func ran");
+          music.volume = music_volume;
+          music.muted = false;
+        }
       }
       mute_lottie.setSpeed(1);
       mute_lottie.loop = true;
       mute_lottie.play();
     } else {
+      if (!showreelHome.muted || !showreelNav.muted) {
+        console.log("user muted during video playback");
+        showreelMuteState = true;
+      }
       music.volume = 0;
       mute_lottie.setSpeed(1.5);
       mute_lottie.loop = false;
@@ -182,6 +197,7 @@ export default function audioImplementation() {
       music.play();
     }
     // }
+    console.log(showreelMuteState);
   });
 
   // catch to make sure music & mute-lottie is never out of sync
@@ -416,9 +432,14 @@ export default function audioImplementation() {
   function fadeInMusic() {
     // $(window).on("load", function () {
     music.play();
-    if (!isMuted) {
-      music.volume = 0;
-      $(music).animate({ volume: music_volume }, 1500, "linear");
+    if (!showreelHome.muted || !showreelNav.muted) {
+      console.log("fade in triggered, but didn't run");
+    } else {
+      if (!isMuted) {
+        console.log("fade in triggered & ran");
+        music.volume = 0;
+        $(music).animate({ volume: music_volume }, 1500, "linear");
+      }
     }
     // });
   }
@@ -429,13 +450,20 @@ export default function audioImplementation() {
     maxVolume = music_volume,
     isFromShowreel = true
   ) {
-    let muted = audio.muted;
-    if (muted && !isFromShowreel) audio.muted = false;
-    let newVolume = muted ? maxVolume : 0;
-    if (!isFromShowreel) newVolume = maxVolume;
-    $(audio).animate({ volume: muted ? maxVolume : 0 }, 1000, function () {
-      audio.muted = !muted;
-    });
+    console.log("ran")
+    if ((!showreelHome.muted || !showreelNav.muted) && !isFromShowreel) {
+      console.log("fade toggle triggered, but didn't run");
+    } else {
+      console.log("fade toggle triggered & ran");
+      // console.log(mutedState());
+      let muted = audio.muted;
+      if (muted && !isFromShowreel) audio.muted = false;
+      let newVolume = muted ? maxVolume : 0;
+      if (!isFromShowreel) newVolume = maxVolume;
+      $(audio).animate({ volume: muted ? maxVolume : 0 }, 1000, function () {
+        audio.muted = !muted;
+      });
+    }
   }
 
   // func to toggle mute state
@@ -443,9 +471,11 @@ export default function audioImplementation() {
     if (isMuted) {
       unmuteAll(uiSounds);
       isMuted = false;
+      showreelMuteState = false;
     } else {
       muteAll(uiSounds);
       isMuted = true;
+      showreelMuteState = true;
     }
   }
 
@@ -466,6 +496,10 @@ export default function audioImplementation() {
   // func to return mute state
   function mutedState() {
     return isMuted;
+  }
+
+  function getShowreelMuteState() {
+    return showreelMuteState;
   }
 
   // forcefully set mute state
@@ -503,5 +537,6 @@ export default function audioImplementation() {
     mutedState,
     toggleCssAnim,
     setMuteState,
+    getShowreelMuteState,
   };
 }
