@@ -550,12 +550,18 @@ var _setLogoHref = require("./js/pitches/setLogoHref");
 var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 var _audio = require("./js/global/audio");
 var _audioDefault = parcelHelpers.interopDefault(_audio);
+var _showreel = require("./js/global/showreel");
 var _bugFixes = require("./js/global/bugFixes");
 const parceled = true; // for checking localhost vs github pages / CDN
+const currentPage = window.location.pathname;
+const homePage = currentPage == "/";
+// alert("local");
 const onReady = ()=>{
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
-    (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
     const page = window.location.pathname.split("/").pop();
+    const audio = (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
+    if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
+    (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _logCareersDefault.default)(); // logs a frog and message to the console
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
@@ -574,14 +580,12 @@ const onLoading = ()=>{
 if (document.readyState !== "loading") {
     onLoading();
     onReady();
-//console.log('readystate')
 } else {
-    //console.log('load')
     window.addEventListener("load", onReady);
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/bugFixes":"lTFyP","./js/global/showreel":"iVfHp"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function getRandomInt(max) {
@@ -923,17 +927,23 @@ function stopLogoLoading() {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function initProjectLotties() {
+    // check if lottie players exist 
     if (document.querySelectorAll("lottie-player").length > 0) {
+        // create array with all lotie players
         var allLotties = [
             ...document.querySelectorAll("lottie-player")
         ];
         //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
         let isMobile = window.innerWidth < 428;
+        // create new array from lotties if it doesn't have a source attribute
         allLotties = allLotties.filter((l)=>!l.hasAttribute("src"));
         allLotties.forEach((e)=>{
+            // get source based to mobile or desktop based on mobile / screen width
             let source = isMobile ? e.getAttribute("mobile-source") : e.getAttribute("desktop-source");
+            // if source is not empty, load the source into each lottie player
             if (source != "") e.load(source);
         });
+        // remove safari placeholder 
         document.querySelectorAll(".safari-image").forEach((e)=>{
             e.remove();
         });
@@ -2511,17 +2521,14 @@ function audioImplementation() {
     // IF MUSIC STATE IS PRESENT, FADE IN (IF IT'S NOT MOBILE)
     if (document.readyState !== "loading") {
         if (musicState) music.currentTime = musicState + 10;
-        if (mobileCheck() == false && muteState == false) {
-            console.log("triggered");
-            fadeInMusic();
-        }
+        if (mobileCheck() == false && muteState == false) fadeInMusic();
     }
     // FADE MUSIC OUT & STORE IN SESSION STATE BEFORE UNLOAD
     window.onbeforeunload = function() {
         sessionStorage.setItem("musicTime", music.currentTime);
         sessionStorage.setItem("muteState", isMuted);
         if (mobileCheck() == false) {
-            if (!isMuted && !linkClicked) fadeToggle(music, music_volume);
+            if (!isMuted && !linkClicked) fadeToggle(music, music_volume, false);
         }
     };
     // MUTE AUDIO IF USER NAVIGATES AWAY FROM BROWSER-TAB
@@ -2548,7 +2555,7 @@ function audioImplementation() {
     addSrc(frog_ui_single_click_2, "frog_ui_single_2_WET");
     // menu hover clack sound
     wood_clack_hover_menu = new Audio();
-    wood_clack_hover_menu.volume = .9;
+    wood_clack_hover_menu.volume = 0.9;
     addSrc(wood_clack_hover_menu, "wood_clack");
     // project hover & click sounds
     project_hover = new Audio();
@@ -2570,7 +2577,7 @@ function audioImplementation() {
     // logo hover sound
     ps_logo_hover = new Audio();
     ps_logo_hover.loop = true;
-    const logo_hover_volume = .2;
+    const logo_hover_volume = 0.2;
     ps_logo_hover.volume = logo_hover_volume;
     addSrc(ps_logo_hover, "hover_sound_short");
     // UI SOUNDS ARRAY
@@ -2587,8 +2594,9 @@ function audioImplementation() {
         home_ui
     ];
     // ^ADD AUDIO VARIABLES HERE IF YOU WANT THEM TO BE INCLUDED IN MUTE FUNCTIONALITY
-    // MUTE FUNCTIONALITY 
+    // MUTE FUNCTIONALITY
     const mute_btn = document.querySelector("#mute-btn-container");
+    const showreelVideo = document.querySelector("#showreel_home");
     const soundwave = document.querySelector(".soundwave-svg");
     const wave = document.querySelectorAll(".wave");
     // toggle css animation on click
@@ -2604,8 +2612,9 @@ function audioImplementation() {
         loop: true,
         autoplay: true
     });
-    // MUTE BUTTON TOGGLE ON CLICK 
+    // MUTE BUTTON TOGGLE ON CLICK
     mute_btn.addEventListener("click", function() {
+        // if (showreelVideo == null || showreelVideo.muted || showreelVideo.paused) {
         muteToggle();
         if (!isMuted) {
             if (mobileCheck() == false) {
@@ -2621,6 +2630,7 @@ function audioImplementation() {
             mute_lottie.loop = false;
         }
         if (muteState) music.play();
+    // }
     });
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener("click", function() {
@@ -2632,7 +2642,7 @@ function audioImplementation() {
     // MUTE ALL if user muted
     if (muteState !== null && isMuted) {
         muteAll(uiSounds);
-        if (mobileCheck() == false) fadeToggle(music, music_volume);
+        if (mobileCheck() == false) fadeToggle(music, music_volume, false);
         // stop mute-btn lottie from playing - OLD
         mute_lottie.autoplay = false;
         // stop mute-btn lottie from playing - NEW
@@ -2647,7 +2657,6 @@ function audioImplementation() {
     // ************ AUDIO TRIGGERS ************
     // PRELOADER TRIGGER
     const preloader_trigger = document.querySelectorAll("#trigger");
-    // get audio object from html in webflow instead, to improve loadtime
     const preloader_sound = document.querySelector("#preloader_sound");
     playSound(preloader_trigger, preloader_sound);
     playSound(preloader_trigger, music);
@@ -2671,22 +2680,22 @@ function audioImplementation() {
     playSound(project_links, project_click, project_hover);
     // UNDERLINED TEXT SOUND
     const underline_links = document.querySelectorAll(".gets-underlined, .underlined, .underline-sound");
-    // FILTER OUT HOVER SOUND FOR 'OPEN POSITIONS' CAREERS CARDS and CONTENT HUB cards 
+    // FILTER OUT HOVER SOUND FOR 'OPEN POSITIONS' CAREERS CARDS and CONTENT HUB cards
     const filter_Out = [
         "sml",
         "content-hub-heading"
     ];
     playSound(underline_links, project_click, project_hover, filter_Out);
-    // ARTICLE LINKS 
+    // ARTICLE LINKS
     const article_links = document.querySelectorAll(".article-rich-text a");
     playSound(article_links, project_click, project_hover);
     // TAG-TEXT & ALL ELEMENTS WITH CLASS NAME TAG SOUND
     const tag_text = document.querySelectorAll(".tag-text, .button-text, .tag-sound");
     playSound(tag_text, frog_ui_single_click_2, text_hover);
-    // FOOTER 
+    // FOOTER
     const footer_sound = document.querySelectorAll(".footer-sound");
     playSound(footer_sound, frog_ui_single_click_2, text_hover);
-    // MUTE BTN 
+    // MUTE BTN
     const mute_btn_container = document.querySelectorAll("#mute-btn-container");
     playSound(mute_btn_container, frog_ui_single_click_2, text_hover);
     // CAREERS ACCORDION
@@ -2697,6 +2706,7 @@ function audioImplementation() {
     playSound(arrow_btns, frog_ui_single_click_2, text_hover);
     // HAMBURGER-MENU OPEN & CLOSE
     const hamburger_menu = document.querySelectorAll(".hamburger-box");
+    const hamburger_close = document.querySelector(".burger-close-icon");
     // ABOUT DEFINITION CARD
     const about_definition = document.querySelectorAll(".see-more-button");
     playSound(about_definition, project_click, project_hover);
@@ -2706,21 +2716,26 @@ function audioImplementation() {
     // NAV MENU SOUNDS
     hamburger_menu.forEach((menu)=>{
         menu.addEventListener("click", function() {
-            if ($(this).hasClass("close")) {
-                frog_ui_close_menu.currentTime = 0;
-                frog_ui_close_menu.play();
-            } else {
-                frog_ui_open_menu.currentTime = 0;
-                frog_ui_open_menu.play();
-            }
+            frog_ui_open_menu.currentTime = 0;
+            frog_ui_open_menu.play();
+            setTimeout(()=>{
+                wave.forEach((stroke)=>{
+                    stroke.style.fill = "#101012";
+                });
+            }, 500);
         });
-        menu.addEventListener("mouseenter", function() {
-            if (!$(this).hasClass("close")) {
-                wood_clack_hover_menu.currentTime = 0;
-                const closeAudio = wood_clack_hover_menu;
-                closeAudio.volume = 0.9;
-                closeAudio.play();
-            }
+        hamburger_close.addEventListener("click", function() {
+            frog_ui_close_menu.currentTime = 0;
+            frog_ui_close_menu.play();
+            wave.forEach((stroke)=>{
+                stroke.style.fill = "#F5F4F2";
+            });
+        });
+        hamburger_close.addEventListener("mouseenter", function() {
+            wood_clack_hover_menu.currentTime = 0;
+            const closeAudio = wood_clack_hover_menu;
+            closeAudio.volume = 0.9;
+            closeAudio.play();
         });
     });
     // LOGO HOME CLICK & HOVER
@@ -2732,7 +2747,7 @@ function audioImplementation() {
             fadeOutMusic();
             ps_logo_hover.volume = 0;
         });
-        // PS-LOGO HOVER SOUNDS 
+        // PS-LOGO HOVER SOUNDS
         link.addEventListener("mouseenter", function() {
             ps_logo_hover.currentTime = 0.1;
             ps_logo_hover.loop = true;
@@ -2749,7 +2764,7 @@ function audioImplementation() {
     function addSrc(audio, file) {
         audio.src = `https://psychoactive-website-media.sfo3.digitaloceanspaces.com/Audio/UI/${file}.mp3`;
     }
-    // func to play a specified sound either click or hover, with the option to filter out a class 
+    // func to play a specified sound either click or hover, with the option to filter out a class
     function playSound(triggerLink, clickSound, hoverSound, filteredClass) {
         triggerLink.forEach((trigger)=>{
             trigger.addEventListener("click", function() {
@@ -2783,25 +2798,27 @@ function audioImplementation() {
     };
     // func to fade out music smoothly
     function fadeOutMusic() {
-        if (!isMuted && mobileCheck() == false) fadeToggle(music, music_volume);
+        if (!isMuted && mobileCheck() == false) fadeToggle(music, music_volume, false);
         linkClicked = true;
     }
     //func to fade in music smoothly
     function fadeInMusic() {
-        $(window).on("load", function() {
-            music.play();
-            if (!isMuted) {
-                music.volume = 0;
-                $(music).animate({
-                    volume: music_volume
-                }, 1500, "linear");
-            }
-        });
+        // $(window).on("load", function () {
+        music.play();
+        if (!isMuted) {
+            music.volume = 0;
+            $(music).animate({
+                volume: music_volume
+            }, 1500, "linear");
+        }
+    // });
     }
     // func to toggle volume
-    function fadeToggle(audio, maxVolume) {
+    function fadeToggle(audio = music, maxVolume = music_volume, isFromShowreel = true) {
         let muted = audio.muted;
-        if (muted) audio.muted = false;
+        if (muted && !isFromShowreel) audio.muted = false;
+        let newVolume = muted ? maxVolume : 0;
+        if (!isFromShowreel) newVolume = maxVolume;
         $(audio).animate({
             volume: muted ? maxVolume : 0
         }, 1000, function() {
@@ -2819,27 +2836,51 @@ function audioImplementation() {
         }
     }
     // func to mute all sounds
-    function muteAll(audioArr) {
+    function muteAll(audioArr = uiSounds) {
         audioArr.forEach((audio)=>{
             audio.muted = true;
         });
     }
     // func to unmute all sounds
-    function unmuteAll(audioArr) {
+    function unmuteAll(audioArr = uiSounds) {
         audioArr.forEach((audio)=>{
             audio.muted = false;
         });
     }
+    // func to return mute state
+    function mutedState() {
+        return isMuted;
+    }
+    // forcefully set mute state
+    function setMuteState(state) {
+        isMuted = state;
+    }
+    // func to toggle the css animation of the soundwave (mute-btn)
+    function toggleCssAnim() {
+        wave.forEach((e)=>{
+            const style = getComputedStyle(e);
+            if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
+            else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+        });
+    }
+    return {
+        isMuted,
+        muteState,
+        muteToggle,
+        addSrc,
+        playSound,
+        filterOut,
+        fadeOutMusic,
+        fadeInMusic,
+        fadeToggle,
+        muteAll,
+        unmuteAll,
+        mutedState,
+        toggleCssAnim,
+        setMuteState
+    };
 }
 exports.default = audioImplementation;
-// func to toggle the css animation of the soundwave (mute-btn)
-function toggleCssAnim(wave) {
-    wave.forEach((e)=>{
-        const style = getComputedStyle(e);
-        if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
-        else e.setAttribute("style", "animation-iteration-count: infinite!important;");
-    });
-}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2857,6 +2898,83 @@ function stopCmdClick() {
     // }
     });
 }
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iVfHp":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "showreelHome", ()=>showreelHome);
+parcelHelpers.export(exports, "showreelNav", ()=>showreelNav);
+function showreelHome(audio) {
+    const fadeMusicToggle = audio.fadeToggle;
+    // const isMuted = audio.mutedState();
+    // const muteAll = audio.muteAll;
+    // const unmuteAll = audio.unmuteAll;
+    // const fadeOutMusic = audio.fadeOutMusic;
+    // const setMuteState = audio.setMuteState;
+    // const toggleCssAnim = audio.toggleCssAnim;
+    const showreelDivs = document.querySelectorAll(".hero-background_video-block.showreel,.showreel-ui-wrapper");
+    const showreelVideo = document.querySelector("#showreel_home");
+    const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
+    const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2");
+    // const showreelBlock = document.querySelector("#showreel_block_home");
+    // const mute_btn = document.querySelector("#mute-btn-container");
+    // const soundwave = document.querySelector(".soundwave-svg");
+    // const wave = document.querySelectorAll(".wave");
+    showreelVideo.volume = 0.7;
+    let clickedOnce = false;
+    let clickedTwice = false;
+    showreelDivs.forEach((div)=>{
+        div.addEventListener("click", ()=>{
+            if (!clickedOnce) {
+                showreelVideo.muted = false;
+                showreelVideo.currentTime = 0;
+                clickedOnce = true;
+                fadeMusicToggle();
+            // console.log("once");
+            } else if (!clickedTwice && clickedOnce) {
+                clickToUnmuteUI.style.display = "flex";
+                clickToUnmuteUI.style.opacity = "100";
+                // console.log("twice");
+                secondClickCode();
+            } else if (clickedOnce && clickedTwice) {
+                // console.log("thrice");
+                clickToUnmuteUI.style.opacity = 0;
+                showreelVideo.muted = false;
+                clickedTwice = false;
+                fadeMusicToggle();
+            }
+        });
+    });
+    clickToMuteUI.addEventListener("click", ()=>{
+        // console.log("mute ui click");
+        secondClickCode();
+    });
+    function secondClickCode() {
+        showreelVideo.muted = true;
+        clickedTwice = true;
+        fadeMusicToggle();
+        clickToMuteUI.style.display = "none";
+    }
+    // catch for if user scrolls video out of view or clicks on nav
+    showreelVideo.addEventListener("pause", function() {
+        if (showreelVideo.muted == false && document.visibilityState == "visible") {
+            fadeMusicToggle();
+            showreelVideo.muted = true;
+            clickedOnce = false;
+            clickedTwice = false;
+        }
+    }, false);
+    // catch if user hovers off showreel, after clicking once
+    showreelVideo.addEventListener("mouseout", function() {
+        if (clickedOnce && !clickedTwice) {
+            console.log("hovered off ");
+            setTimeout(()=>{
+                clickToMuteUI.style.display = "flex";
+            }, 500);
+        }
+    });
+}
+function showreelNav(audio) {}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 

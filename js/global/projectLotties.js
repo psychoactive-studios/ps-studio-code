@@ -1,20 +1,26 @@
 // query breakpoint and load suitable lottie into player
 export default function initProjectLotties() {
+  // check if lottie players exist 
   if (document.querySelectorAll('lottie-player').length > 0) {
+    // create array with all lotie players
     var allLotties = [...document.querySelectorAll('lottie-player')]
     //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
 
     let isMobile = window.innerWidth < 428
     
+    // create new array from lotties if it doesn't have a source attribute
     allLotties = allLotties.filter( l => !l.hasAttribute('src'))
 
     allLotties.forEach( e => {
+      // get source based to mobile or desktop based on mobile / screen width
       let source = isMobile ? e.getAttribute('mobile-source') : e.getAttribute('desktop-source')
+      // if source is not empty, load the source into each lottie player
       if(source != ''){
         e.load(source)
       }
     })
-
+    
+    // remove safari placeholder 
     document.querySelectorAll('.safari-image').forEach(e => {
       e.remove()
     })

@@ -7,14 +7,20 @@ import initProjectLotties from "./js/global/projectLotties";
 import loadAnim from "./js/home/loadAnim";
 import setLogoHref from "./js/pitches/setLogoHref";
 import audioImplementation from "./js/global/audio";
+import { showreelHome, showreelNav } from "./js/global/showreel";
 import { stopCmdClick } from "./js/global/bugFixes";
 
 const parceled = true; // for checking localhost vs github pages / CDN
+const currentPage = window.location.pathname;
+const homePage = currentPage == "/";
+// alert("local");
 
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
-  audioImplementation(); // adds music, ui-sounds and mute-lottie functionality
   const page = window.location.pathname.split("/").pop();
+  const audio = audioImplementation(); // adds music, ui-sounds and mute-lottie functionality
+  if (homePage) showreelHome(audio); // code for homepage showreel video
+  showreelNav(audio); // code for nav showreel video
   logCareers(); // logs a frog and message to the console
   initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer
@@ -35,9 +41,7 @@ const onLoading = () => {
 if (document.readyState !== "loading") {
   onLoading();
   onReady();
-  //console.log('readystate')
 } else {
-  //console.log('load')
   window.addEventListener("load", onReady);
   document.addEventListener("DOMContentLoaded", onLoading);
 }
