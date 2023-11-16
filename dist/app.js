@@ -559,7 +559,7 @@ const homePage = currentPage == "/";
 const onReady = ()=>{
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     const page = window.location.pathname.split("/").pop();
-    const audio = (0, _audioDefault.default)(); // adds music, ui-sounds and mute-lottie functionality
+    const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
     if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _logCareersDefault.default)(); // logs a frog and message to the console
@@ -2494,7 +2494,7 @@ exports.default = setLogoHref = ()=>{
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc3EI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-function audioImplementation() {
+function audioImplementation(homePage) {
     const showreelHome = document.querySelector("#showreel_home");
     const showreelNav = document.querySelector("#showreel_nav");
     // MOBILE CHECK
@@ -2616,11 +2616,34 @@ function audioImplementation() {
     let showreelMuteState = false;
     // MUTE BUTTON TOGGLE ON CLICK
     mute_btn.addEventListener("click", function() {
-        // if (showreelVideo == null || showreelVideo.muted || showreelVideo.paused) {
         muteToggle();
-        if (!isMuted) {
-            if (mobileCheck() == false) {
+        if (showreelHome) {
+            if (!isMuted) {
+                if (mobileCheck() == false) {
+                    if (!showreelHome.muted || !showreelNav.muted) {
+                        console.log("user unmuted during video playback");
+                        showreelMuteState = false;
+                    } else {
+                        console.log("custom mute func ran");
+                        music.volume = music_volume;
+                        music.muted = false;
+                    }
+                }
+                mute_lottie.setSpeed(1);
+                mute_lottie.loop = true;
+                mute_lottie.play();
+            } else {
                 if (!showreelHome.muted || !showreelNav.muted) {
+                    console.log("user muted during video playback");
+                    showreelMuteState = true;
+                }
+                music.volume = 0;
+                mute_lottie.setSpeed(1.5);
+                mute_lottie.loop = false;
+            }
+        } else if (!isMuted) {
+            if (mobileCheck() == false) {
+                if (!showreelNav.muted) {
                     console.log("user unmuted during video playback");
                     showreelMuteState = false;
                 } else {
@@ -2633,7 +2656,7 @@ function audioImplementation() {
             mute_lottie.loop = true;
             mute_lottie.play();
         } else {
-            if (!showreelHome.muted || !showreelNav.muted) {
+            if (!showreelNav.muted) {
                 console.log("user muted during video playback");
                 showreelMuteState = true;
             }
@@ -2642,8 +2665,6 @@ function audioImplementation() {
             mute_lottie.loop = false;
         }
         if (muteState) music.play();
-        // }
-        console.log(showreelMuteState);
     });
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener("click", function() {
@@ -2818,31 +2839,57 @@ function audioImplementation() {
     function fadeInMusic() {
         // $(window).on("load", function () {
         music.play();
-        if (!showreelHome.muted || !showreelNav.muted) console.log("fade in triggered, but didn't run");
-        else if (!isMuted) {
-            console.log("fade in triggered & ran");
-            music.volume = 0;
-            $(music).animate({
-                volume: music_volume
-            }, 1500, "linear");
+        if (showreelHome) {
+            if (!showreelHome.muted || !showreelNav.muted) console.log("fade in triggered, but didn't run");
+            else if (!isMuted) {
+                console.log("fade in triggered & ran");
+                music.volume = 0;
+                $(music).animate({
+                    volume: music_volume
+                }, 1500, "linear");
+            }
+        } else {
+            if (!showreelNav.muted) console.log("fade in triggered, but didn't run");
+            else if (!isMuted) {
+                console.log("fade in triggered & ran");
+                music.volume = 0;
+                $(music).animate({
+                    volume: music_volume
+                }, 1500, "linear");
+            }
         }
     // });
     }
     // func to toggle volume
     function fadeToggle(audio = music, maxVolume = music_volume, isFromShowreel = true) {
         console.log("ran");
-        if ((!showreelHome.muted || !showreelNav.muted) && !isFromShowreel) console.log("fade toggle triggered, but didn't run");
+        if (homePage) {
+            if ((!showreelHome.muted || !showreelNav.muted) && !isFromShowreel) console.log("fade toggle triggered, but didn't run");
+            else {
+                console.log("fade toggle triggered & ran");
+                // console.log(mutedState());
+                let muted = audio.muted;
+                if (muted && !isFromShowreel) audio.muted = false;
+                let newVolume = muted ? maxVolume : 0;
+                if (!isFromShowreel) newVolume = maxVolume;
+                $(audio).animate({
+                    volume: muted ? maxVolume : 0
+                }, 1000, function() {
+                    audio.muted = !muted;
+                });
+            }
+        } else if (!showreelNav.muted && !isFromShowreel) console.log("fade toggle triggered, but didn't run");
         else {
             console.log("fade toggle triggered & ran");
             // console.log(mutedState());
-            let muted = audio.muted;
-            if (muted && !isFromShowreel) audio.muted = false;
-            let newVolume = muted ? maxVolume : 0;
-            if (!isFromShowreel) newVolume = maxVolume;
+            let muted1 = audio.muted;
+            if (muted1 && !isFromShowreel) audio.muted = false;
+            let newVolume1 = muted1 ? maxVolume : 0;
+            if (!isFromShowreel) newVolume1 = maxVolume;
             $(audio).animate({
-                volume: muted ? maxVolume : 0
+                volume: muted1 ? maxVolume : 0
             }, 1000, function() {
-                audio.muted = !muted;
+                audio.muted = !muted1;
             });
         }
     }

@@ -18,7 +18,7 @@ const homePage = currentPage == "/";
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
   const page = window.location.pathname.split("/").pop();
-  const audio = audioImplementation(); // adds music, ui-sounds and mute-lottie functionality
+  const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
   if (homePage) showreelHome(audio); // code for homepage showreel video
   showreelNav(audio); // code for nav showreel video
   logCareers(); // logs a frog and message to the console
