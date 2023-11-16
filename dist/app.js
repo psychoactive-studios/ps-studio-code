@@ -585,7 +585,7 @@ if (document.readyState !== "loading") {
     document.addEventListener("DOMContentLoaded", onLoading);
 }
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/bugFixes":"lTFyP","./js/global/showreel":"iVfHp"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function getRandomInt(max) {
@@ -2882,23 +2882,6 @@ function audioImplementation() {
 }
 exports.default = audioImplementation;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "stopCmdClick", ()=>stopCmdClick);
-function stopCmdClick() {
-    document.addEventListener("click", function(e) {
-        if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
-            element.setAttribute("style", "visibility:hidden !important");
-        });
-    // else {
-    //   document.querySelectorAll(".menu-transition-cover").forEach((element) => {
-    //     element.setAttribute("style", "visibility:visible !important");
-    //   });
-    // }
-    });
-}
-
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iVfHp":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -2975,6 +2958,23 @@ function showreelHome(audio) {
     });
 }
 function showreelNav(audio) {}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "stopCmdClick", ()=>stopCmdClick);
+function stopCmdClick() {
+    document.addEventListener("click", function(e) {
+        if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
+            element.setAttribute("style", "visibility:hidden !important");
+        });
+    // else {
+    //   document.querySelectorAll(".menu-transition-cover").forEach((element) => {
+    //     element.setAttribute("style", "visibility:visible !important");
+    //   });
+    // }
+    });
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 
