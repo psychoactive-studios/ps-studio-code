@@ -473,17 +473,37 @@ export default function audioImplementation(homePage) {
   //func to fade in music smoothly
   function fadeInMusic() {
     music.play();
-
-    const condition1 =
-      showreelHome && (showreelHome.muted || showreelNav.muted);
-    const condition2 = !showreelHome && showreelNav.muted;
-    const overallCondition = (condition1 || condition2) && !isMuted;
-
-    if (overallCondition) {
-      music.volume = 0;
-      $(music).animate({ volume: music_volume }, 1500, "linear");
+    if (showreelHome) {
+      if (!showreelHome.muted || !showreelNav.muted) {
+      } else {
+        if (!isMuted) {
+          music.volume = 0;
+          $(music).animate({ volume: music_volume }, 1500, "linear");
+        }
+      }
+    } else {
+      if (!showreelNav.muted) {
+      } else {
+        if (!isMuted) {
+          music.volume = 0;
+          $(music).animate({ volume: music_volume }, 1500, "linear");
+        }
+      }
     }
   }
+  // function fadeInMusic() {
+  //   music.play();
+  //   if (showreelHome && (!showreelHome.muted || !showreelNav.muted)) {
+  //   } else if (!isMuted) {
+  //     music.volume = 0;
+  //     $(music).animate({ volume: music_volume }, 1500, "linear");
+  //   }
+
+  //   if (!showreelHome && showreelNav && !showreelNav.muted && !isMuted) {
+  //     music.volume = 0;
+  //     $(music).animate({ volume: music_volume }, 1500, "linear");
+  //   }
+  // }
 
   // func to toggle volume
   function fadeToggle(
@@ -491,18 +511,35 @@ export default function audioImplementation(homePage) {
     maxVolume = music_volume,
     isFromShowreel = true
   ) {
-    const condition1 = homePage && (showreelHome.muted || showreelNav.muted);
-    const condition2 = !homePage && showreelNav.muted;
-    const overallCondition = (condition1 || condition2) && isFromShowreel;
-
-    if (overallCondition) {
-      let muted = audio.muted;
-      if (muted && !isFromShowreel) audio.muted = false;
-      let newVolume = muted ? maxVolume : 0;
-      if (!isFromShowreel) newVolume = maxVolume;
-      $(audio).animate({ volume: muted ? maxVolume : 0 }, 1000, function () {
-        audio.muted = !muted;
-      });
+    // console.log("ran");
+    if (homePage) {
+      if ((!showreelHome.muted || !showreelNav.muted) && !isFromShowreel) {
+        // console.log("fade toggle triggered, but didn't run");
+      } else {
+        // console.log("fade toggle triggered & ran");
+        // console.log(mutedState());
+        let muted = audio.muted;
+        if (muted && !isFromShowreel) audio.muted = false;
+        let newVolume = muted ? maxVolume : 0;
+        if (!isFromShowreel) newVolume = maxVolume;
+        $(audio).animate({ volume: muted ? maxVolume : 0 }, 1000, function () {
+          audio.muted = !muted;
+        });
+      }
+    } else {
+      if (!showreelNav.muted && !isFromShowreel) {
+        // console.log("fade toggle triggered, but didn't run");
+      } else {
+        // console.log("fade toggle triggered & ran");
+        // console.log(mutedState());
+        let muted = audio.muted;
+        if (muted && !isFromShowreel) audio.muted = false;
+        let newVolume = muted ? maxVolume : 0;
+        if (!isFromShowreel) newVolume = maxVolume;
+        $(audio).animate({ volume: muted ? maxVolume : 0 }, 1000, function () {
+          audio.muted = !muted;
+        });
+      }
     }
   }
 

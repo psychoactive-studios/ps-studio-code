@@ -2602,10 +2602,10 @@ function audioImplementation(homePage) {
     const wave = document.querySelectorAll(".wave");
     // toggle css animation on click
     soundwave.addEventListener("click", function() {
-        toggleCssAnim(wave);
+        toggleCssAnim();
     });
-    // ALTERNATE VERSION USING LOTTIE, INSTEAD OF CSS ANIME (NOT CURRENTLY USED)
-    // need bodymovin cdn for this to work
+    // MUTE LOTTIE
+    // need bodymovin cdn in header for this to work
     const mute_lottie = bodymovin.loadAnimation({
         container: mute_btn,
         path: "https://uploads-ssl.webflow.com/5f287eb0037f68c8a08d3520/639bd27ee53aaa1429f32a14_audio_wave_shorter.json",
@@ -2617,55 +2617,52 @@ function audioImplementation(homePage) {
     // MUTE BUTTON TOGGLE ON CLICK
     mute_btn.addEventListener("click", function() {
         muteToggle();
+        const isMobile = mobileCheck() == false;
         if (showreelHome) {
             if (!isMuted) {
-                if (mobileCheck() == false) {
-                    if (!showreelHome.muted || !showreelNav.muted) {
-                        console.log("user unmuted during video playback");
-                        showreelMuteState = false;
-                    } else {
-                        console.log("custom mute func ran");
+                if (isMobile) {
+                    if (!showreelHome.muted || !showreelNav.muted) // console.log("user unmuted during video playback");
+                    showreelMuteState = false;
+                    else {
+                        // console.log("custom mute func ran");
                         music.volume = music_volume;
                         music.muted = false;
                     }
                 }
-                mute_lottie.setSpeed(1);
-                mute_lottie.loop = true;
-                mute_lottie.play();
+                playLottie();
             } else {
-                if (!showreelHome.muted || !showreelNav.muted) {
-                    console.log("user muted during video playback");
-                    showreelMuteState = true;
-                }
-                music.volume = 0;
-                mute_lottie.setSpeed(1.5);
-                mute_lottie.loop = false;
+                if (!showreelHome.muted || !showreelNav.muted) // console.log("user muted during video playback");
+                showreelMuteState = true;
+                stopLottie();
             }
         } else if (!isMuted) {
-            if (mobileCheck() == false) {
-                if (!showreelNav.muted) {
-                    console.log("user unmuted during video playback");
-                    showreelMuteState = false;
-                } else {
-                    console.log("custom mute func ran");
+            if (isMobile) {
+                if (!showreelNav.muted) // console.log("user unmuted during video playback");
+                showreelMuteState = false;
+                else {
+                    // console.log("custom mute func ran");
                     music.volume = music_volume;
                     music.muted = false;
                 }
             }
-            mute_lottie.setSpeed(1);
-            mute_lottie.loop = true;
-            mute_lottie.play();
+            playLottie();
         } else {
-            if (!showreelNav.muted) {
-                console.log("user muted during video playback");
-                showreelMuteState = true;
-            }
-            music.volume = 0;
-            mute_lottie.setSpeed(1.5);
-            mute_lottie.loop = false;
+            if (!showreelNav.muted) // console.log("user muted during video playback");
+            showreelMuteState = true;
+            stopLottie();
         }
         if (muteState) music.play();
     });
+    function playLottie() {
+        mute_lottie.setSpeed(1);
+        mute_lottie.loop = true;
+        mute_lottie.play();
+    }
+    function stopLottie() {
+        music.volume = 0;
+        mute_lottie.setSpeed(1.5);
+        mute_lottie.loop = false;
+    }
     // catch to make sure music & mute-lottie is never out of sync
     mute_btn.addEventListener("click", function() {
         if (mobileCheck() == false) {
@@ -2673,7 +2670,7 @@ function audioImplementation(homePage) {
             else fadeInMusic();
         }
     });
-    // MUTE ALL if user muted
+    // MUTE ALL if user is muted
     if (muteState !== null && isMuted) {
         muteAll(uiSounds);
         if (mobileCheck() == false) fadeToggle(music, music_volume, false);
@@ -2739,7 +2736,7 @@ function audioImplementation(homePage) {
     const arrow_btns = document.querySelectorAll(".arrow");
     playSound(arrow_btns, frog_ui_single_click_2, text_hover);
     // HAMBURGER-MENU OPEN & CLOSE
-    const hamburger_menu = document.querySelectorAll(".hamburger-box");
+    const hamburger_open = document.querySelector(".hamburger-box");
     const hamburger_close = document.querySelector(".burger-close-icon");
     // ABOUT DEFINITION CARD
     const about_definition = document.querySelectorAll(".see-more-button");
@@ -2747,30 +2744,41 @@ function audioImplementation(homePage) {
     // DEFINE METAMORPHOSIS BUTTON
     const metamorphosis_btn = document.querySelectorAll("#metamorphosis-btn");
     playSound(metamorphosis_btn, metamorphosis_ui);
-    // NAV MENU SOUNDS
-    hamburger_menu.forEach((menu)=>{
-        menu.addEventListener("click", function() {
-            frog_ui_open_menu.currentTime = 0;
-            frog_ui_open_menu.play();
-            setTimeout(()=>{
-                wave.forEach((stroke)=>{
-                    stroke.style.fill = "#101012";
-                });
-            }, 500);
-        });
-        hamburger_close.addEventListener("click", function() {
-            frog_ui_close_menu.currentTime = 0;
-            frog_ui_close_menu.play();
+    const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
+    let humburgerState = "closed";
+    navPlayReel.addEventListener("click", ()=>{
+        humburgerState = "closed";
+    });
+    // HAMBURGER MENU SOUNDS
+    hamburger_open.addEventListener("click", function() {
+        frog_ui_open_menu.currentTime = 0;
+        frog_ui_open_menu.play();
+        humburgerState = "open";
+        setTimeout(()=>{
             wave.forEach((stroke)=>{
-                stroke.style.fill = "#F5F4F2";
+                stroke.style.fill = "#101012"; // change mute btn lottie to black
             });
+        }, 500);
+    });
+    hamburger_open.addEventListener("mouseenter", function() {
+        wood_clack_hover_menu.currentTime = 0;
+        const closeAudio = wood_clack_hover_menu;
+        closeAudio.volume = 0.9;
+        closeAudio.play();
+    });
+    hamburger_close.addEventListener("click", function() {
+        frog_ui_close_menu.currentTime = 0;
+        frog_ui_close_menu.play();
+        humburgerState = "closed";
+        wave.forEach((stroke)=>{
+            stroke.style.fill = "#F5F4F2"; // change mute btn lottie back to white
         });
-        hamburger_close.addEventListener("mouseenter", function() {
-            wood_clack_hover_menu.currentTime = 0;
-            const closeAudio = wood_clack_hover_menu;
-            closeAudio.volume = 0.9;
-            closeAudio.play();
-        });
+    });
+    hamburger_close.addEventListener("mouseenter", function() {
+        wood_clack_hover_menu.currentTime = 0;
+        const closeAudio = wood_clack_hover_menu;
+        closeAudio.volume = 0.9;
+        closeAudio.play();
     });
     // LOGO HOME CLICK & HOVER
     const home_link = document.querySelectorAll("#ps-logo-wrap, #ps-logo-wrap-black");
@@ -2837,59 +2845,31 @@ function audioImplementation(homePage) {
     }
     //func to fade in music smoothly
     function fadeInMusic() {
-        // $(window).on("load", function () {
         music.play();
-        if (showreelHome) {
-            if (!showreelHome.muted || !showreelNav.muted) console.log("fade in triggered, but didn't run");
-            else if (!isMuted) {
-                console.log("fade in triggered & ran");
-                music.volume = 0;
-                $(music).animate({
-                    volume: music_volume
-                }, 1500, "linear");
-            }
-        } else {
-            if (!showreelNav.muted) console.log("fade in triggered, but didn't run");
-            else if (!isMuted) {
-                console.log("fade in triggered & ran");
-                music.volume = 0;
-                $(music).animate({
-                    volume: music_volume
-                }, 1500, "linear");
-            }
+        const condition1 = showreelHome && (showreelHome.muted || showreelNav.muted);
+        const condition2 = !showreelHome && showreelNav.muted;
+        const overallCondition = (condition1 || condition2) && !isMuted;
+        if (overallCondition) {
+            music.volume = 0;
+            $(music).animate({
+                volume: music_volume
+            }, 1500, "linear");
         }
-    // });
     }
     // func to toggle volume
     function fadeToggle(audio = music, maxVolume = music_volume, isFromShowreel = true) {
-        console.log("ran");
-        if (homePage) {
-            if ((!showreelHome.muted || !showreelNav.muted) && !isFromShowreel) console.log("fade toggle triggered, but didn't run");
-            else {
-                console.log("fade toggle triggered & ran");
-                // console.log(mutedState());
-                let muted = audio.muted;
-                if (muted && !isFromShowreel) audio.muted = false;
-                let newVolume = muted ? maxVolume : 0;
-                if (!isFromShowreel) newVolume = maxVolume;
-                $(audio).animate({
-                    volume: muted ? maxVolume : 0
-                }, 1000, function() {
-                    audio.muted = !muted;
-                });
-            }
-        } else if (!showreelNav.muted && !isFromShowreel) console.log("fade toggle triggered, but didn't run");
-        else {
-            console.log("fade toggle triggered & ran");
-            // console.log(mutedState());
-            let muted1 = audio.muted;
-            if (muted1 && !isFromShowreel) audio.muted = false;
-            let newVolume1 = muted1 ? maxVolume : 0;
-            if (!isFromShowreel) newVolume1 = maxVolume;
+        const condition1 = homePage && (showreelHome.muted || showreelNav.muted);
+        const condition2 = !homePage && showreelNav.muted;
+        const overallCondition = (condition1 || condition2) && isFromShowreel;
+        if (overallCondition) {
+            let muted = audio.muted;
+            if (muted && !isFromShowreel) audio.muted = false;
+            let newVolume = muted ? maxVolume : 0;
+            if (!isFromShowreel) newVolume = maxVolume;
             $(audio).animate({
-                volume: muted1 ? maxVolume : 0
+                volume: muted ? maxVolume : 0
             }, 1000, function() {
-                audio.muted = !muted1;
+                audio.muted = !muted;
             });
         }
     }
@@ -2934,6 +2914,8 @@ function audioImplementation(homePage) {
             const style = getComputedStyle(e);
             if (style["animation-iteration-count"] == "infinite") e.setAttribute("style", "animation-iteration-count: 1!important;");
             else e.setAttribute("style", "animation-iteration-count: infinite!important;");
+            // catch to ensure mute btn stays black when toggled whilst hamburger menu is open
+            if (humburgerState == "open") e.style.fill = "#101012"; //set mute svg fill back to white
         });
     }
     return {
@@ -2964,82 +2946,74 @@ parcelHelpers.export(exports, "showreelNav", ()=>showreelNav);
 function showreelHome(audio) {
     const fadeMusicToggle = audio.fadeToggle;
     const showreelMuteState = audio.getShowreelMuteState;
-    const showreelDivs = document.querySelectorAll(".hero-background_video-block.showreel,.showreel-ui-wrapper");
     const homeBlock = document.querySelector("#showreel_block_home");
     const showreelVideo = document.querySelector("#showreel_home");
     const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
     const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2");
     showreelVideo.volume = 0.7;
-    let clickedOnce = false;
-    let clickedTwice = false;
+    let clickLogic = "none";
     let outOfView = false;
-    showreelDivs.forEach((div)=>{
-        div.addEventListener("click", ()=>{
-            console.log(showreelMuteState());
-            if (!clickedOnce) {
-                showreelVideo.muted = false;
-                showreelVideo.currentTime = 0;
-                clickToUnmuteUI.style.display = "none";
-                clickToMuteUI.style.opacity = 0;
-                clickedOnce = true;
-                if (!showreelMuteState()) fadeMusicToggle();
-                outOfView = false;
-            // console.log("once");
-            } else if (!clickedTwice && clickedOnce) {
-                clickToUnmuteUI.style.opacity = "100";
-                console.log("twice");
-                secondClickCode();
-            } else if (clickedOnce && clickedTwice) {
-                console.log("thrice");
-                clickToUnmuteUI.style.display = "none";
-                showreelVideo.muted = false;
-                clickedTwice = false;
-                outOfView = false;
-                if (!showreelMuteState()) {
-                    console.log("ran thre");
-                    fadeMusicToggle();
-                }
-            }
-        });
-    });
-    clickToMuteUI.addEventListener("click", ()=>{
-        // console.log("mute ui click");
-        secondClickCode();
-    });
-    function secondClickCode() {
-        showreelVideo.muted = true;
-        clickedTwice = true;
-        console.log(showreelMuteState());
-        if (!showreelMuteState()) {
-            console.log("ran");
-            fadeMusicToggle();
+    // homepage showreel click logic
+    homeBlock.addEventListener("click", ()=>{
+        switch(clickLogic){
+            case "none":
+                firstClickLogic();
+                break;
+            case "once":
+                secondClickLogic();
+                break;
+            case "twice":
+                thirdClickLogic();
+                break;
+            default:
+                firstClickLogic();
         }
-        clickToUnmuteUI.style.display = "flex";
-        clickToMuteUI.style.display = "none";
+    });
+    // FIRST CLICK LOGIC
+    function firstClickLogic() {
+        showreelVideo.muted = false; //unmute video
+        showreelVideo.currentTime = 0; //restart video
+        clickToUnmuteUI.style.display = "none"; //hide unmute ui
+        clickToMuteUI.style.opacity = 0; // set mute opacity to 0
+        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        clickLogic = "once"; //update click logic
+        outOfView = false; //ensure out of view logic is false
+    }
+    // SECOND CLICK LOGIC
+    function secondClickLogic() {
+        showreelVideo.muted = true; //mute video again
+        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
+        clickToUnmuteUI.style.display = "flex"; // display unmute ui
+        clickToMuteUI.style.display = "none"; // hide mute ui
+        clickLogic = "twice"; //update click logic
+    }
+    // THIRD CLICK LOGIC
+    function thirdClickLogic() {
+        showreelVideo.muted = false; //unmute video
+        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        clickToUnmuteUI.style.display = "none"; //hide unmute ui
+        clickLogic = "twice"; //update click logic
+        outOfView = false; //ensure out of view logic is false
     }
     // catch for if user scrolls video out of view or clicks on nav
     showreelVideo.addEventListener("pause", function() {
         outOfView = true;
-        if (showreelVideo.muted == false && document.visibilityState == "visible") {
-            // homeBlock.click();
-            clickToUnmuteUI.style.display = "flex";
-            clickToUnmuteUI.style.opacity = "100";
-            secondClickCode();
-            clickToMuteUI.style.display = "none";
-            clickToMuteUI.style.opacity = 0;
-            console.log(showreelMuteState());
-            if (!showreelMuteState()) fadeMusicToggle();
-            showreelVideo.muted = true;
-            clickedOnce = false;
-            clickedTwice = false;
-            console.log(clickToMuteUI.style.display);
+        if (showreelVideo.muted == false && // check if video is unmuted
+        document.visibilityState == "visible" // check if user is not in another tab
+        ) {
+            secondClickLogic();
+            clickLogic = "none"; //reset click logic
         }
     }, false);
+    // catch to ensure mute ui is never visible when unmute ui is
+    homeBlock.addEventListener("mouseenter", ()=>{
+        if (clickToUnmuteUI.style.display == "flex") clickToMuteUI.style.display = "none";
+    });
     // catch if user hovers off showreel, after clicking once
     showreelVideo.addEventListener("mouseout", function() {
-        // console.log(outOfView);
-        if (clickedOnce && !clickedTwice && !outOfView) setTimeout(()=>{
-            // console.log("hovered off ");
+        const clickedOnce = clickLogic == "once";
+        if (clickedOnce && !outOfView) setTimeout(()=>{
             clickToMuteUI.style.display = "flex";
         }, 500);
     });
@@ -3049,74 +3023,24 @@ function showreelNav(audio) {
     const showreelMuteState = audio.getShowreelMuteState;
     const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
     const wave = document.querySelectorAll(".wave");
-    const showreelDivs = document.querySelectorAll(".hero-background_video-block-nav.showreel-nav,.showreel-ui-wrapper-nav");
     const showreelVideo = document.querySelector("#showreel_nav");
-    const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper-nav");
-    const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2-nav");
     showreelVideo.volume = 0.7;
-    let clickedOnce = false;
-    let clickedTwice = false;
-    clickToMuteUI.style.display = "none";
-    clickToUnmuteUI.style.display = "none";
+    // on showreel-nav click
     navPlayReel.addEventListener("click", ()=>{
-        showreelVideo.muted = false;
-        showreelVideo.currentTime = 0;
-        // clickedOnce = true;
-        fadeMusicToggle();
+        showreelVideo.muted = false; //unmute video
+        showreelVideo.currentTime = 0; //restart video
+        console.log(!showreelMuteState());
+        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         wave.forEach((stroke)=>{
-            stroke.style.fill = "#F5F4F2";
+            stroke.style.fill = "#F5F4F2"; //set mute svg fill back to white
         });
     });
-    // showreelDivs.forEach((div) => {
-    //   div.addEventListener("click", () => {
-    //     if (!clickedOnce) {
-    //       // showreelVideo.muted = false;
-    //       // showreelVideo.currentTime = 0;
-    //       // clickedOnce = true;
-    //       // fadeMusicToggle();
-    //       // console.log("once");
-    //     } else if (!clickedTwice && clickedOnce) {
-    //       clickToUnmuteUI.style.display = "flex";
-    //       clickToUnmuteUI.style.opacity = "100";
-    //       // console.log("twice");
-    //       secondClickCode();
-    //     } else if (clickedOnce && clickedTwice) {
-    //       // console.log("thrice");
-    //       clickToUnmuteUI.style.opacity = 0;
-    //       showreelVideo.muted = false;
-    //       clickedTwice = false;
-    //       fadeMusicToggle();
-    //     }
-    //   });
-    // });
-    // clickToMuteUI.addEventListener("click", () => {
-    //   // console.log("mute ui click");
-    //   secondClickCode();
-    // });
-    // function secondClickCode() {
-    //   showreelVideo.muted = true;
-    //   clickedTwice = true;
-    //   fadeMusicToggle();
-    //   clickToMuteUI.style.display = "none";
-    // }
-    // catch for if user scrolls video out of view or clicks on nav
+    // when user navigates away from showreel
     showreelVideo.addEventListener("pause", function() {
         if (showreelVideo.muted == false && document.visibilityState == "visible") {
-            if (!showreelMuteState()) fadeMusicToggle();
-            showreelVideo.muted = true;
-            clickedOnce = false;
-            clickedTwice = false;
+            if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         }
     }, false);
-// catch if user hovers off showreel, after clicking once
-// showreelVideo.addEventListener("mouseout", function () {
-//   if (clickedOnce && !clickedTwice) {
-//     console.log("hovered off ");
-//     setTimeout(() => {
-//       clickToMuteUI.style.display = "flex";
-//     }, 500);
-//   }
-// });
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lTFyP":[function(require,module,exports) {
