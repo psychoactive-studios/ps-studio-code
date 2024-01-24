@@ -13,9 +13,9 @@ import { stopCmdClick } from "./js/global/bugFixes";
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
-// alert("local");
 
 const onReady = () => {
+  // alert("local");
   readyPreloader(); // hides preloader and add event listener for frog lottie
   const page = window.location.pathname.split("/").pop();
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality

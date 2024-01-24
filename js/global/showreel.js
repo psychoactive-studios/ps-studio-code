@@ -31,6 +31,7 @@ export function showreelHome(audio) {
 
   // FIRST CLICK LOGIC
   function firstClickLogic() {
+    console.log("first click logic");
     showreelVideo.muted = false; //unmute video
     showreelVideo.currentTime = 0; //restart video
     clickToUnmuteUI.style.display = "none"; //hide unmute ui
@@ -42,6 +43,7 @@ export function showreelHome(audio) {
 
   // SECOND CLICK LOGIC
   function secondClickLogic() {
+    console.log("second click logic");
     showreelVideo.muted = true; //mute video again
     if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
     clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
@@ -52,10 +54,11 @@ export function showreelHome(audio) {
 
   // THIRD CLICK LOGIC
   function thirdClickLogic() {
+    console.log("third click logic");
     showreelVideo.muted = false; //unmute video
     if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
     clickToUnmuteUI.style.display = "none"; //hide unmute ui
-    clickLogic = "twice"; //update click logic
+    clickLogic = "once"; //update click logic
     outOfView = false; //ensure out of view logic is false
   }
 

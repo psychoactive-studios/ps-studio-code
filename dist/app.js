@@ -555,8 +555,8 @@ var _bugFixes = require("./js/global/bugFixes");
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
-// alert("local");
 const onReady = ()=>{
+    // alert("local");
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     const page = window.location.pathname.split("/").pop();
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
@@ -2971,6 +2971,7 @@ function showreelHome(audio) {
     });
     // FIRST CLICK LOGIC
     function firstClickLogic() {
+        console.log("first click logic");
         showreelVideo.muted = false; //unmute video
         showreelVideo.currentTime = 0; //restart video
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
@@ -2981,6 +2982,7 @@ function showreelHome(audio) {
     }
     // SECOND CLICK LOGIC
     function secondClickLogic() {
+        console.log("second click logic");
         showreelVideo.muted = true; //mute video again
         if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
@@ -2990,10 +2992,11 @@ function showreelHome(audio) {
     }
     // THIRD CLICK LOGIC
     function thirdClickLogic() {
+        console.log("third click logic");
         showreelVideo.muted = false; //unmute video
         if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
-        clickLogic = "twice"; //update click logic
+        clickLogic = "once"; //update click logic
         outOfView = false; //ensure out of view logic is false
     }
     // catch for if user scrolls video out of view or clicks on nav
