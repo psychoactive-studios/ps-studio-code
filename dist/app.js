@@ -682,21 +682,13 @@ exports.default = copyEmail = ()=>{
             });
         }, 1400);
     }
-    var helloBlock = document.getElementById("email-block-hello");
-    helloBlock.addEventListener("click", function() {
-        copyToClipboard("hello@psychoactive.co.nz");
-    });
-    var remoteHelloBlock = document.getElementById("remote-hello");
+    var remoteHelloBlock = document.getElementById("hello");
     remoteHelloBlock.addEventListener("click", function() {
         copyToClipboard("hello@psychoactive.co.nz");
     });
     var careersBlock = document.getElementById("careers");
     careersBlock.addEventListener("click", function() {
         copyToClipboard("careers@psychoactive.co.nz");
-    });
-    var internBlock = document.getElementById("intern");
-    internBlock.addEventListener("click", function() {
-        copyToClipboard("intern@psychoactive.co.nz");
     });
 };
 
@@ -812,12 +804,27 @@ const readyPreloader = ()=>{
 };
 // This code delays the page going to the next URL for a moment so that we can fade the content out (page transition)
 function pageOutTransitionLinks() {
-    function link_is_external(link_element) {
-        return link_element.host !== window.location.host;
+    function linkIsExternal(link) {
+        return link.host !== window.location.host;
+    }
+    function linkIsPagination(link) {
+        return link.classList.contains("w-pagination-previous") || link.classList.contains("w-pagination-next");
     }
     const links = document.querySelectorAll("a");
     links.forEach((link)=>{
-        if (!link_is_external(link)) link.addEventListener("click", pageTransition);
+        if (!linkIsExternal(link)) {
+            if (linkIsPagination(link)) return;
+            link.addEventListener("click", pageTransition);
+        // Only internal links trigger page out logo animation
+        // with the exception of content-hub inner page internal links
+        //     if (
+        //       (!link.classList.contains("hamburger-box")) &&
+        //       (!link.classList.contains("close-menu-box")) &&
+        //       (!link.target == "_blank")
+        //     ) {
+        //       link.addEventListener("click", pageTransition);
+        //     }
+        }
     });
     function pageTransition(e) {
         e.preventDefault();
@@ -2942,6 +2949,7 @@ exports.default = audioImplementation;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "showreelHome", ()=>showreelHome);
+// NAV SHOWREEL
 parcelHelpers.export(exports, "showreelNav", ()=>showreelNav);
 function showreelHome(audio) {
     const fadeMusicToggle = audio.fadeToggle;
@@ -3013,6 +3021,35 @@ function showreelHome(audio) {
     homeBlock.addEventListener("mouseenter", ()=>{
         if (clickToUnmuteUI.style.display == "flex") clickToMuteUI.style.display = "none";
     });
+    // initial show / hide on hover
+    homeBlock.addEventListener("mouseenter", ()=>{
+        const muteStyle = window.getComputedStyle(clickToMuteUI);
+        const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
+        console.log(muteStyle.display == "none");
+        if (unMuteStyle.display == "none" && showreelVideo.muted) {
+            console.log("show unmute");
+            clickToUnmuteUI.style.display = "flex";
+        }
+    // if (muteStyle.display == "none" && !showreelVideo.muted) {
+    //   console.log("show mute");
+    //   clickToMuteUI.style.display = "flex";
+    // }
+    });
+    clickToUnmuteUI.addEventListener("mouseout", ()=>{
+        const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
+        if (unMuteStyle.display == "flex" && showreelVideo.muted) {
+            console.log("hide unmute");
+            clickToUnmuteUI.style.display = "none";
+        }
+    });
+    // homeBlock.addEventListener("mouseout", () => {
+    //   console.log("hovered out");
+    //   const muteStyle = window.getComputedStyle(clickToMuteUI);
+    //   if (muteStyle.display == "flex" && !showreelVideo.muted) {
+    //     console.log("hide mute");
+    //     clickToMuteUI.style.display = "none";
+    //   }
+    // });
     // catch if user hovers off showreel, after clicking once
     showreelVideo.addEventListener("mouseout", function() {
         const clickedOnce = clickLogic == "once";
@@ -3055,11 +3092,6 @@ function stopCmdClick() {
         if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
             element.setAttribute("style", "visibility:hidden !important");
         });
-    // else {
-    //   document.querySelectorAll(".menu-transition-cover").forEach((element) => {
-    //     element.setAttribute("style", "visibility:visible !important");
-    //   });
-    // }
     });
 }
 

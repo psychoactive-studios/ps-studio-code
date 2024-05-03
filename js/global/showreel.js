@@ -85,6 +85,38 @@ export function showreelHome(audio) {
     }
   });
 
+  // initial show / hide on hover
+  homeBlock.addEventListener("mouseenter", () => {
+    const muteStyle = window.getComputedStyle(clickToMuteUI);
+    const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
+    console.log(muteStyle.display == "none");
+    if (unMuteStyle.display == "none" && showreelVideo.muted) {
+      console.log("show unmute");
+      clickToUnmuteUI.style.display = "flex";
+    }
+    // if (muteStyle.display == "none" && !showreelVideo.muted) {
+    //   console.log("show mute");
+    //   clickToMuteUI.style.display = "flex";
+    // }
+  });
+
+  clickToUnmuteUI.addEventListener("mouseout", () => {
+    const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
+    if (unMuteStyle.display == "flex" && showreelVideo.muted) {
+      console.log("hide unmute");
+      clickToUnmuteUI.style.display = "none";
+    }
+  });
+
+  // homeBlock.addEventListener("mouseout", () => {
+  //   console.log("hovered out");
+  //   const muteStyle = window.getComputedStyle(clickToMuteUI);
+  //   if (muteStyle.display == "flex" && !showreelVideo.muted) {
+  //     console.log("hide mute");
+  //     clickToMuteUI.style.display = "none";
+  //   }
+  // });
+
   // catch if user hovers off showreel, after clicking once
   showreelVideo.addEventListener("mouseout", function () {
     const clickedOnce = clickLogic == "once";
@@ -96,6 +128,7 @@ export function showreelHome(audio) {
   });
 }
 
+// NAV SHOWREEL
 export function showreelNav(audio) {
   const fadeMusicToggle = audio.fadeToggle;
   const showreelMuteState = audio.getShowreelMuteState;

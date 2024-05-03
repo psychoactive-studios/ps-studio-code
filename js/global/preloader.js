@@ -11,14 +11,22 @@ const readyPreloader = () => {
 
 // This code delays the page going to the next URL for a moment so that we can fade the content out (page transition)
 function pageOutTransitionLinks() {
-  function link_is_external(link_element) {
-    return link_element.host !== window.location.host;
+  function linkIsExternal(link) {
+    return link.host !== window.location.host;
+  }
+
+  function linkIsPagination(link) {
+    return (
+      link.classList.contains("w-pagination-previous") ||
+      link.classList.contains("w-pagination-next")
+    );
   }
 
   const links = document.querySelectorAll("a");
 
   links.forEach((link) => {
-    if (!link_is_external(link)) {
+    if (!linkIsExternal(link)) {
+      if (linkIsPagination(link)) return;
       link.addEventListener("click", pageTransition);
       // Only internal links trigger page out logo animation
       // with the exception of content-hub inner page internal links

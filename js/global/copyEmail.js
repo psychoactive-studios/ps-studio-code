@@ -30,14 +30,4 @@ export default copyEmail = () => {
   careersBlock.addEventListener("click", function () {
     copyToClipboard("careers@psychoactive.co.nz");
   });
-
-  // var helloBlock = document.getElementById("email-block-hello");
-  // helloBlock.addEventListener('click', function() {
-  //   copyToClipboard("hello@psychoactive.co.nz");
-  // })
-
-  // var internBlock = document.getElementById("intern");
-  // internBlock.addEventListener('click', function() {
-  //   copyToClipboard("intern@psychoactive.co.nz");
-  // })
 };
