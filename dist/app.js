@@ -584,6 +584,15 @@ if (document.readyState !== "loading") {
     window.addEventListener("load", onReady);
     document.addEventListener("DOMContentLoaded", onLoading);
 }
+// close menu on escape key press
+const handleEscape = (e)=>{
+    if (e.key === "Escape") {
+        const closeBtn = document.querySelector(".burger-close-icon");
+        const hamburgerMenu = document.querySelector(".hamburger-box");
+        if (hamburgerMenu.style.opacity == 0) closeBtn.click();
+    }
+};
+window.addEventListener("keydown", handleEscape);
 
 },{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

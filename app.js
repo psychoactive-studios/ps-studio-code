@@ -45,3 +45,15 @@ if (document.readyState !== "loading") {
   window.addEventListener("load", onReady);
   document.addEventListener("DOMContentLoaded", onLoading);
 }
+
+// close menu on escape key press
+const handleEscape = (e) => {
+  if (e.key === "Escape") {
+    const closeBtn = document.querySelector(".burger-close-icon");
+    const hamburgerMenu = document.querySelector(".hamburger-box");
+    if (hamburgerMenu.style.opacity == 0) {
+      closeBtn.click();
+    }
+  }
+};
+window.addEventListener("keydown", handleEscape);
