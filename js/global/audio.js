@@ -291,6 +291,10 @@ export default function audioImplementation(homePage) {
   const team_links = document.querySelectorAll(".team-link-box");
   playSound(team_links, project_click, project_hover);
 
+  // NEW HOME HOVER LINKS
+  const home_links = document.querySelectorAll(".home-hover-outer");
+  playSound(home_links, project_click, project_hover);
+
   // PROJECT LINKS & ALL ELEMENTS WITH CLASS NAME CARD SOUND
   const project_links = document.querySelectorAll(
     ".project-link-wrapper, .project-link, .card-sound"
