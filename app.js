@@ -32,7 +32,7 @@ const onReady = () => {
   });
   page == "about" && aboutLottie();
   stopCmdClick(); // prevent command click from triggering page transition
-};
+}
 
 const onLoading = () => {
   loopLogoLoading();
