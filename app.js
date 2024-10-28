@@ -21,7 +21,7 @@ const onReady = () => {
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
   if (homePage) showreelHome(audio); // code for homepage showreel video
   showreelNav(audio); // code for nav showreel video
-  logCareers(); // logs a frog and message to the console
+  // logCareers(); // logs a frog and message to the console
   initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer
   initCms(); // sets color hovers and cms filtering style for work page & content hub
@@ -32,7 +32,7 @@ const onReady = () => {
   });
   page == "about" && aboutLottie();
   stopCmdClick(); // prevent command click from triggering page transition
-}
+};
 
 const onLoading = () => {
   loopLogoLoading();
