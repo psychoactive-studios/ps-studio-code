@@ -562,7 +562,7 @@ const onReady = ()=>{
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
     if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
-    (0, _logCareersDefault.default)(); // logs a frog and message to the console
+    // logCareers(); // logs a frog and message to the console
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
@@ -2970,6 +2970,7 @@ function showreelHome(audio) {
     const showreelVideo = document.querySelector("#showreel_home");
     const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
     const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2");
+    const soundBtns = Array.from(document.querySelectorAll(".showreel-sound-button"));
     showreelVideo.volume = 0.7;
     let clickLogic = "none";
     let outOfView = false;
@@ -2991,7 +2992,6 @@ function showreelHome(audio) {
     });
     // FIRST CLICK LOGIC
     function firstClickLogic() {
-        console.log("first click logic");
         showreelVideo.muted = false; //unmute video
         showreelVideo.currentTime = 0; //restart video
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
@@ -3002,7 +3002,6 @@ function showreelHome(audio) {
     }
     // SECOND CLICK LOGIC
     function secondClickLogic() {
-        console.log("second click logic");
         showreelVideo.muted = true; //mute video again
         if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
@@ -3012,7 +3011,6 @@ function showreelHome(audio) {
     }
     // THIRD CLICK LOGIC
     function thirdClickLogic() {
-        console.log("third click logic");
         showreelVideo.muted = false; //unmute video
         if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
@@ -3035,33 +3033,17 @@ function showreelHome(audio) {
     });
     // initial show / hide on hover
     homeBlock.addEventListener("mouseenter", ()=>{
-        const muteStyle = window.getComputedStyle(clickToMuteUI);
         const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
-        console.log(muteStyle.display == "none");
-        if (unMuteStyle.display == "none" && showreelVideo.muted) {
-            console.log("show unmute");
-            clickToUnmuteUI.style.display = "flex";
-        }
-    // if (muteStyle.display == "none" && !showreelVideo.muted) {
-    //   console.log("show mute");
-    //   clickToMuteUI.style.display = "flex";
-    // }
+        if (unMuteStyle.display == "none" && showreelVideo.muted) clickToUnmuteUI.style.display = "flex";
     });
-    clickToUnmuteUI.addEventListener("mouseout", ()=>{
+    // hover out interaction with checks to ensure its not hovering out into the sound btns itself
+    clickToUnmuteUI.addEventListener("mouseout", (event)=>{
         const unMuteStyle = window.getComputedStyle(clickToUnmuteUI);
-        if (unMuteStyle.display == "flex" && showreelVideo.muted) {
-            console.log("hide unmute");
-            clickToUnmuteUI.style.display = "none";
-        }
+        // Check if the mouse is still over clickToUnmuteUI or any soundBtns
+        const isHoveringSoundBtns = soundBtns.some((btn)=>btn.contains(event.relatedTarget));
+        const isHoveringClickToUnmute = clickToUnmuteUI.contains(event.relatedTarget);
+        if (!isHoveringSoundBtns && !isHoveringClickToUnmute && unMuteStyle.display === "flex" && showreelVideo.muted) clickToUnmuteUI.style.display = "none";
     });
-    // homeBlock.addEventListener("mouseout", () => {
-    //   console.log("hovered out");
-    //   const muteStyle = window.getComputedStyle(clickToMuteUI);
-    //   if (muteStyle.display == "flex" && !showreelVideo.muted) {
-    //     console.log("hide mute");
-    //     clickToMuteUI.style.display = "none";
-    //   }
-    // });
     // catch if user hovers off showreel, after clicking once
     showreelVideo.addEventListener("mouseout", function() {
         const clickedOnce = clickLogic == "once";
@@ -3081,7 +3063,6 @@ function showreelNav(audio) {
     navPlayReel.addEventListener("click", ()=>{
         showreelVideo.muted = false; //unmute video
         showreelVideo.currentTime = 0; //restart video
-        console.log(!showreelMuteState());
         if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         wave.forEach((stroke)=>{
             stroke.style.fill = "#F5F4F2"; //set mute svg fill back to white
