@@ -594,7 +594,7 @@ const handleEscape = (e)=>{
 };
 window.addEventListener("keydown", handleEscape);
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function getRandomInt(max) {
@@ -944,26 +944,24 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function initProjectLotties() {
     // check if lottie players exist 
-    if (document.querySelectorAll("lottie-player").length > 0) {
-        // create array with all lotie players
-        var allLotties = [
-            ...document.querySelectorAll("lottie-player")
-        ];
-        //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
-        let isMobile = window.innerWidth < 428;
-        // create new array from lotties if it doesn't have a source attribute
-        allLotties = allLotties.filter((l)=>!l.hasAttribute("src"));
-        allLotties.forEach((e)=>{
-            // get source based to mobile or desktop based on mobile / screen width
-            let source = isMobile ? e.getAttribute("mobile-source") : e.getAttribute("desktop-source");
-            // if source is not empty, load the source into each lottie player
-            if (source != "") e.load(source);
-        });
-        // remove safari placeholder 
-        document.querySelectorAll(".safari-image").forEach((e)=>{
-            e.remove();
-        });
-    }
+    if (document.querySelectorAll("lottie-player").length > 0) // create array with all lotie players
+    // var allLotties = [...document.querySelectorAll('lottie-player')]
+    // //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
+    // let isMobile = window.innerWidth < 428
+    // // create new array from lotties if it doesn't have a source attribute
+    // allLotties = allLotties.filter( l => !l.hasAttribute('src'))
+    // allLotties.forEach( e => {
+    //   // get source based to mobile or desktop based on mobile / screen width
+    //   let source = isMobile ? e.getAttribute('mobile-source') : e.getAttribute('desktop-source')
+    //   // if source is not empty, load the source into each lottie player
+    //   if(source != ''){
+    //     e.load(source)
+    //   }
+    // })
+    // remove safari placeholder 
+    document.querySelectorAll(".safari-image").forEach((e)=>{
+        e.remove();
+    });
 } //   // Play lotties one randomly and one at a time for performance
  //   function isInViewport(el) {
  //     var rect = el.getBoundingClientRect()
@@ -1026,7 +1024,9 @@ exports.default = loadAnim = ()=>{
     var topMargin;
     if ($(window).width() <= 1024) topMargin = "15vh";
     else topMargin = "6vw";
-    let targetQuery = ".landing-text-box, .project-card-parent";
+    let targetQuery = ".landing-text-box";
+    // original
+    // let targetQuery = ".landing-text-box, .project-card-parent";
     //get cookies
     var hasVisited = sessionStorage.getItem("washere");
     (0, _animejsDefault.default).set(targetQuery, {
