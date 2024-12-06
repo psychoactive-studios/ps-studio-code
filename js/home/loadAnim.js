@@ -10,7 +10,8 @@ export default loadAnim = () => {
   }
 
   let targetQuery = ".landing-text-box";
-  // let targetQuery = ".landing-text-box, .project-card-parent"; // original
+  // original
+  // let targetQuery = ".landing-text-box, .project-card-parent";
 
   //get cookies
   var hasVisited = sessionStorage.getItem("washere");
