@@ -9,7 +9,8 @@ export default loadAnim = () => {
     topMargin = "6vw";
   }
 
-  let targetQuery = ".landing-text-box, .project-card-parent";
+  let targetQuery = ".landing-text-box";
+  // let targetQuery = ".landing-text-box, .project-card-parent"; // original
 
   //get cookies
   var hasVisited = sessionStorage.getItem("washere");
