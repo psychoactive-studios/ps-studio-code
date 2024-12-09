@@ -533,45 +533,36 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"igcvL":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _aboutLottie = require("./js/global/about/aboutLottie");
-var _aboutLottieDefault = parcelHelpers.interopDefault(_aboutLottie);
 var _copyEmail = require("./js/global/copyEmail");
 var _copyEmailDefault = parcelHelpers.interopDefault(_copyEmail);
 var _initCms = require("./js/global/initCms");
 var _initCmsDefault = parcelHelpers.interopDefault(_initCms);
-var _logCareers = require("./js/global/logCareers");
-var _logCareersDefault = parcelHelpers.interopDefault(_logCareers);
 var _preloader = require("./js/global/preloader");
 var _projectLotties = require("./js/global/projectLotties");
 var _projectLottiesDefault = parcelHelpers.interopDefault(_projectLotties);
 var _loadAnim = require("./js/home/loadAnim");
 var _loadAnimDefault = parcelHelpers.interopDefault(_loadAnim);
-var _setLogoHref = require("./js/pitches/setLogoHref");
-var _setLogoHrefDefault = parcelHelpers.interopDefault(_setLogoHref);
 var _audio = require("./js/global/audio");
 var _audioDefault = parcelHelpers.interopDefault(_audio);
 var _showreel = require("./js/global/showreel");
 var _bugFixes = require("./js/global/bugFixes");
+// import setLogoHref from "./js/pitches/setLogoHref";
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
 const onReady = ()=>{
-    // alert("local");
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
-    const page = window.location.pathname.split("/").pop();
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
     if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
-    // logCareers(); // logs a frog and message to the console
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
-    document.querySelector(".client-link") && (0, _setLogoHrefDefault.default)();
+    // document.querySelector(".client-link") && setLogoHref();
     document.querySelectorAll(".article-rich-text a").forEach((e)=>{
         e.target = "_blank";
     });
-    page == "about" && (0, _aboutLottieDefault.default)();
     (0, _bugFixes.stopCmdClick)(); // prevent command click from triggering page transition
 };
 const onLoading = ()=>{
@@ -594,47 +585,36 @@ const handleEscape = (e)=>{
 };
 window.addEventListener("keydown", handleEscape);
 
-},{"./js/global/about/aboutLottie":"8Krlv","./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/logCareers":"DcFUA","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/pitches/setLogoHref":"1c4zC","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Krlv":[function(require,module,exports) {
+},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aI83l":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}
-exports.default = aboutLottie = ()=>{
-    var availableLotties = [];
-    //var lastLottie = null
-    //var lastLotties = []
-    var lotties = [
-        ...document.querySelectorAll("lottie-player")
-    ];
-    availableLotties = lotties.filter((l)=>l.getAttribute("src") != "");
-    // method 1, timeout
-    setInterval(function() {
-        // Function runs every 800 milliseconds (the duration of the lottie animations)     
-        if (availableLotties.length == 0) return;
-        // Select a random lottie
-        var selectedIndex = getRandomInt(availableLotties.length);
-        var selectedLottie = availableLotties[selectedIndex];
-        // play lottie
-        if (selectedLottie) {
-            selectedLottie.seek(0);
-            selectedLottie.play();
-        }
-        //remove the item from array as the lottie plays on loop
-        availableLotties.splice(selectedIndex, 1);
-    }, 500);
-    document.querySelectorAll(".team-box").forEach((e)=>{
-        const video = e.querySelector("video");
-        let isPlaying = false;
-        video.onplaying = ()=>isPlaying = true;
-        video.onpause = ()=>isPlaying = false;
-        video.pause();
-        e.addEventListener("mouseenter", ()=>{
-            video.paused && !isPlaying && video.play();
+exports.default = copyEmail = ()=>{
+    function copyToClipboard(copyText) {
+        // copies text to keyboard by creating then deleting selectable text area
+        const el = document.createElement("textarea");
+        el.value = copyText;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        // change text of header
+        $(".footer-title-roller-down").each(function() {
+            $(this).html("E-mail copied to clipboard");
         });
-        e.addEventListener("mouseleave", ()=>{
-            !video.paused && isPlaying && video.pause();
-        });
+        // reset text of header after 1000 ms
+        setTimeout(function() {
+            $(".footer-title-roller-down").each(function() {
+                $(this).html("Copy email");
+            });
+        }, 1400);
+    }
+    var remoteHelloBlock = document.getElementById("hello");
+    remoteHelloBlock.addEventListener("click", function() {
+        copyToClipboard("hello@psychoactive.co.nz");
+    });
+    var careersBlock = document.getElementById("careers");
+    careersBlock.addEventListener("click", function() {
+        copyToClipboard("careers@psychoactive.co.nz");
     });
 };
 
@@ -668,40 +648,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"aI83l":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-exports.default = copyEmail = ()=>{
-    function copyToClipboard(copyText) {
-        // copies text to keyboard by creating then deleting selectable text area
-        const el = document.createElement("textarea");
-        el.value = copyText;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand("copy");
-        document.body.removeChild(el);
-        // change text of header
-        $(".footer-title-roller-down").each(function() {
-            $(this).html("E-mail copied to clipboard");
-        });
-        // reset text of header after 1000 ms
-        setTimeout(function() {
-            $(".footer-title-roller-down").each(function() {
-                $(this).html("Copy email");
-            });
-        }, 1400);
-    }
-    var remoteHelloBlock = document.getElementById("hello");
-    remoteHelloBlock.addEventListener("click", function() {
-        copyToClipboard("hello@psychoactive.co.nz");
-    });
-    var careersBlock = document.getElementById("careers");
-    careersBlock.addEventListener("click", function() {
-        copyToClipboard("careers@psychoactive.co.nz");
-    });
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3jJBr":[function(require,module,exports) {
+},{}],"3jJBr":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = initCms = ()=>{
@@ -753,49 +700,6 @@ exports.default = initCms = ()=>{
         }, 300);
     });
 };
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"DcFUA":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-exports.default = logCareers = ()=>console.log(`
-We're the best. No cap.
-
-Sup beans!
-Check out here if you want to join the team: https://psychoactive.co.nz/careers
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@    .@@.     ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@                           @@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@                          @@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@      .@@@@@@@@@@.                         @@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@                                              @@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@                                                   @@@@@@@@@@@@@@@
-@@@@@@@@@@@@                                                      @@@@@@@@@@@@@@
-@@@@@@@@@@@                                                       @@@@@@@@@@@@@@
-@@@@@@@@@.                                                       ,@@@@@@@@@@@@@@
-@@@@@@@@              @                        @@@@@@@@@@        @@@@@@@@@@@@@@@
-@@@@@@@@            .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       @@@@@@@@@@@@@@@@@
-@@@@@@@                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@.       @@@@@@@@@@     @@@@@
-@@@@@@,                  @@@@@@@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@@@     @@@@@
-@@@@@@                    @@@@@@@@@@@@@@@@@@@@@@     @@@@@@@@@@@@@@@@      @@@@@
-@@@@@@                     @@@@@@@@@@@@@@@@@@@@.    @@@@@@@@@@@@@@@@@      @@@@@
-@@@@@@                     @@@@@@@@@@@@@@@@@@@@,    @@@@@@@@@@@@@@@@       @@@@@
-@@@@@@@                      @@@@@@@@@@@@@@@@@@@      @@@@@@@@@@@@@        @@@@@
-@@@@@@@                        @@@@@@@@@@@@@@@@@@       @@@@@@@@           @@@@@
-@@@@@@@@                         @@@@@@@@@@@@@@@@@,                       @@@@@@
-@@@@@@@@@                            @@@@@@@@@@@@@@@@                    @@@@@@@
-@@@@@@@@@@                                  .@@@@@@                     @@@@@@@@
-@@@@@@@@@@@                                                           .@@@@@@@@@
-@@@@@@@@@@@@@                                                        @@@@@@@@@@@
-@@@@@@@@@@@@@@@                                                    @@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@                                               ,@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@                                         ,@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@                                  @@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.                      @@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-`);
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gnoda":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1024,15 +928,15 @@ exports.default = loadAnim = ()=>{
     var topMargin;
     if ($(window).width() <= 1024) topMargin = "15vh";
     else topMargin = "6vw";
-    let targetQuery = ".landing-text-box";
+    // let targetQuery = ".landing-text-box";
     // original
     // let targetQuery = ".landing-text-box, .project-card-parent";
     //get cookies
     var hasVisited = sessionStorage.getItem("washere");
-    (0, _animejsDefault.default).set(targetQuery, {
-        opacity: 0,
-        translateY: "4vh"
-    });
+    // anime.set(targetQuery, {
+    //   opacity: 0,
+    //   translateY: "4vh",
+    // });
     (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container", {
         opacity: 0,
         translateY: "-4vh"
@@ -1087,22 +991,12 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-        (0, _animejsDefault.default)({
-            targets: targetQuery,
-            opacity: {
-                value: 1,
-                duration: 800,
-                easing: "easeOutSine"
-            },
-            translateY: {
-                value: 0,
-                duration: 1000,
-                easing: "easeOutQuad"
-            },
-            delay: (0, _animejsDefault.default).stagger(500, {
-                start: delay + 1000
-            })
-        });
+    // anime({
+    //   targets: targetQuery,
+    //   opacity: { value: 1, duration: 800, easing: "easeOutSine" },
+    //   translateY: { value: 0, duration: 1000, easing: "easeOutQuad" },
+    //   delay: anime.stagger(500, { start: delay + 1000 }),
+    // });
     };
     const visited = (delay)=>{
         $(".body-dark").css({
@@ -1148,25 +1042,16 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-        (0, _animejsDefault.default)({
-            targets: targetQuery,
-            opacity: {
-                value: 1,
-                duration: 0,
-                easing: "easeOutSine"
-            },
-            translateY: {
-                value: [
-                    "0vh",
-                    "0vh"
-                ],
-                duration: 1000,
-                easing: "easeOutQuad"
-            },
-            delay: (0, _animejsDefault.default).stagger(500, {
-                start: delay + 1000
-            })
-        });
+    // anime({
+    //   targets: targetQuery,
+    //   opacity: { value: 1, duration: 0, easing: "easeOutSine" },
+    //   translateY: {
+    //     value: ["0vh", "0vh"],
+    //     duration: 1000,
+    //     easing: "easeOutQuad",
+    //   },
+    //   delay: anime.stagger(500, { start: delay + 1000 }),
+    // });
     };
     //if page has been visited - don't animate
     if (hasVisited || $(window).width() <= 1024) {
@@ -2481,31 +2366,6 @@ anime.random = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 exports.default = anime;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"1c4zC":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-exports.default = setLogoHref = ()=>{
-    console.log(`Checking out or code uh ? We'll write some for ya !`);
-    // macth link from the rich text list to each logo image
-    var linkArray = Array.from(document.querySelectorAll(".link-list ul li a"));
-    var allResourcesLink = Array.from(document.querySelectorAll(".client-link"));
-    linkArray.forEach((link, i)=>{
-        var href = link.getAttribute("href");
-        // Set logo link
-        allResourcesLink.forEach((resource, index)=>{
-            if (i === index) resource.setAttribute("href", href);
-        });
-    });
-    var all_links = document.querySelectorAll(".w-lightbox");
-    all_links.forEach((e)=>{
-        e.removeAttribute("href");
-    });
-//for(var i=0; i<all_links.length; i++){
-//    all_links[i].removeAttribute("href");
-//    console.log("remove");
-//}
-};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc3EI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
