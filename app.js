@@ -30,7 +30,7 @@ const onReady = () => {
   document.querySelectorAll(".article-rich-text a").forEach((e) => {
     e.target = "_blank";
   });
-  page == "about" && aboutLottie();
+  // page == "about" && aboutLottie();
   stopCmdClick(); // prevent command click from triggering page transition
 };
 
