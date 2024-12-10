@@ -556,7 +556,7 @@ const onReady = ()=>{
     if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
-    (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
+    // copyEmail(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
     // document.querySelector(".client-link") && setLogoHref();
@@ -928,15 +928,15 @@ exports.default = loadAnim = ()=>{
     var topMargin;
     if ($(window).width() <= 1024) topMargin = "15vh";
     else topMargin = "6vw";
-    // let targetQuery = ".landing-text-box";
+    let targetQuery = ".landing-text-box";
     // original
     // let targetQuery = ".landing-text-box, .project-card-parent";
     //get cookies
     var hasVisited = sessionStorage.getItem("washere");
-    // anime.set(targetQuery, {
-    //   opacity: 0,
-    //   translateY: "4vh",
-    // });
+    (0, _animejsDefault.default).set(targetQuery, {
+        opacity: 0,
+        translateY: "4vh"
+    });
     (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container", {
         opacity: 0,
         translateY: "-4vh"
@@ -991,12 +991,22 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 800, easing: "easeOutSine" },
-    //   translateY: { value: 0, duration: 1000, easing: "easeOutQuad" },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
+        (0, _animejsDefault.default)({
+            targets: targetQuery,
+            opacity: {
+                value: 1,
+                duration: 800,
+                easing: "easeOutSine"
+            },
+            translateY: {
+                value: 0,
+                duration: 1000,
+                easing: "easeOutQuad"
+            },
+            delay: (0, _animejsDefault.default).stagger(500, {
+                start: delay + 1000
+            })
+        });
     };
     const visited = (delay)=>{
         $(".body-dark").css({
@@ -1042,16 +1052,25 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 0, easing: "easeOutSine" },
-    //   translateY: {
-    //     value: ["0vh", "0vh"],
-    //     duration: 1000,
-    //     easing: "easeOutQuad",
-    //   },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
+        (0, _animejsDefault.default)({
+            targets: targetQuery,
+            opacity: {
+                value: 1,
+                duration: 0,
+                easing: "easeOutSine"
+            },
+            translateY: {
+                value: [
+                    "0vh",
+                    "0vh"
+                ],
+                duration: 1000,
+                easing: "easeOutQuad"
+            },
+            delay: (0, _animejsDefault.default).stagger(500, {
+                start: delay + 1000
+            })
+        });
     };
     //if page has been visited - don't animate
     if (hasVisited || $(window).width() <= 1024) {

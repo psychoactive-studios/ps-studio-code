@@ -18,7 +18,7 @@ const onReady = () => {
   if (homePage) showreelHome(audio); // code for homepage showreel video
   showreelNav(audio); // code for nav showreel video
   initProjectLotties(); // initiates project lotties for home and work pages
-  copyEmail(); // copies email to clipboard in footer
+  // copyEmail(); // copies email to clipboard in footer
   initCms(); // sets color hovers and cms filtering style for work page & content hub
   document.querySelector(".landing-video-container") && loadAnim(); // for home page intro anim
   // document.querySelector(".client-link") && setLogoHref();
