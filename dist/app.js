@@ -556,7 +556,7 @@ const onReady = ()=>{
     if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
-    // copyEmail(); // copies email to clipboard in footer
+    (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
     // document.querySelector(".client-link") && setLogoHref();
