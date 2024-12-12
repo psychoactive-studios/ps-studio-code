@@ -3,7 +3,7 @@ export function showreelHome(audio) {
   const showreelMuteState = audio.getShowreelMuteState;
 
   const homeBlock = document.querySelector("#showreel_block_home");
-  const showreelVideo = document.querySelector("#showreel_home");
+  const showreelVideo = document.querySelector("#showreel_video");
   const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
   const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2");
   const soundBtns = Array.from(
@@ -133,7 +133,7 @@ export function showreelNav(audio) {
 
   const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
   const wave = document.querySelectorAll(".wave");
-  const showreelVideo = document.querySelector("#showreel_nav");
+  const showreelVideo = document.querySelector("#showreelNavXL_video");
 
   showreelVideo.volume = 0.7;
 

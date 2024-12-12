@@ -1,6 +1,6 @@
 export default function audioImplementation(homePage) {
-  const showreelHome = document.querySelector("#showreel_home");
-  const showreelNav = document.querySelector("#showreel_nav");
+  const showreelHome = document.querySelector("#showreel_video");
+  const showreelNav = document.querySelector("#showreelNavXL");
 
   // MOBILE CHECK
   window.mobileCheck = function () {

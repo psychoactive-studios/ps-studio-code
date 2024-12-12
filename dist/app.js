@@ -546,20 +546,24 @@ var _audio = require("./js/global/audio");
 var _audioDefault = parcelHelpers.interopDefault(_audio);
 var _showreel = require("./js/global/showreel");
 var _bugFixes = require("./js/global/bugFixes");
-// import setLogoHref from "./js/pitches/setLogoHref";
+var _dynamicVideos = require("./js/global/dynamicVideos");
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
 const onReady = ()=>{
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
-    if (homePage) (0, _showreel.showreelHome)(audio); // code for homepage showreel video
+    (0, _dynamicVideos.responsiveNavShowreel)();
+    if (homePage) {
+        (0, _dynamicVideos.responsiveHomeVideos)();
+        (0, _dynamicVideos.lazyLoadHomeVideos)();
+        (0, _showreel.showreelHome)(audio); // code for homepage showreel video
+    }
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
-    // document.querySelector(".client-link") && setLogoHref();
     document.querySelectorAll(".article-rich-text a").forEach((e)=>{
         e.target = "_blank";
     });
@@ -585,7 +589,7 @@ const handleEscape = (e)=>{
 };
 window.addEventListener("keydown", handleEscape);
 
-},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aI83l":[function(require,module,exports) {
+},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/dynamicVideos":"8GDbY"}],"aI83l":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = copyEmail = ()=>{
@@ -928,15 +932,15 @@ exports.default = loadAnim = ()=>{
     var topMargin;
     if ($(window).width() <= 1024) topMargin = "15vh";
     else topMargin = "6vw";
-    let targetQuery = ".landing-text-box";
+    // let targetQuery = ".landing-text-box";
     // original
     // let targetQuery = ".landing-text-box, .project-card-parent";
     //get cookies
     var hasVisited = sessionStorage.getItem("washere");
-    (0, _animejsDefault.default).set(targetQuery, {
-        opacity: 0,
-        translateY: "4vh"
-    });
+    // anime.set(targetQuery, {
+    //   opacity: 0,
+    //   translateY: "4vh",
+    // });
     (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container", {
         opacity: 0,
         translateY: "-4vh"
@@ -991,22 +995,12 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-        (0, _animejsDefault.default)({
-            targets: targetQuery,
-            opacity: {
-                value: 1,
-                duration: 800,
-                easing: "easeOutSine"
-            },
-            translateY: {
-                value: 0,
-                duration: 1000,
-                easing: "easeOutQuad"
-            },
-            delay: (0, _animejsDefault.default).stagger(500, {
-                start: delay + 1000
-            })
-        });
+    // anime({
+    //   targets: targetQuery,
+    //   opacity: { value: 1, duration: 800, easing: "easeOutSine" },
+    //   translateY: { value: 0, duration: 1000, easing: "easeOutQuad" },
+    //   delay: anime.stagger(500, { start: delay + 1000 }),
+    // });
     };
     const visited = (delay)=>{
         $(".body-dark").css({
@@ -1052,25 +1046,16 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-        (0, _animejsDefault.default)({
-            targets: targetQuery,
-            opacity: {
-                value: 1,
-                duration: 0,
-                easing: "easeOutSine"
-            },
-            translateY: {
-                value: [
-                    "0vh",
-                    "0vh"
-                ],
-                duration: 1000,
-                easing: "easeOutQuad"
-            },
-            delay: (0, _animejsDefault.default).stagger(500, {
-                start: delay + 1000
-            })
-        });
+    // anime({
+    //   targets: targetQuery,
+    //   opacity: { value: 1, duration: 0, easing: "easeOutSine" },
+    //   translateY: {
+    //     value: ["0vh", "0vh"],
+    //     duration: 1000,
+    //     easing: "easeOutQuad",
+    //   },
+    //   delay: anime.stagger(500, { start: delay + 1000 }),
+    // });
     };
     //if page has been visited - don't animate
     if (hasVisited || $(window).width() <= 1024) {
@@ -2390,8 +2375,8 @@ exports.default = anime;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function audioImplementation(homePage) {
-    const showreelHome = document.querySelector("#showreel_home");
-    const showreelNav = document.querySelector("#showreel_nav");
+    const showreelHome = document.querySelector("#showreel_video");
+    const showreelNav = document.querySelector("#showreelNavXL");
     // MOBILE CHECK
     window.mobileCheck = function() {
         let check = false;
@@ -2846,7 +2831,7 @@ function showreelHome(audio) {
     const fadeMusicToggle = audio.fadeToggle;
     const showreelMuteState = audio.getShowreelMuteState;
     const homeBlock = document.querySelector("#showreel_block_home");
-    const showreelVideo = document.querySelector("#showreel_home");
+    const showreelVideo = document.querySelector("#showreel_video");
     const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
     const clickToMuteUI = document.querySelector(".showreel-ui-wrapper-2");
     const soundBtns = Array.from(document.querySelectorAll(".showreel-sound-button"));
@@ -2936,7 +2921,7 @@ function showreelNav(audio) {
     const showreelMuteState = audio.getShowreelMuteState;
     const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
     const wave = document.querySelectorAll(".wave");
-    const showreelVideo = document.querySelector("#showreel_nav");
+    const showreelVideo = document.querySelector("#showreelNavXL_video");
     showreelVideo.volume = 0.7;
     // on showreel-nav click
     navPlayReel.addEventListener("click", ()=>{
@@ -2964,6 +2949,92 @@ function stopCmdClick() {
         if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
             element.setAttribute("style", "visibility:hidden !important");
         });
+    });
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8GDbY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "responsiveHomeVideos", ()=>responsiveHomeVideos);
+parcelHelpers.export(exports, "responsiveNavShowreel", ()=>responsiveNavShowreel);
+// Main function to lazy load home videos
+parcelHelpers.export(exports, "lazyLoadHomeVideos", ()=>lazyLoadHomeVideos);
+function responsiveHomeVideos() {
+    // dynamically set video sources based on screen size
+    function setVideoSource(video) {
+        const videoElem = document.getElementById(`${video}_video`);
+        let videoSrc = "";
+        if (window.innerWidth <= 560) videoSrc = getURL(video, "mobile");
+        else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
+        else videoSrc = getURL(video, "desktop");
+        // Check if the current source is already set
+        if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
+        // Preload only if the video is already in the viewport
+        const isInViewport = (elem)=>{
+            const rect = elem.getBoundingClientRect();
+            return rect.top < (window.innerHeight || document.documentElement.clientHeight) && rect.bottom > 0 && rect.left < (window.innerWidth || document.documentElement.clientWidth) && rect.right > 0;
+        };
+        if (isInViewport(videoElem) && videoElem.paused) videoElem.play().catch((error)=>{
+            console.warn(`Failed to autoplay video: ${video}`, error);
+        });
+    }
+    function getURL(video, device) {
+        let url;
+        if (video.includes("Nav")) url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/showreel_${device}.mp4`;
+        else url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${video}_${device}.mp4`;
+        return url;
+    }
+    // Initial call to set the video source
+    function setAllVideoSources() {
+        setVideoSource("oasis");
+        setVideoSource("showreel");
+        setVideoSource("sgf");
+        setVideoSource("metamorphoses");
+    }
+    setAllVideoSources();
+    debounceWindowResizedListener(setAllVideoSources);
+    return {
+        setVideoSource
+    };
+}
+function responsiveNavShowreel() {
+    const { setVideoSource  } = responsiveHomeVideos();
+    function satNavSources() {
+        setVideoSource("showreelNav");
+        setVideoSource("showreelNavXL");
+    }
+    satNavSources();
+    debounceWindowResizedListener(satNavSources);
+}
+function lazyLoadHomeVideos() {
+    // SGF VIDEO
+    setupLazyLoad(document.getElementById("sgf_video"), document.getElementById("project-thumbnails"));
+    // OASIS VIDEO
+    setupLazyLoad(document.getElementById("oasis_video"), document.getElementById("project-thumbnails-2"));
+    // SHOWREEL VIDEO
+    setupLazyLoad(document.getElementById("showreel_video"), document.getElementById("project-thumbnails-3"));
+    // HERO TESSELATION VIDEO
+    setupLazyLoad(document.getElementById("metamorphoses_video"), document.getElementById("metamorphoses_video"));
+}
+// Utility function to set up IntersectionObserver for lazy loading videos
+function setupLazyLoad(videoElement, triggerElement) {
+    const observer = new IntersectionObserver(([entry])=>{
+        if (entry.isIntersecting) {
+            console.log(videoElement, "is intersecting: ", triggerElement);
+            videoElement.setAttribute("preload", "auto"); // Preload the video
+            videoElement.play(); // Play the video
+            observer.unobserve(triggerElement); // Stop observing after triggering
+        }
+    }, {
+        threshold: 0
+    });
+    observer.observe(triggerElement); // Start observing the trigger element
+}
+function debounceWindowResizedListener(func) {
+    let resizeTimeout;
+    window.addEventListener("resize", ()=>{
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(func, 500);
     });
 }
 

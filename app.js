@@ -6,7 +6,11 @@ import loadAnim from "./js/home/loadAnim";
 import audioImplementation from "./js/global/audio";
 import { showreelHome, showreelNav } from "./js/global/showreel";
 import { stopCmdClick } from "./js/global/bugFixes";
-// import setLogoHref from "./js/pitches/setLogoHref";
+import {
+  responsiveHomeVideos,
+  responsiveNavShowreel,
+  lazyLoadHomeVideos,
+} from "./js/global/dynamicVideos";
 
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
@@ -15,13 +19,17 @@ const homePage = currentPage == "/";
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
-  if (homePage) showreelHome(audio); // code for homepage showreel video
+  responsiveNavShowreel();
+  if (homePage) {
+    responsiveHomeVideos();
+    lazyLoadHomeVideos();
+    showreelHome(audio); // code for homepage showreel video
+  }
   showreelNav(audio); // code for nav showreel video
   initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer
   initCms(); // sets color hovers and cms filtering style for work page & content hub
   document.querySelector(".landing-video-container") && loadAnim(); // for home page intro anim
-  // document.querySelector(".client-link") && setLogoHref();
   document.querySelectorAll(".article-rich-text a").forEach((e) => {
     e.target = "_blank";
   });
