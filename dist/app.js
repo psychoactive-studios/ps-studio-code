@@ -2969,7 +2969,10 @@ function setVideoSource(video) {
     else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
     else videoSrc = getURL(video, "desktop");
     // Check if the current source is already set
-    if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
+    if (videoElem.getAttribute("src") !== videoSrc) {
+        videoElem.src = videoSrc;
+        if (video == "metamorphoses") videoElem.play();
+    }
     // Preload only if the video is already in the viewport
     const isInViewport = (elem)=>{
         const rect = elem.getBoundingClientRect();
