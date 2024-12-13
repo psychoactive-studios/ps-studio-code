@@ -14,7 +14,7 @@ function setVideoSource(video) {
   // Check if the current source is already set
   if (videoElem.getAttribute("src") !== videoSrc) {
     videoElem.src = videoSrc;
-    if (video == "metamorphoses") videoElem.play(); // catch to always play tesselation
+    // if (video == "metamorphoses") videoElem.play(); // catch to always play tesselation
   }
 
   // Preload only if the video is already in the viewport
