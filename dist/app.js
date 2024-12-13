@@ -555,7 +555,7 @@ const onReady = ()=>{
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
     (0, _dynamicVideos.responsiveNavShowreel)();
     if (homePage) {
-        (0, _dynamicVideos.responsiveHomeVideos)();
+        (0, _dynamicVideos.setAllHomepageVideoSources)();
         (0, _dynamicVideos.lazyLoadHomeVideos)();
         (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     }
@@ -2376,7 +2376,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 function audioImplementation(homePage) {
     const showreelHome = document.querySelector("#showreel_video");
-    const showreelNav = document.querySelector("#showreelNavXL");
+    const showreelNav = document.querySelector("#showreelNavXL_video");
     // MOBILE CHECK
     window.mobileCheck = function() {
         let check = false;
@@ -2953,38 +2953,41 @@ function stopCmdClick() {
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8GDbY":[function(require,module,exports) {
+// dynamically set video sources based on screen size
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "responsiveHomeVideos", ()=>responsiveHomeVideos);
+// call to set all nav showreel video sources
 parcelHelpers.export(exports, "responsiveNavShowreel", ()=>responsiveNavShowreel);
+// call to set all homepage video sources
+parcelHelpers.export(exports, "setAllHomepageVideoSources", ()=>setAllHomepageVideoSources);
 // Main function to lazy load home videos
 parcelHelpers.export(exports, "lazyLoadHomeVideos", ()=>lazyLoadHomeVideos);
-function responsiveHomeVideos() {
-    // dynamically set video sources based on screen size
-    function setVideoSource(video) {
-        const videoElem = document.getElementById(`${video}_video`);
-        let videoSrc = "";
-        if (window.innerWidth <= 560) videoSrc = getURL(video, "mobile");
-        else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
-        else videoSrc = getURL(video, "desktop");
-        // Check if the current source is already set
-        if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
-        // Preload only if the video is already in the viewport
-        const isInViewport = (elem)=>{
-            const rect = elem.getBoundingClientRect();
-            return rect.top < (window.innerHeight || document.documentElement.clientHeight) && rect.bottom > 0 && rect.left < (window.innerWidth || document.documentElement.clientWidth) && rect.right > 0;
-        };
-        if (isInViewport(videoElem) && videoElem.paused) videoElem.play().catch((error)=>{
-            console.warn(`Failed to autoplay video: ${video}`, error);
-        });
+function setVideoSource(video) {
+    const videoElem = document.getElementById(`${video}_video`);
+    let videoSrc = "";
+    if (window.innerWidth <= 560) videoSrc = getURL(video, "mobile");
+    else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
+    else videoSrc = getURL(video, "desktop");
+    // Check if the current source is already set
+    if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
+    // Preload only if the video is already in the viewport
+    const isInViewport = (elem)=>{
+        const rect = elem.getBoundingClientRect();
+        return rect.top < (window.innerHeight || document.documentElement.clientHeight) && rect.bottom > 0 && rect.left < (window.innerWidth || document.documentElement.clientWidth) && rect.right > 0;
+    };
+    if (isInViewport(videoElem) && videoElem.paused) videoElem.play().catch((error)=>{
+        console.warn(`Failed to autoplay video: ${video}`, error);
+    });
+}
+function responsiveNavShowreel() {
+    function satNavSources() {
+        setVideoSource("showreelNav");
+        setVideoSource("showreelNavXL");
     }
-    function getURL(video, device) {
-        let url;
-        if (video.includes("Nav")) url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/showreel_${device}.mp4`;
-        else url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${video}_${device}.mp4`;
-        return url;
-    }
-    // Initial call to set the video source
+    satNavSources();
+    debounceWindowResizedListener(satNavSources);
+}
+function setAllHomepageVideoSources() {
     function setAllVideoSources() {
         setVideoSource("oasis");
         setVideoSource("showreel");
@@ -2993,18 +2996,6 @@ function responsiveHomeVideos() {
     }
     setAllVideoSources();
     debounceWindowResizedListener(setAllVideoSources);
-    return {
-        setVideoSource
-    };
-}
-function responsiveNavShowreel() {
-    const { setVideoSource  } = responsiveHomeVideos();
-    function satNavSources() {
-        setVideoSource("showreelNav");
-        setVideoSource("showreelNavXL");
-    }
-    satNavSources();
-    debounceWindowResizedListener(satNavSources);
 }
 function lazyLoadHomeVideos() {
     // SGF VIDEO
@@ -3016,11 +3007,11 @@ function lazyLoadHomeVideos() {
     // HERO TESSELATION VIDEO
     setupLazyLoad(document.getElementById("metamorphoses_video"), document.getElementById("metamorphoses_video"));
 }
-// Utility function to set up IntersectionObserver for lazy loading videos
+// UTILITY FUNCTIONS
+// set up IntersectionObserver for lazy loading videos
 function setupLazyLoad(videoElement, triggerElement) {
     const observer = new IntersectionObserver(([entry])=>{
         if (entry.isIntersecting) {
-            console.log(videoElement, "is intersecting: ", triggerElement);
             videoElement.setAttribute("preload", "auto"); // Preload the video
             videoElement.play(); // Play the video
             observer.unobserve(triggerElement); // Stop observing after triggering
@@ -3030,12 +3021,20 @@ function setupLazyLoad(videoElement, triggerElement) {
     });
     observer.observe(triggerElement); // Start observing the trigger element
 }
+// render new video source based on window screen size change event
 function debounceWindowResizedListener(func) {
     let resizeTimeout;
     window.addEventListener("resize", ()=>{
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(func, 500);
     });
+}
+// return correct digital ocean url
+function getURL(video, device) {
+    let url;
+    if (video.includes("Nav")) url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/showreel_${device}.mp4`;
+    else url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${video}_${device}.mp4`;
+    return url;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
