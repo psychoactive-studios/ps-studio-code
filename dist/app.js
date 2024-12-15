@@ -2385,6 +2385,9 @@ function audioImplementation(homePage) {
         })(navigator.userAgent || navigator.vendor || window.opera);
         return check;
     };
+    const isMobile = mobileCheck();
+    // Exit early if on mobile to prevent loading or playing UI sounds
+    if (isMobile) return;
     // MUTE STATE
     let isMuted = false;
     let linkClicked = false;
@@ -2828,8 +2831,8 @@ parcelHelpers.export(exports, "showreelHome", ()=>showreelHome);
 // NAV SHOWREEL
 parcelHelpers.export(exports, "showreelNav", ()=>showreelNav);
 function showreelHome(audio) {
-    const fadeMusicToggle = audio.fadeToggle;
-    const showreelMuteState = audio.getShowreelMuteState;
+    const fadeMusicToggle = audio?.fadeToggle;
+    const showreelMuteState = audio?.getShowreelMuteState;
     const homeBlock = document.querySelector("#showreel_block_home");
     const showreelVideo = document.querySelector("#showreel_video");
     const clickToUnmuteUI = document.querySelector(".showreel-ui-wrapper");
@@ -2860,14 +2863,14 @@ function showreelHome(audio) {
         showreelVideo.currentTime = 0; //restart video
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
         clickToMuteUI.style.opacity = 0; // set mute opacity to 0
-        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickLogic = "once"; //update click logic
         outOfView = false; //ensure out of view logic is false
     }
     // SECOND CLICK LOGIC
     function secondClickLogic() {
         showreelVideo.muted = true; //mute video again
-        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
         clickToUnmuteUI.style.display = "flex"; // display unmute ui
         clickToMuteUI.style.display = "none"; // hide mute ui
@@ -2876,7 +2879,7 @@ function showreelHome(audio) {
     // THIRD CLICK LOGIC
     function thirdClickLogic() {
         showreelVideo.muted = false; //unmute video
-        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         clickToUnmuteUI.style.display = "none"; //hide unmute ui
         clickLogic = "once"; //update click logic
         outOfView = false; //ensure out of view logic is false
@@ -2917,8 +2920,8 @@ function showreelHome(audio) {
     });
 }
 function showreelNav(audio) {
-    const fadeMusicToggle = audio.fadeToggle;
-    const showreelMuteState = audio.getShowreelMuteState;
+    const fadeMusicToggle = audio?.fadeToggle;
+    const showreelMuteState = audio?.getShowreelMuteState;
     const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
     const wave = document.querySelectorAll(".wave");
     const showreelVideo = document.querySelector("#showreelNavXL_video");
@@ -2927,7 +2930,7 @@ function showreelNav(audio) {
     navPlayReel.addEventListener("click", ()=>{
         showreelVideo.muted = false; //unmute video
         showreelVideo.currentTime = 0; //restart video
-        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         wave.forEach((stroke)=>{
             stroke.style.fill = "#F5F4F2"; //set mute svg fill back to white
         });
@@ -2935,7 +2938,7 @@ function showreelNav(audio) {
     // when user navigates away from showreel
     showreelVideo.addEventListener("pause", function() {
         if (showreelVideo.muted == false && document.visibilityState == "visible") {
-            if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+            if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
         }
     }, false);
 }
@@ -2969,10 +2972,7 @@ function setVideoSource(video) {
     else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
     else videoSrc = getURL(video, "desktop");
     // Check if the current source is already set
-    if (videoElem.getAttribute("src") !== videoSrc) {
-        videoElem.src = videoSrc;
-        if (video == "metamorphoses") videoElem.play();
-    }
+    if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
     // Preload only if the video is already in the viewport
     const isInViewport = (elem)=>{
         const rect = elem.getBoundingClientRect();

@@ -19,6 +19,13 @@ export default function audioImplementation(homePage) {
     return check;
   };
 
+  const isMobile = mobileCheck();
+
+  // Exit early if on mobile to prevent loading or playing UI sounds
+  if (isMobile) {
+    return;
+  }
+
   // MUTE STATE
   let isMuted = false;
   let linkClicked = false;

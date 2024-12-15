@@ -1,6 +1,6 @@
 export function showreelHome(audio) {
-  const fadeMusicToggle = audio.fadeToggle;
-  const showreelMuteState = audio.getShowreelMuteState;
+  const fadeMusicToggle = audio?.fadeToggle;
+  const showreelMuteState = audio?.getShowreelMuteState;
 
   const homeBlock = document.querySelector("#showreel_block_home");
   const showreelVideo = document.querySelector("#showreel_video");
@@ -38,7 +38,9 @@ export function showreelHome(audio) {
     showreelVideo.currentTime = 0; //restart video
     clickToUnmuteUI.style.display = "none"; //hide unmute ui
     clickToMuteUI.style.opacity = 0; // set mute opacity to 0
-    if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+    if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) {
+      fadeMusicToggle(); //if unmuted, toggle music fade
+    }
     clickLogic = "once"; //update click logic
     outOfView = false; //ensure out of view logic is false
   }
@@ -46,7 +48,9 @@ export function showreelHome(audio) {
   // SECOND CLICK LOGIC
   function secondClickLogic() {
     showreelVideo.muted = true; //mute video again
-    if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+    if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) {
+      fadeMusicToggle(); //if unmuted, toggle music fade
+    }
     clickToUnmuteUI.style.opacity = "100"; // set unmute opacity to 100
     clickToUnmuteUI.style.display = "flex"; // display unmute ui
     clickToMuteUI.style.display = "none"; // hide mute ui
@@ -56,7 +60,9 @@ export function showreelHome(audio) {
   // THIRD CLICK LOGIC
   function thirdClickLogic() {
     showreelVideo.muted = false; //unmute video
-    if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+    if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) {
+      fadeMusicToggle(); //if unmuted, toggle music fade
+    }
     clickToUnmuteUI.style.display = "none"; //hide unmute ui
     clickLogic = "once"; //update click logic
     outOfView = false; //ensure out of view logic is false
@@ -128,8 +134,8 @@ export function showreelHome(audio) {
 
 // NAV SHOWREEL
 export function showreelNav(audio) {
-  const fadeMusicToggle = audio.fadeToggle;
-  const showreelMuteState = audio.getShowreelMuteState;
+  const fadeMusicToggle = audio?.fadeToggle;
+  const showreelMuteState = audio?.getShowreelMuteState;
 
   const navPlayReel = document.querySelector(".navbar_playreel-wrapper");
   const wave = document.querySelectorAll(".wave");
@@ -141,7 +147,9 @@ export function showreelNav(audio) {
   navPlayReel.addEventListener("click", () => {
     showreelVideo.muted = false; //unmute video
     showreelVideo.currentTime = 0; //restart video
-    if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+    if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) {
+      fadeMusicToggle(); //if unmuted, toggle music fade
+    }
     wave.forEach((stroke) => {
       stroke.style.fill = "#F5F4F2"; //set mute svg fill back to white
     });
@@ -155,7 +163,9 @@ export function showreelNav(audio) {
         showreelVideo.muted == false &&
         document.visibilityState == "visible"
       ) {
-        if (!showreelMuteState()) fadeMusicToggle(); //if unmuted, toggle music fade
+        if (fadeMusicToggle && showreelMuteState && !showreelMuteState()) {
+          fadeMusicToggle(); //if unmuted, toggle music fade
+        }
       }
     },
     false
