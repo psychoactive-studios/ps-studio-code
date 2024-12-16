@@ -10,21 +10,27 @@ import {
   setAllHomepageVideoSources,
   responsiveNavShowreel,
   lazyLoadHomeVideos,
+  contentHubDynamicVideos,
 } from "./js/global/dynamicVideos";
 
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
 
+const contentHubOuter = currentPage === "/content-hub/";
+const contentHubInner =
+  currentPage.startsWith("/content-hub/") && !contentHubOuter;
+
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
-  responsiveNavShowreel();
+  responsiveNavShowreel(); // make nav showreel load video sources dynamically
   if (homePage) {
-    setAllHomepageVideoSources();
-    lazyLoadHomeVideos();
+    setAllHomepageVideoSources(); // make homepage load video sources dynamically
+    lazyLoadHomeVideos(); // make homepage videos lazy load in on scroll
     showreelHome(audio); // code for homepage showreel video
   }
+  if (contentHubInner) contentHubDynamicVideos();
   showreelNav(audio); // code for nav showreel video
   initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer

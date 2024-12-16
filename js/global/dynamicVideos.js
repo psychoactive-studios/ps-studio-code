@@ -1,20 +1,41 @@
 // dynamically set video sources based on screen size
 function setVideoSource(video) {
-  const videoElem = document.getElementById(`${video}_video`);
-  let videoSrc = "";
+  let videoSrc;
+  const isContentHub = video == "content-hub";
+
+  const videoElem = isContentHub
+    ? document.querySelector(".content-hub-video")
+    : document.getElementById(`${video}_video`);
 
   if (window.innerWidth <= 560) {
-    videoSrc = getURL(video, "mobile");
+    videoSrc = isContentHub
+      ? getURLContentHub(videoElem, "mobile")
+      : getURL(video, "mobile");
   } else if (window.innerWidth <= 1680) {
-    videoSrc = getURL(video, "laptop");
+    videoSrc = isContentHub
+      ? getURLContentHub(videoElem, "laptop")
+      : getURL(video, "laptop");
   } else {
-    videoSrc = getURL(video, "desktop");
+    videoSrc = isContentHub
+      ? getURLContentHub(videoElem, "desktop")
+      : getURL(video, "desktop");
   }
 
-  // Check if the current source is already set
-  if (videoElem.getAttribute("src") !== videoSrc) {
-    videoElem.src = videoSrc;
-    // if (video == "metamorphoses") videoElem.play(); // catch to always play tesselation
+  // Check if the current source is already set, then update it
+  if (isContentHub) {
+    const sourceElement = videoElem.querySelector("source");
+    let videoSource = sourceElement ? sourceElement.getAttribute("src") : null;
+
+    if (sourceElement.getAttribute("src") !== videoSrc) {
+      videoSource = videoSrc;
+      sourceElement.setAttribute("src", videoSource);
+      videoElem.load();
+      videoElem.play();
+    }
+  } else {
+    if (videoElem.getAttribute("src") !== videoSrc) {
+      videoElem.src = videoSrc;
+    }
   }
 
   // Preload only if the video is already in the viewport
@@ -82,6 +103,10 @@ export function lazyLoadHomeVideos() {
   );
 }
 
+export function contentHubDynamicVideos() {
+  debounceWindowResizedListener(() => setVideoSource("content-hub"));
+}
+
 // UTILITY FUNCTIONS
 
 // set up IntersectionObserver for lazy loading videos
@@ -116,5 +141,17 @@ function getURL(video, device) {
   } else {
     url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${video}_${device}.mp4`;
   }
+  return url;
+}
+
+function getURLContentHub(video, device) {
+  const sourceElement = video.querySelector("source");
+  const videoSource = sourceElement ? sourceElement.getAttribute("src") : null;
+
+  const match = videoSource.match(/\/([^\/]+)_(mobile|laptop|desktop)\.mp4$/);
+  const videoTitle = match ? match[1] : null;
+
+  const url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/Content-Hub/${videoTitle}_${device}.mp4`;
+
   return url;
 }

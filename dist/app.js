@@ -550,15 +550,18 @@ var _dynamicVideos = require("./js/global/dynamicVideos");
 const parceled = true; // for checking localhost vs github pages / CDN
 const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
+const contentHubOuter = currentPage === "/content-hub/";
+const contentHubInner = currentPage.startsWith("/content-hub/") && !contentHubOuter;
 const onReady = ()=>{
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
-    (0, _dynamicVideos.responsiveNavShowreel)();
+    (0, _dynamicVideos.responsiveNavShowreel)(); // make nav showreel load video sources dynamically
     if (homePage) {
-        (0, _dynamicVideos.setAllHomepageVideoSources)();
-        (0, _dynamicVideos.lazyLoadHomeVideos)();
+        (0, _dynamicVideos.setAllHomepageVideoSources)(); // make homepage load video sources dynamically
+        (0, _dynamicVideos.lazyLoadHomeVideos)(); // make homepage videos lazy load in on scroll
         (0, _showreel.showreelHome)(audio); // code for homepage showreel video
     }
+    if (contentHubInner) (0, _dynamicVideos.contentHubDynamicVideos)();
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
     (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
@@ -2965,14 +2968,25 @@ parcelHelpers.export(exports, "responsiveNavShowreel", ()=>responsiveNavShowreel
 parcelHelpers.export(exports, "setAllHomepageVideoSources", ()=>setAllHomepageVideoSources);
 // Main function to lazy load home videos
 parcelHelpers.export(exports, "lazyLoadHomeVideos", ()=>lazyLoadHomeVideos);
+parcelHelpers.export(exports, "contentHubDynamicVideos", ()=>contentHubDynamicVideos);
 function setVideoSource(video) {
-    const videoElem = document.getElementById(`${video}_video`);
-    let videoSrc = "";
-    if (window.innerWidth <= 560) videoSrc = getURL(video, "mobile");
-    else if (window.innerWidth <= 1680) videoSrc = getURL(video, "laptop");
-    else videoSrc = getURL(video, "desktop");
-    // Check if the current source is already set
-    if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
+    let videoSrc;
+    const isContentHub = video == "content-hub";
+    const videoElem = isContentHub ? document.querySelector(".content-hub-video") : document.getElementById(`${video}_video`);
+    if (window.innerWidth <= 560) videoSrc = isContentHub ? getURLContentHub(videoElem, "mobile") : getURL(video, "mobile");
+    else if (window.innerWidth <= 1680) videoSrc = isContentHub ? getURLContentHub(videoElem, "laptop") : getURL(video, "laptop");
+    else videoSrc = isContentHub ? getURLContentHub(videoElem, "desktop") : getURL(video, "desktop");
+    // Check if the current source is already set, then update it
+    if (isContentHub) {
+        const sourceElement = videoElem.querySelector("source");
+        let videoSource = sourceElement ? sourceElement.getAttribute("src") : null;
+        if (sourceElement.getAttribute("src") !== videoSrc) {
+            videoSource = videoSrc;
+            sourceElement.setAttribute("src", videoSource);
+            videoElem.load();
+            videoElem.play();
+        }
+    } else if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
     // Preload only if the video is already in the viewport
     const isInViewport = (elem)=>{
         const rect = elem.getBoundingClientRect();
@@ -3010,6 +3024,9 @@ function lazyLoadHomeVideos() {
     // HERO TESSELATION VIDEO
     setupLazyLoad(document.getElementById("metamorphoses_video"), document.getElementById("metamorphoses_video"));
 }
+function contentHubDynamicVideos() {
+    debounceWindowResizedListener(()=>setVideoSource("content-hub"));
+}
 // UTILITY FUNCTIONS
 // set up IntersectionObserver for lazy loading videos
 function setupLazyLoad(videoElement, triggerElement) {
@@ -3037,6 +3054,14 @@ function getURL(video, device) {
     let url;
     if (video.includes("Nav")) url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/showreel_${device}.mp4`;
     else url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${video}_${device}.mp4`;
+    return url;
+}
+function getURLContentHub(video, device) {
+    const sourceElement = video.querySelector("source");
+    const videoSource = sourceElement ? sourceElement.getAttribute("src") : null;
+    const match = videoSource.match(/\/([^\/]+)_(mobile|laptop|desktop)\.mp4$/);
+    const videoTitle = match ? match[1] : null;
+    const url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/Content-Hub/${videoTitle}_${device}.mp4`;
     return url;
 }
 
