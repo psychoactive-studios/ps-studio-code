@@ -538,8 +538,6 @@ var _copyEmailDefault = parcelHelpers.interopDefault(_copyEmail);
 var _initCms = require("./js/global/initCms");
 var _initCmsDefault = parcelHelpers.interopDefault(_initCms);
 var _preloader = require("./js/global/preloader");
-var _projectLotties = require("./js/global/projectLotties");
-var _projectLottiesDefault = parcelHelpers.interopDefault(_projectLotties);
 var _loadAnim = require("./js/home/loadAnim");
 var _loadAnimDefault = parcelHelpers.interopDefault(_loadAnim);
 var _audio = require("./js/global/audio");
@@ -563,7 +561,6 @@ const onReady = ()=>{
     }
     if (contentHubInner) (0, _dynamicVideos.contentHubDynamicVideos)();
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
-    (0, _projectLottiesDefault.default)(); // initiates project lotties for home and work pages
     (0, _copyEmailDefault.default)(); // copies email to clipboard in footer
     (0, _initCmsDefault.default)(); // sets color hovers and cms filtering style for work page & content hub
     document.querySelector(".landing-video-container") && (0, _loadAnimDefault.default)(); // for home page intro anim
@@ -592,7 +589,7 @@ const handleEscape = (e)=>{
 };
 window.addEventListener("keydown", handleEscape);
 
-},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/global/projectLotties":"2KQxL","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/dynamicVideos":"8GDbY"}],"aI83l":[function(require,module,exports) {
+},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/dynamicVideos":"8GDbY"}],"aI83l":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = copyEmail = ()=>{
@@ -848,83 +845,6 @@ function stopLogoLoading() {
         once: true
     });
 }
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2KQxL":[function(require,module,exports) {
-// query breakpoint and load suitable lottie into player
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-function initProjectLotties() {
-    // check if lottie players exist 
-    if (document.querySelectorAll("lottie-player").length > 0) // create array with all lotie players
-    // var allLotties = [...document.querySelectorAll('lottie-player')]
-    // //var allLottiesHover = document.querySelectorAll('.hover-lottie-wrapper')
-    // let isMobile = window.innerWidth < 428
-    // // create new array from lotties if it doesn't have a source attribute
-    // allLotties = allLotties.filter( l => !l.hasAttribute('src'))
-    // allLotties.forEach( e => {
-    //   // get source based to mobile or desktop based on mobile / screen width
-    //   let source = isMobile ? e.getAttribute('mobile-source') : e.getAttribute('desktop-source')
-    //   // if source is not empty, load the source into each lottie player
-    //   if(source != ''){
-    //     e.load(source)
-    //   }
-    // })
-    // remove safari placeholder 
-    document.querySelectorAll(".safari-image").forEach((e)=>{
-        e.remove();
-    });
-} //   // Play lotties one randomly and one at a time for performance
- //   function isInViewport(el) {
- //     var rect = el.getBoundingClientRect()
- //     return (
- //       rect.top >= 0 &&
- //       rect.left >= 0 &&
- //       rect.bottom <=
- //         (window.innerHeight || document.documentElement.clientHeight) &&
- //       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
- //     )
- //   }
- //   // lotties only play when in viewport
- //   var lottiesRemoved = false
- //   var x = 0
- //   // method 1, timeout
- //   var deleteLottiesFunction = setInterval(function () {
- //     deleteLotties()
- //     if (++x === 50) {
- //       clearInterval(deleteLottiesFunction)
- //     }
- //   }, 100)
- //   //
- //   //deleteLotties()
- //   function deleteLotties() {
- //     // Function runs every 4 seconds (the duration of the lottie animations)
- //     if (pageLoaded) {
- //       //availableLotties = []
- //       //var lotties = document.getElementsByTagName("lottie-player");
- //       var lottieBoxes = document.getElementsByClassName('lottie-box')
- //       var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
- //       var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
- //       //console.log()
- //       if (isSafari && isMac && !lottiesRemoved) {
- //         lottieBoxes = document.getElementsByClassName('lottie-box')
- //         if (lottieBoxes.length == 0) {
- //           //clearInterval(deleteLottiesFunction);
- //         }
- //         for (var i = 0; i < lottieBoxes.length; i++) {
- //           //lottieBoxes[i].remove()
- //           //lottiesRemoved = true
- //         }
- //       } else {
- //         safariImages = document.getElementsByClassName('safari-image')
- //         for (var i = 0; i < safariImages.length; i++) {
- //           safariImages[i].remove()
- //           //lottiesRemoved = true
- //         }
- //       }
- //     }
- //   }
- // }
-exports.default = initProjectLotties;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4gmyN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

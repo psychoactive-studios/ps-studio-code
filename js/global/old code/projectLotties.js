@@ -21,9 +21,9 @@ export default function initProjectLotties() {
     // })
     
     // remove safari placeholder 
-    document.querySelectorAll('.safari-image').forEach(e => {
-      e.remove()
-    })
+    // document.querySelectorAll('.safari-image').forEach(e => {
+    //   e.remove()
+    // })
   }
 }
 

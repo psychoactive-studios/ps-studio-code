@@ -1,7 +1,6 @@
 import copyEmail from "./js/global/copyEmail";
 import initCms from "./js/global/initCms";
 import { loopLogoLoading, readyPreloader } from "./js/global/preloader";
-import initProjectLotties from "./js/global/projectLotties";
 import loadAnim from "./js/home/loadAnim";
 import audioImplementation from "./js/global/audio";
 import { showreelHome, showreelNav } from "./js/global/showreel";
@@ -32,7 +31,6 @@ const onReady = () => {
   }
   if (contentHubInner) contentHubDynamicVideos();
   showreelNav(audio); // code for nav showreel video
-  initProjectLotties(); // initiates project lotties for home and work pages
   copyEmail(); // copies email to clipboard in footer
   initCms(); // sets color hovers and cms filtering style for work page & content hub
   document.querySelector(".landing-video-container") && loadAnim(); // for home page intro anim
