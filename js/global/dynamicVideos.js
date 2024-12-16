@@ -34,7 +34,14 @@ function setVideoSource(video) {
     }
   } else {
     if (videoElem.getAttribute("src") !== videoSrc) {
-      videoElem.src = videoSrc;
+      try {
+        videoElem.pause(); // Pause the video before changing the src
+        videoElem.removeAttribute("src"); // Clear the current src to ensure a fresh load
+        videoElem.setAttribute("src", videoSrc); // Set the new src
+        videoElem.load(); // Explicitly load the video
+      } catch (error) {
+        console.warn(`Failed to update video source for ${video}`, error);
+      }
     }
   }
 

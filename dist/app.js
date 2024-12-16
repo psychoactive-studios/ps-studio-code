@@ -2906,7 +2906,16 @@ function setVideoSource(video) {
             videoElem.load();
             videoElem.play();
         }
-    } else if (videoElem.getAttribute("src") !== videoSrc) videoElem.src = videoSrc;
+    } else {
+        if (videoElem.getAttribute("src") !== videoSrc) try {
+            videoElem.pause(); // Pause the video before changing the src
+            videoElem.removeAttribute("src"); // Clear the current src to ensure a fresh load
+            videoElem.setAttribute("src", videoSrc); // Set the new src
+            videoElem.load(); // Explicitly load the video
+        } catch (error) {
+            console.warn(`Failed to update video source for ${video}`, error);
+        }
+    }
     // Preload only if the video is already in the viewport
     const isInViewport = (elem)=>{
         const rect = elem.getBoundingClientRect();
