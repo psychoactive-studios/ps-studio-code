@@ -3,6 +3,7 @@ import initCms from "./js/global/initCms";
 import { loopLogoLoading, readyPreloader } from "./js/global/preloader";
 import loadAnim from "./js/home/loadAnim";
 import audioImplementation from "./js/global/audio";
+import aboutPage from "./js/about/aboutPage";
 import { showreelHome, showreelNav } from "./js/global/showreel";
 import { stopCmdClick } from "./js/global/bugFixes";
 import {
@@ -19,6 +20,8 @@ const homePage = currentPage == "/";
 const contentHubOuter = currentPage === "/content-hub/";
 const contentHubInner =
   currentPage.startsWith("/content-hub/") && !contentHubOuter;
+
+const aboutPage = currentPage == "/about-new"; // change to just about later
 
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
@@ -37,6 +40,8 @@ const onReady = () => {
   document.querySelectorAll(".article-rich-text a").forEach((e) => {
     e.target = "_blank";
   });
+
+  if (aboutPage) aboutPage(); // all custom code for about page 
   stopCmdClick(); // prevent command click from triggering page transition
 };
 
