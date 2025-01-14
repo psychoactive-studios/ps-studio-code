@@ -3019,7 +3019,26 @@ exports.default = aboutPageCode = ()=>{
                 end: "top 20%",
                 scrub: true
             },
-            opacity: 0.2,
+            opacity: 0.05,
+            stagger: 0.1
+        });
+    });
+    const scrollingHighlightElementsBg = document.querySelectorAll("[data-animation='scrolling-highlight-bg']");
+    scrollingHighlightElementsBg.forEach((element)=>{
+        const splitText = new SplitType(element, {
+            types: [
+                "chars",
+                "words"
+            ]
+        });
+        gsap.from(splitText.chars, {
+            scrollTrigger: {
+                trigger: element,
+                start: "top 80%",
+                end: "top 20%",
+                scrub: true
+            },
+            opacity: 1,
             stagger: 0.1
         });
     });
@@ -3101,8 +3120,10 @@ exports.default = aboutPageCode = ()=>{
     if (container && follower) {
         container.style.position = "relative";
         follower.style.position = "absolute";
-        follower.style.opacity = "0";
-        const followerRadius = follower.offsetWidth / 2;
+        follower.style.transform = "scale(0)"; // Start with scale 0
+        follower.style.transition = "transform 0.5s cubic-bezier(0.42, 0, 0.58, 1), left 0.1s, top 0.1s"; // Smooth grow-in easing
+        follower.style.transformOrigin = "center center"; // Default origin at the center
+        const followerRadius = follower.offsetWidth / 2; // Get the radius of the follower
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
@@ -3114,26 +3135,139 @@ exports.default = aboutPageCode = ()=>{
             currentY = lerp(currentY, targetY, 0.1);
             follower.style.left = `${currentX}px`;
             follower.style.top = `${currentY}px`;
-            follower.style.transform = "translate(-50%, -50%)";
             requestAnimationFrame(updateFollowerPosition);
         };
-        container.addEventListener("mouseenter", ()=>{
-            follower.style.opacity = "1";
+        container.addEventListener("mouseenter", (e)=>{
+            const rect = container.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            // Positioning the follower at the mouse center
+            targetX = mouseX - followerRadius;
+            targetY = mouseY - followerRadius;
+            currentX = targetX; // Ensure it's directly placed
+            currentY = targetY;
+            follower.style.left = `${currentX}px`;
+            follower.style.top = `${currentY}px`;
+            // Set the transformOrigin to the center of the mouse position
+            follower.style.transformOrigin = `${mouseX}px ${mouseY}px`;
+            // Start grow-in animation from the center of the mouse
+            follower.style.transform = "scale(1)";
         });
         container.addEventListener("mouseleave", ()=>{
-            follower.style.opacity = "0";
+            // Shrink out, scale to 0
+            follower.style.transition = "transform 0.25s ease-in"; // Shrink-out easing at the end
+            follower.style.transform = "scale(0)";
         });
         container.addEventListener("mousemove", (e)=>{
             const rect = container.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
             // Clamp target values to keep the circle inside the container
-            targetX = Math.max(followerRadius, Math.min(mouseX, rect.width - followerRadius));
-            targetY = Math.max(followerRadius, Math.min(mouseY, rect.height - followerRadius));
+            targetX = Math.max(followerRadius, Math.min(mouseX - followerRadius, rect.width - followerRadius));
+            targetY = Math.max(followerRadius, Math.min(mouseY - followerRadius, rect.height - followerRadius));
+            // Update the position of the transform origin to mouse center
+            follower.style.transformOrigin = `${mouseX}px ${mouseY}px`;
         });
         updateFollowerPosition(); // Start the animation loop
     }
-}; ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+};
+///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+// SWAP HERO VIDEO TO MOBILE / BACK
+document.addEventListener("DOMContentLoaded", (event)=>{
+    // Cache all video elements
+    const allVideos = document.querySelectorAll(".background-video");
+    // Debounce function to prevent frequent calls
+    function debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(()=>func.apply(this, args), wait);
+        };
+    }
+    // Function to update video sources based on screen width
+    function updateVideoSources() {
+        allVideos.forEach((video)=>{
+            const currentSrc = video.querySelector("source").src;
+            const screenWidth = window.innerWidth;
+            let newSrc;
+            if (screenWidth <= 479) newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video%20MOBILE.mp4";
+            else newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video.mp4";
+            if (currentSrc !== newSrc) {
+                video.pause();
+                video.querySelector("source").setAttribute("src", newSrc);
+                video.load();
+                video.play();
+            }
+        });
+    }
+    // Initial setup
+    updateVideoSources();
+    // Debounced event listener for window resize
+    window.addEventListener("resize", debounce(updateVideoSources, 100));
+}); ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+ ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+ // ASCI ART ANIMATOR
+ // document.addEventListener("DOMContentLoaded", function () {
+ //   function loadSVG() {
+ //     const container = document.getElementById("asci-left");
+ //     // URL or path to the SVG file
+ //     const svgURL =
+ //       "https://cdn.prod.website-files.com/6761fc8483c673ae45ad8f4e/6784bf272a5d360fc3d33bb9_asci-art-left.svg";
+ //     fetch(svgURL)
+ //       .then((response) => response.text())
+ //       .then((svgText) => {
+ //         container.innerHTML = svgText; // Load SVG content into the div
+ //         // Wait for SVG to fully load and for DOM to update
+ //         setTimeout(() => {
+ //           const svgElement = document.querySelector(".asci-art");
+ //           if (svgElement) {
+ //             console.log(svgElement);
+ //             // Function to change the fill color to red
+ //             function changeToRed() {
+ //               svgElement.style.fill = "red";
+ //             }
+ //             // Function to change the fill color back to white
+ //             function changeToWhite() {
+ //               svgElement.style.fill = "#fff";
+ //             }
+ //             function randomFlicker() {
+ //               const flickers = getRandomInt(2, 6); // Random number of flickers (2 to 6)
+ //               const pause = getRandomInt(500, 3000); // Random pause (0.5 to 3 seconds)
+ //               let flickCount = 0;
+ //               function flick() {
+ //                 if (flickCount < flickers) {
+ //                   if (Math.random() > 0.5) {
+ //                     changeToRed();
+ //                   } else {
+ //                     changeToWhite();
+ //                   }
+ //                   flickCount++;
+ //                   setTimeout(flick, 5); // Quick switch every 100ms
+ //                 } else {
+ //                   setTimeout(() => {
+ //                     randomFlicker();
+ //                   }, pause); // Pause after flicker
+ //                 }
+ //               }
+ //               flick();
+ //             }
+ //             function getRandomInt(min, max) {
+ //               return Math.floor(Math.random() * (max - min + 1) + min);
+ //             }
+ //             // Start the flicker behavior
+ //             randomFlicker();
+ //           } else {
+ //             console.log("SVG element not found.");
+ //           }
+ //         }, 100); // Timeout to ensure DOM update
+ //       })
+ //       .catch((error) => console.error("Error loading SVG:", error));
+ //   }
+ //   // Call the function to load the SVG
+ //   loadSVG();
+ // });
+ ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
  ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
  // old version of text fade GSAP, taken from psychoactive work inner pages
  // let typeSplit = new SplitType("[text-split]", {
