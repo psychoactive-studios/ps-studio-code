@@ -3114,98 +3114,112 @@ exports.default = aboutPageCode = ()=>{
     document.head.appendChild(style);
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
-    // MOUSE FOLLOWER CTA
+    // function syncPosition() {
+    //   const heroImage = document.querySelector(".hero_bg-image-wrapper");
+    //   const amphibiansImage = document.querySelector(".amphibians_bg-img");
+    //   // Get the computed height of the hero image wrapper
+    //   const heroHeight = heroImage.offsetHeight;
+    //   // Set the top of the amphibians image dynamically
+    //   amphibiansImage.style.top = `${heroHeight}px`;
+    // }
+    // window.addEventListener("resize", syncPosition);
+    // syncPosition(); // Initial call to set positions
+    // MOUSE FOLLOWER CODE
     const container = document.getElementById("container");
     const follower = document.getElementById("follower");
     if (container && follower) {
         container.style.position = "relative";
         follower.style.position = "absolute";
-        follower.style.transform = "scale(0)"; // Start with scale 0
-        follower.style.transition = "transform 0.5s cubic-bezier(0.42, 0, 0.58, 1), left 0.1s, top 0.1s"; // Smooth grow-in easing
-        follower.style.transformOrigin = "center center"; // Default origin at the center
-        const followerRadius = follower.offsetWidth / 2; // Get the radius of the follower
+        follower.style.transform = "scale(0)";
+        follower.style.transition = "transform 0.25s ease-in, opacity 0.25s ease-in";
+        follower.style.transformOrigin = "center center";
+        follower.style.opacity = "0";
+        const followerRadius = follower.offsetWidth / 2;
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
         let currentY = 0;
         const lerp = (start, end, t)=>start + (end - start) * t;
         const updateFollowerPosition = ()=>{
-            // Smoothly interpolate current position towards target position
-            currentX = lerp(currentX, targetX, 0.1); // Adjust 0.1 for faster/slower smoothing
-            currentY = lerp(currentY, targetY, 0.1);
-            follower.style.left = `${currentX}px`;
-            follower.style.top = `${currentY}px`;
+            currentX = lerp(currentX, targetX, 0.5);
+            currentY = lerp(currentY, targetY, 0.5);
+            follower.style.left = `${currentX - followerRadius}px`;
+            follower.style.top = `${currentY - followerRadius}px`;
             requestAnimationFrame(updateFollowerPosition);
         };
         container.addEventListener("mouseenter", (e)=>{
             const rect = container.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
-            // Positioning the follower at the mouse center
-            targetX = mouseX - followerRadius;
-            targetY = mouseY - followerRadius;
-            currentX = targetX; // Ensure it's directly placed
+            targetX = mouseX;
+            targetY = mouseY;
+            currentX = targetX;
             currentY = targetY;
-            follower.style.left = `${currentX}px`;
-            follower.style.top = `${currentY}px`;
-            // Set the transformOrigin to the center of the mouse position
-            follower.style.transformOrigin = `${mouseX}px ${mouseY}px`;
-            // Start grow-in animation from the center of the mouse
-            follower.style.transform = "scale(1)";
+            follower.style.left = `${currentX - followerRadius}px`;
+            follower.style.top = `${currentY - followerRadius}px`;
+            follower.style.transformOrigin = `${followerRadius}px ${followerRadius}px`;
+            requestAnimationFrame(()=>{
+                follower.style.transform = "scale(1)";
+                follower.style.opacity = "1";
+            });
         });
         container.addEventListener("mouseleave", ()=>{
-            // Shrink out, scale to 0
-            follower.style.transition = "transform 0.25s ease-in"; // Shrink-out easing at the end
-            follower.style.transform = "scale(0)";
+            requestAnimationFrame(()=>{
+                follower.style.transform = "scale(0)";
+                follower.style.opacity = "0";
+            });
+            setTimeout(()=>{
+                currentX = -followerRadius;
+                currentY = -followerRadius;
+                targetX = currentX;
+                targetY = currentY;
+            }, 250); // matching the transition time
         });
         container.addEventListener("mousemove", (e)=>{
             const rect = container.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
-            // Clamp target values to keep the circle inside the container
-            targetX = Math.max(followerRadius, Math.min(mouseX - followerRadius, rect.width - followerRadius));
-            targetY = Math.max(followerRadius, Math.min(mouseY - followerRadius, rect.height - followerRadius));
-            // Update the position of the transform origin to mouse center
-            follower.style.transformOrigin = `${mouseX}px ${mouseY}px`;
+            targetX = mouseX;
+            targetY = mouseY;
         });
-        updateFollowerPosition(); // Start the animation loop
+        updateFollowerPosition();
     }
-};
-///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
-///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
-// SWAP HERO VIDEO TO MOBILE / BACK
-document.addEventListener("DOMContentLoaded", (event)=>{
-    // Cache all video elements
-    const allVideos = document.querySelectorAll(".background-video");
-    // Debounce function to prevent frequent calls
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(()=>func.apply(this, args), wait);
-        };
-    }
-    // Function to update video sources based on screen width
-    function updateVideoSources() {
-        allVideos.forEach((video)=>{
-            const currentSrc = video.querySelector("source").src;
-            const screenWidth = window.innerWidth;
-            let newSrc;
-            if (screenWidth <= 479) newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video%20MOBILE.mp4";
-            else newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video.mp4";
-            if (currentSrc !== newSrc) {
-                video.pause();
-                video.querySelector("source").setAttribute("src", newSrc);
-                video.load();
-                video.play();
-            }
-        });
-    }
-    // Initial setup
-    updateVideoSources();
-    // Debounced event listener for window resize
-    window.addEventListener("resize", debounce(updateVideoSources, 100));
-}); ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+    ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+    ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
+    // SWAP HERO VIDEO TO MOBILE / BACK
+    document.addEventListener("DOMContentLoaded", (event)=>{
+        // Cache all video elements
+        const allVideos = document.querySelectorAll(".background-video");
+        // Debounce function to prevent frequent calls
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(()=>func.apply(this, args), wait);
+            };
+        }
+        // Function to update video sources based on screen width
+        function updateVideoSources() {
+            allVideos.forEach((video)=>{
+                const currentSrc = video.querySelector("source").src;
+                const screenWidth = window.innerWidth;
+                let newSrc;
+                if (screenWidth <= 479) newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video%20MOBILE.mp4";
+                else newSrc = "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video.mp4";
+                if (currentSrc !== newSrc) {
+                    video.pause();
+                    video.querySelector("source").setAttribute("src", newSrc);
+                    video.load();
+                    video.play();
+                }
+            });
+        }
+        // Initial setup
+        updateVideoSources();
+        // Debounced event listener for window resize
+        window.addEventListener("resize", debounce(updateVideoSources, 100));
+    });
+}; ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
  ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
  // ASCI ART ANIMATOR
  // document.addEventListener("DOMContentLoaded", function () {
