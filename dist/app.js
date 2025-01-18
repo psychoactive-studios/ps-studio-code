@@ -3114,76 +3114,100 @@ exports.default = aboutPageCode = ()=>{
     document.head.appendChild(style);
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
-    // function syncPosition() {
-    //   const heroImage = document.querySelector(".hero_bg-image-wrapper");
-    //   const amphibiansImage = document.querySelector(".amphibians_bg-img");
-    //   // Get the computed height of the hero image wrapper
-    //   const heroHeight = heroImage.offsetHeight;
-    //   // Set the top of the amphibians image dynamically
-    //   amphibiansImage.style.top = `${heroHeight}px`;
-    // }
-    // window.addEventListener("resize", syncPosition);
-    // syncPosition(); // Initial call to set positions
-    // MOUSE FOLLOWER CODE
-    const container = document.getElementById("container");
-    const follower = document.getElementById("follower");
-    if (container && follower) {
-        container.style.position = "relative";
-        follower.style.position = "absolute";
-        follower.style.transform = "scale(0)";
-        follower.style.transition = "transform 0.25s ease-in, opacity 0.25s ease-in";
-        follower.style.transformOrigin = "center center";
-        follower.style.opacity = "0";
-        const followerRadius = follower.offsetWidth / 2;
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        const lerp = (start, end, t)=>start + (end - start) * t;
-        const updateFollowerPosition = ()=>{
-            currentX = lerp(currentX, targetX, 0.5);
-            currentY = lerp(currentY, targetY, 0.5);
-            follower.style.left = `${currentX - followerRadius}px`;
-            follower.style.top = `${currentY - followerRadius}px`;
-            requestAnimationFrame(updateFollowerPosition);
-        };
-        container.addEventListener("mouseenter", (e)=>{
-            const rect = container.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            targetX = mouseX;
-            targetY = mouseY;
-            currentX = targetX;
-            currentY = targetY;
-            follower.style.left = `${currentX - followerRadius}px`;
-            follower.style.top = `${currentY - followerRadius}px`;
-            follower.style.transformOrigin = `${followerRadius}px ${followerRadius}px`;
-            requestAnimationFrame(()=>{
-                follower.style.transform = "scale(1)";
-                follower.style.opacity = "1";
-            });
-        });
-        container.addEventListener("mouseleave", ()=>{
-            requestAnimationFrame(()=>{
+    // Function to initialize the mouse follower
+    const initializeMouseFollower = ()=>{
+        const container = document.getElementById("container");
+        const follower = document.getElementById("follower");
+        if (container && follower) {
+            if (window.innerWidth > 991) {
+                container.style.position = "relative";
+                follower.style.position = "absolute";
                 follower.style.transform = "scale(0)";
+                follower.style.transition = "transform 0.25s ease-in, opacity 0.25s ease-in";
+                follower.style.transformOrigin = "center center";
                 follower.style.opacity = "0";
+            }
+            const followerRadius = follower.offsetWidth / 2;
+            let targetX = 0;
+            let targetY = 0;
+            let currentX = 0;
+            let currentY = 0;
+            const lerp = (start, end, t)=>start + (end - start) * t;
+            const updateFollowerPosition = ()=>{
+                if (window.innerWidth > 991) {
+                    currentX = lerp(currentX, targetX, 0.5);
+                    currentY = lerp(currentY, targetY, 0.5);
+                    follower.style.left = `${currentX - followerRadius}px`;
+                    follower.style.top = `${currentY - followerRadius}px`;
+                    requestAnimationFrame(updateFollowerPosition);
+                }
+            };
+            container.addEventListener("mouseenter", (e)=>{
+                if (window.innerWidth > 991) {
+                    const rect = container.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    targetX = mouseX;
+                    targetY = mouseY;
+                    currentX = targetX;
+                    currentY = targetY;
+                    follower.style.left = `${currentX - followerRadius}px`;
+                    follower.style.top = `${currentY - followerRadius}px`;
+                    follower.style.transformOrigin = `${followerRadius}px ${followerRadius}px`;
+                    requestAnimationFrame(()=>{
+                        follower.style.transform = "scale(1)";
+                        follower.style.opacity = "1";
+                    });
+                }
             });
-            setTimeout(()=>{
-                currentX = -followerRadius;
-                currentY = -followerRadius;
-                targetX = currentX;
-                targetY = currentY;
-            }, 250); // matching the transition time
-        });
-        container.addEventListener("mousemove", (e)=>{
-            const rect = container.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            targetX = mouseX;
-            targetY = mouseY;
-        });
-        updateFollowerPosition();
-    }
+            container.addEventListener("mouseleave", ()=>{
+                if (window.innerWidth > 991) {
+                    requestAnimationFrame(()=>{
+                        follower.style.transform = "scale(0)";
+                        follower.style.opacity = "0";
+                    });
+                    setTimeout(()=>{
+                        currentX = -followerRadius;
+                        currentY = -followerRadius;
+                        targetX = currentX;
+                        targetY = currentY;
+                    }, 250); // matching the transition time
+                }
+            });
+            container.addEventListener("mousemove", (e)=>{
+                if (window.innerWidth > 991) {
+                    const rect = container.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    targetX = mouseX;
+                    targetY = mouseY;
+                }
+            });
+            updateFollowerPosition();
+        }
+    };
+    // Variable to track whether the mouse follower is active
+    let mouseFollowerActive = false;
+    // Function to handle enabling/disabling the mouse follower
+    const handleMouseFollower = ()=>{
+        const follower = document.getElementById("follower");
+        if (window.innerWidth > 991) {
+            if (!mouseFollowerActive) {
+                initializeMouseFollower();
+                mouseFollowerActive = true;
+            }
+        } else {
+            mouseFollowerActive = false;
+            if (follower) {
+                // Reset styles when below threshold
+                follower.style.transform = "";
+                follower.style.opacity = "";
+            }
+        }
+    };
+    // Run on initial load and on window resize
+    handleMouseFollower();
+    window.addEventListener("resize", handleMouseFollower);
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
     ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
     // SWAP HERO VIDEO TO MOBILE / BACK
