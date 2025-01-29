@@ -136,10 +136,10 @@ export default aboutPageCode = () => {
       }
 
       const followerRadius = follower.offsetWidth / 2;
-      let targetX = 0;
-      let targetY = 0;
-      let currentX = 0;
-      let currentY = 0;
+      let targetX = -100; // Start outside viewport to avoid (0,0) jump
+      let targetY = -100;
+      let currentX = targetX;
+      let currentY = targetY;
 
       const lerp = (start, end, t) => start + (end - start) * t;
 
@@ -165,7 +165,7 @@ export default aboutPageCode = () => {
           targetX = mouseX;
           targetY = mouseY;
 
-          currentX = targetX;
+          currentX = targetX; // Immediately update to avoid animation lag
           currentY = targetY;
 
           follower.style.left = `${currentX - followerRadius}px`;
@@ -186,11 +186,10 @@ export default aboutPageCode = () => {
           });
 
           setTimeout(() => {
-            currentX = -followerRadius;
-            currentY = -followerRadius;
+            // Keep the last known position instead of resetting off-screen
             targetX = currentX;
             targetY = currentY;
-          }, 400); // Matching the transition time
+          }, 400); // Matches transition time
         }
       });
 
