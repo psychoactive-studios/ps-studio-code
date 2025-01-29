@@ -10,8 +10,8 @@ export default aboutPageCode = () => {
     gsap.from(splitText.chars, {
       scrollTrigger: {
         trigger: element,
-        start: "top 80%",
-        end: "top 20%",
+        start: "top 75%",
+        end: "top 25%",
         scrub: true,
       },
       opacity: 0.05,
@@ -27,8 +27,8 @@ export default aboutPageCode = () => {
     gsap.from(splitText.chars, {
       scrollTrigger: {
         trigger: element,
-        start: "top 80%",
-        end: "top 20%",
+        start: "top 75%",
+        end: "top 25%",
         scrub: true,
       },
       opacity: 1,
@@ -119,7 +119,6 @@ export default aboutPageCode = () => {
 
   ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
   ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
-
   // Function to initialize the mouse follower
   const initializeMouseFollower = () => {
     const container = document.getElementById("container");
@@ -131,7 +130,7 @@ export default aboutPageCode = () => {
         follower.style.position = "absolute";
         follower.style.transform = "scale(0)";
         follower.style.transition =
-          "transform 0.25s ease-in, opacity 0.25s ease-in";
+          "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease-out";
         follower.style.transformOrigin = "center center";
         follower.style.opacity = "0";
       }
@@ -146,8 +145,9 @@ export default aboutPageCode = () => {
 
       const updateFollowerPosition = () => {
         if (window.innerWidth > 991) {
-          currentX = lerp(currentX, targetX, 0.5);
-          currentY = lerp(currentY, targetY, 0.5);
+          // Adjust the lerp value for stickier behavior (lower = more sticky)
+          currentX = lerp(currentX, targetX, 0.2);
+          currentY = lerp(currentY, targetY, 0.2);
 
           follower.style.left = `${currentX - followerRadius}px`;
           follower.style.top = `${currentY - followerRadius}px`;
@@ -171,8 +171,6 @@ export default aboutPageCode = () => {
           follower.style.left = `${currentX - followerRadius}px`;
           follower.style.top = `${currentY - followerRadius}px`;
 
-          follower.style.transformOrigin = `${followerRadius}px ${followerRadius}px`;
-
           requestAnimationFrame(() => {
             follower.style.transform = "scale(1)";
             follower.style.opacity = "1";
@@ -192,7 +190,7 @@ export default aboutPageCode = () => {
             currentY = -followerRadius;
             targetX = currentX;
             targetY = currentY;
-          }, 250); // matching the transition time
+          }, 400); // Matching the transition time
         }
       });
 
@@ -241,50 +239,52 @@ export default aboutPageCode = () => {
   ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
 
   // SWAP HERO VIDEO TO MOBILE / BACK
+  // document.addEventListener("DOMContentLoaded", (event) => {
+  // Cache all video elements
+  // const allVideos = document.querySelectorAll(".background-video");
+  // console.log(allVideos);
 
-  document.addEventListener("DOMContentLoaded", (event) => {
-    // Cache all video elements
-    const allVideos = document.querySelectorAll(".background-video");
+  // // Debounce function to prevent frequent calls
+  // function debounce(func, wait) {
+  //   let timeout;
+  //   return function (...args) {
+  //     clearTimeout(timeout);
+  //     timeout = setTimeout(() => func.apply(this, args), wait);
+  //   };
+  // }
 
-    // Debounce function to prevent frequent calls
-    function debounce(func, wait) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-      };
-    }
+  // // Function to update video sources based on screen width
+  // function updateVideoSources() {
+  //   allVideos.forEach((video) => {
+  //     console.log("update, ", video);
 
-    // Function to update video sources based on screen width
-    function updateVideoSources() {
-      allVideos.forEach((video) => {
-        const currentSrc = video.querySelector("source").src;
-        const screenWidth = window.innerWidth;
+  //     const currentSrc = video.querySelector("source").src;
+  //     const screenWidth = window.innerWidth;
 
-        let newSrc;
-        if (screenWidth <= 479) {
-          newSrc =
-            "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video%20MOBILE.mp4";
-        } else {
-          newSrc =
-            "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video.mp4";
-        }
+  //     let newSrc;
+  //     if (screenWidth <= 479) {
+  //       newSrc =
+  //         "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video%20MOBILE.mp4";
+  //     } else {
+  //       newSrc =
+  //         "https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/About-Page/psychoactive%20texture%20video.mp4";
+  //     }
 
-        if (currentSrc !== newSrc) {
-          video.pause();
-          video.querySelector("source").setAttribute("src", newSrc);
-          video.load();
-          video.play();
-        }
-      });
-    }
+  //     if (currentSrc !== newSrc) {
+  //       video.pause();
+  //       video.querySelector("source").setAttribute("src", newSrc);
+  //       video.load();
+  //       video.play();
+  //     }
+  //   });
+  // }
 
-    // Initial setup
-    updateVideoSources();
+  // // Initial setup
+  // updateVideoSources();
 
-    // Debounced event listener for window resize
-    window.addEventListener("resize", debounce(updateVideoSources, 100));
-  });
+  // // Debounced event listener for window resize
+  // window.addEventListener("resize", debounce(updateVideoSources, 100));
+  // });
 };
 ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
 ///////////////////// ///////////////////// ///////////////////// ///////////////////// ///////////////////// /////////////////////
