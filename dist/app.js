@@ -3003,6 +3003,11 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = aboutPageCode = ()=>{
     // alert("we live on about page");
+    // const pixelRatio = window.devicePixelRatio || 1;
+    // console.log(pixelRatio);
+    // if (pixelRatio > 1) {
+    lottie.setQuality("low"); // Lower quality for high-DPI screens
+    // }
     // GSAP Words fade in animation
     const scrollingHighlightElements = document.querySelectorAll("[data-animation='scrolling-highlight']");
     scrollingHighlightElements.forEach((element)=>{
