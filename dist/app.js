@@ -616,11 +616,11 @@ exports.default = copyEmail = ()=>{
             });
         }, 1400);
     }
-    var remoteHelloBlock = document.getElementById("hello");
+    var remoteHelloBlock = document.getElementById("email-block-hello");
     remoteHelloBlock.addEventListener("click", function() {
         copyToClipboard("hello@psychoactive.co.nz");
     });
-    var careersBlock = document.getElementById("careers");
+    var careersBlock = document.getElementById("email-block-careers");
     careersBlock.addEventListener("click", function() {
         copyToClipboard("careers@psychoactive.co.nz");
     });
@@ -2522,6 +2522,17 @@ function audioImplementation(homePage) {
     // PROJECT LINKS & ALL ELEMENTS WITH CLASS NAME CARD SOUND
     const project_links = document.querySelectorAll(".project-link-wrapper, .project-link, .card-sound");
     playSound(project_links, project_click, project_hover);
+    // ADD STANDARD UI SOUND TO ELEMENT
+    const add_ui_sound = document.querySelectorAll(".add_ui_sound");
+    playSound(add_ui_sound, project_click, project_hover);
+    // ADD STANDARD UI SOUND TO ELEMENT - HOVER ONLY
+    const add_ui_sound_hover = document.querySelectorAll(".add_ui_sound-hover-only");
+    add_ui_sound_hover.forEach((trigger)=>{
+        if (project_hover) trigger.addEventListener("mouseenter", function() {
+            project_hover.currentTime = 0;
+            project_hover.play();
+        });
+    });
     // UNDERLINED TEXT SOUND
     const underline_links = document.querySelectorAll(".gets-underlined, .underlined, .underline-sound");
     // FILTER OUT HOVER SOUND FOR 'OPEN POSITIONS' CAREERS CARDS and CONTENT HUB cards
@@ -3003,11 +3014,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = aboutPageCode = ()=>{
     // alert("we live on about page");
-    // const pixelRatio = window.devicePixelRatio || 1;
-    // console.log(pixelRatio);
-    // if (pixelRatio > 1) {
-    lottie.setQuality("low"); // Lower quality for high-DPI screens
-    // }
     // GSAP Words fade in animation
     const scrollingHighlightElements = document.querySelectorAll("[data-animation='scrolling-highlight']");
     scrollingHighlightElements.forEach((element)=>{

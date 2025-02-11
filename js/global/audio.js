@@ -308,6 +308,23 @@ export default function audioImplementation(homePage) {
   );
   playSound(project_links, project_click, project_hover);
 
+  // ADD STANDARD UI SOUND TO ELEMENT
+  const add_ui_sound = document.querySelectorAll(".add_ui_sound");
+  playSound(add_ui_sound, project_click, project_hover);
+
+  // ADD STANDARD UI SOUND TO ELEMENT - HOVER ONLY
+  const add_ui_sound_hover = document.querySelectorAll(
+    ".add_ui_sound-hover-only"
+  );
+  add_ui_sound_hover.forEach((trigger) => {
+    if (project_hover) {
+      trigger.addEventListener("mouseenter", function () {
+        project_hover.currentTime = 0;
+        project_hover.play();
+      });
+    }
+  });
+
   // UNDERLINED TEXT SOUND
   const underline_links = document.querySelectorAll(
     ".gets-underlined, .underlined, .underline-sound"

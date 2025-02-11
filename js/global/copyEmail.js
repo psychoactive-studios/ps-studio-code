@@ -21,12 +21,12 @@ export default copyEmail = () => {
     }, 1400);
   }
 
-  var remoteHelloBlock = document.getElementById("hello");
+  var remoteHelloBlock = document.getElementById("email-block-hello");
   remoteHelloBlock.addEventListener("click", function () {
     copyToClipboard("hello@psychoactive.co.nz");
   });
 
-  var careersBlock = document.getElementById("careers");
+  var careersBlock = document.getElementById("email-block-careers");
   careersBlock.addEventListener("click", function () {
     copyToClipboard("careers@psychoactive.co.nz");
   });
