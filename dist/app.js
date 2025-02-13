@@ -2533,7 +2533,7 @@ function audioImplementation(homePage) {
             project_hover.play();
         });
     });
-    // UNDERLINED TEXT SOUND
+    // UNDERLINED TEXT SOUNDS
     const underline_links = document.querySelectorAll(".gets-underlined, .underlined, .underline-sound");
     // FILTER OUT HOVER SOUND FOR 'OPEN POSITIONS' CAREERS CARDS and CONTENT HUB cards
     const filter_Out = [

@@ -325,7 +325,7 @@ export default function audioImplementation(homePage) {
     }
   });
 
-  // UNDERLINED TEXT SOUND
+  // UNDERLINED TEXT SOUNDS
   const underline_links = document.querySelectorAll(
     ".gets-underlined, .underlined, .underline-sound"
   );
