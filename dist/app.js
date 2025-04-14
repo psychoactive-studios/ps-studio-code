@@ -3005,7 +3005,7 @@ function getURLContentHub(video, device) {
     const videoSource = sourceElement ? sourceElement.getAttribute("src") : null;
     const match = videoSource.match(/\/([^\/]+)_(mobile|laptop|desktop)\.mp4$/);
     const videoTitle = match ? match[1] : null;
-    const url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/Content-Hub/${videoTitle}_${device}.mp4`;
+    const url = `https://psychoactive-website-media.sfo3.cdn.digitaloceanspaces.com/Responsive-Videos/${videoTitle}_${device}.mp4`;
     return url;
 }
 
