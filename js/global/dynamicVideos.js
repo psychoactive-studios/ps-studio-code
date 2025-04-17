@@ -1,3 +1,10 @@
+// ADDING NEW HOMEPAGE VIDEOS GUIDE
+// 1. compress videos using handbrake, 1 for desktop at 1080p, 1 for laptop at 720p, 1 for mobile at 480p (name video_device.mp4)
+// 2. add the video to the Responsive-Videos folder in the digital ocean space
+// 3. change ID's, titles and poster images in custom code embeds on videos in webflow
+// 4. update titles in LazyLoadHomeVideos and in setAllHomepageVideoSources function
+// 5. ensure trigger elements are set up correctly (section above respective video)
+
 // dynamically set video sources based on screen size
 function setVideoSource(video) {
   let videoSrc;
@@ -77,9 +84,10 @@ export function responsiveNavShowreel() {
 // call to set all homepage video sources
 export function setAllHomepageVideoSources() {
   function setAllVideoSources() {
-    setVideoSource("oasis");
+    setVideoSource("superai");
+    setVideoSource("wow");
+    setVideoSource("sgf-25");
     setVideoSource("showreel");
-    setVideoSource("sgf");
     setVideoSource("metamorphoses");
   }
   setAllVideoSources();
@@ -87,15 +95,23 @@ export function setAllHomepageVideoSources() {
 }
 
 // Main function to lazy load home videos
+// first ID should be the video element from the custom code embed on the homepage
+// second ID should be the trigger element from the section above the video
+// make sure the id is the same as the video name
 export function lazyLoadHomeVideos() {
-  // SGF VIDEO
+  // SUPERAI VIDEO
   setupLazyLoad(
-    document.getElementById("sgf_video"),
+    document.getElementById("superai_video"),
+    document.getElementById("agency-section")
+  );
+  // WOW VIDEO
+  setupLazyLoad(
+    document.getElementById("wow_video"),
     document.getElementById("project-thumbnails")
   );
-  // OASIS VIDEO
+  // SGF VIDEO
   setupLazyLoad(
-    document.getElementById("oasis_video"),
+    document.getElementById("sgf-25_video"),
     document.getElementById("project-thumbnails-2")
   );
   // SHOWREEL VIDEO

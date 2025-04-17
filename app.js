@@ -5,6 +5,7 @@ import loadAnim from "./js/home/loadAnim";
 import audioImplementation from "./js/global/audio";
 import aboutPage from "./js/about/aboutPage";
 import { showreelHome, showreelNav } from "./js/global/showreel";
+import { homeVideoAudio } from "./js/global/videoAudio";
 import { stopCmdClick } from "./js/global/bugFixes";
 import {
   setAllHomepageVideoSources,
@@ -28,9 +29,10 @@ const onReady = () => {
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
   responsiveNavShowreel(); // make nav showreel load video sources dynamically
   if (homePage) {
+    homeVideoAudio(audio); // code for home video audio
     setAllHomepageVideoSources(); // make homepage load video sources dynamically
     lazyLoadHomeVideos(); // make homepage videos lazy load in on scroll
-    showreelHome(audio); // code for homepage showreel video
+    // showreelHome(audio); // code for homepage showreel video
   }
   if (contentHubInner) contentHubDynamicVideos();
   showreelNav(audio); // code for nav showreel video

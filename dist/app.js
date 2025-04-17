@@ -545,6 +545,7 @@ var _audioDefault = parcelHelpers.interopDefault(_audio);
 var _aboutPage = require("./js/about/aboutPage");
 var _aboutPageDefault = parcelHelpers.interopDefault(_aboutPage);
 var _showreel = require("./js/global/showreel");
+var _videoAudio = require("./js/global/videoAudio");
 var _bugFixes = require("./js/global/bugFixes");
 var _dynamicVideos = require("./js/global/dynamicVideos");
 const parceled = true; // for checking localhost vs github pages / CDN
@@ -558,9 +559,10 @@ const onReady = ()=>{
     const audio = (0, _audioDefault.default)(homePage); // adds music, ui-sounds and mute-lottie functionality
     (0, _dynamicVideos.responsiveNavShowreel)(); // make nav showreel load video sources dynamically
     if (homePage) {
+        (0, _videoAudio.homeVideoAudio)(audio); // code for home video audio
         (0, _dynamicVideos.setAllHomepageVideoSources)(); // make homepage load video sources dynamically
         (0, _dynamicVideos.lazyLoadHomeVideos)(); // make homepage videos lazy load in on scroll
-        (0, _showreel.showreelHome)(audio); // code for homepage showreel video
+    // showreelHome(audio); // code for homepage showreel video
     }
     if (contentHubInner) (0, _dynamicVideos.contentHubDynamicVideos)();
     (0, _showreel.showreelNav)(audio); // code for nav showreel video
@@ -593,7 +595,7 @@ const handleEscape = (e)=>{
 };
 window.addEventListener("keydown", handleEscape);
 
-},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/dynamicVideos":"8GDbY","./js/about/aboutPage":"4M5wA"}],"aI83l":[function(require,module,exports) {
+},{"./js/global/copyEmail":"aI83l","./js/global/initCms":"3jJBr","./js/global/preloader":"gnoda","./js/home/loadAnim":"4gmyN","./js/global/audio":"bc3EI","./js/global/showreel":"iVfHp","./js/global/bugFixes":"lTFyP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./js/global/dynamicVideos":"8GDbY","./js/about/aboutPage":"4M5wA","./js/global/videoAudio":"24Zjj"}],"aI83l":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 exports.default = copyEmail = ()=>{
@@ -2894,6 +2896,12 @@ function stopCmdClick() {
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8GDbY":[function(require,module,exports) {
+// ADDING NEW HOMEPAGE VIDEOS GUIDE
+// 1. compress videos using handbrake, 1 for desktop at 1080p, 1 for laptop at 720p, 1 for mobile at 480p (name video_device.mp4)
+// 2. add the video to the Responsive-Videos folder in the digital ocean space
+// 3. change ID's, titles and poster images in custom code embeds on videos in webflow
+// 4. update titles in LazyLoadHomeVideos and in setAllHomepageVideoSources function
+// 5. ensure trigger elements are set up correctly (section above respective video)
 // dynamically set video sources based on screen size
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -2902,6 +2910,9 @@ parcelHelpers.export(exports, "responsiveNavShowreel", ()=>responsiveNavShowreel
 // call to set all homepage video sources
 parcelHelpers.export(exports, "setAllHomepageVideoSources", ()=>setAllHomepageVideoSources);
 // Main function to lazy load home videos
+// first ID should be the video element from the custom code embed on the homepage
+// second ID should be the trigger element from the section above the video
+// make sure the id is the same as the video name
 parcelHelpers.export(exports, "lazyLoadHomeVideos", ()=>lazyLoadHomeVideos);
 parcelHelpers.export(exports, "contentHubDynamicVideos", ()=>contentHubDynamicVideos);
 function setVideoSource(video) {
@@ -2950,19 +2961,22 @@ function responsiveNavShowreel() {
 }
 function setAllHomepageVideoSources() {
     function setAllVideoSources() {
-        setVideoSource("oasis");
+        setVideoSource("superai");
+        setVideoSource("wow");
+        setVideoSource("sgf-25");
         setVideoSource("showreel");
-        setVideoSource("sgf");
         setVideoSource("metamorphoses");
     }
     setAllVideoSources();
     debounceWindowResizedListener(setAllVideoSources);
 }
 function lazyLoadHomeVideos() {
+    // SUPERAI VIDEO
+    setupLazyLoad(document.getElementById("superai_video"), document.getElementById("agency-section"));
+    // WOW VIDEO
+    setupLazyLoad(document.getElementById("wow_video"), document.getElementById("project-thumbnails"));
     // SGF VIDEO
-    setupLazyLoad(document.getElementById("sgf_video"), document.getElementById("project-thumbnails"));
-    // OASIS VIDEO
-    setupLazyLoad(document.getElementById("oasis_video"), document.getElementById("project-thumbnails-2"));
+    setupLazyLoad(document.getElementById("sgf-25_video"), document.getElementById("project-thumbnails-2"));
     // SHOWREEL VIDEO
     setupLazyLoad(document.getElementById("showreel_video"), document.getElementById("project-thumbnails-3"));
     // HERO TESSELATION VIDEO
@@ -3511,6 +3525,94 @@ exports.default = aboutPageCode = ()=>{
  //     });
  //   }
  // };
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"24Zjj":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "homeVideoAudio", ()=>homeVideoAudio);
+function homeVideoAudio(audio) {
+    const fadeMusicToggle = audio?.fadeToggle;
+    const isMuted = audio?.mutedState;
+    const playVideoTriggers = document.querySelectorAll(".home-hover-outer");
+    const allHomepageVideos = document.querySelectorAll(".home-video");
+    // Reduce volume of all homepage videos to 0.7`
+    allHomepageVideos.forEach((video)=>{
+        if (video) video.volume = 0.7;
+    });
+    // Map to store click states for each video
+    const videoClickStates = new Map();
+    const videoOutOfViewStates = new Map();
+    // homepage video click logic
+    playVideoTriggers.forEach((trigger)=>{
+        const currentVideo = trigger.querySelector(".home-video"); // get current video
+        const currentPlayWrapper = trigger.querySelector(".play-video-wrapper");
+        const currentPlayBtn = trigger.querySelector(".view-project-btn");
+        if (!currentVideo) return; // exit if no video found
+        // Initialize states for this video
+        videoClickStates.set(currentVideo, "none");
+        videoOutOfViewStates.set(currentVideo, false);
+        // catch for if user scrolls video out of view or clicks on nav
+        currentVideo.addEventListener("pause", function() {
+            videoOutOfViewStates.set(currentVideo, true);
+            if (currentVideo.muted == false && // check if video is unmuted
+            document.visibilityState == "visible" // check if user is not in another tab
+            ) {
+                secondClickLogic(currentVideo, currentPlayWrapper);
+                videoClickStates.set(currentVideo, "none"); //reset click logic
+            }
+        }, false);
+        // trigger click logic
+        trigger.addEventListener("click", (e)=>{
+            // Check if the click was on the view project button or any of its children
+            if (currentPlayBtn && (e.target === currentPlayBtn || currentPlayBtn.contains(e.target))) {
+                e.stopPropagation();
+                return; // Exit if so
+            }
+            const currentClickState = videoClickStates.get(currentVideo);
+            switch(currentClickState){
+                case "none":
+                    firstClickLogic(currentVideo, currentPlayWrapper);
+                    break;
+                case "once":
+                    secondClickLogic(currentVideo, currentPlayWrapper);
+                    break;
+                case "twice":
+                    thirdClickLogic(currentVideo, currentPlayWrapper);
+                    break;
+                default:
+                    firstClickLogic(currentVideo, currentPlayWrapper);
+            }
+        });
+    });
+    // FIRST CLICK LOGIC
+    function firstClickLogic(currentVideo, currentPlayWrapper) {
+        currentVideo.muted = false; //unmute video
+        currentVideo.currentTime = 0; //restart video
+        currentPlayWrapper.style.display = "none"; //hide play ui
+        //if unmuted, toggle music fade
+        if (fadeMusicToggle && !isMuted()) fadeMusicToggle();
+        videoClickStates.set(currentVideo, "once"); //update click logic
+        videoOutOfViewStates.set(currentVideo, false); //ensure out of view logic is false
+    }
+    // SECOND CLICK LOGIC
+    function secondClickLogic(currentVideo, currentPlayWrapper) {
+        currentVideo.muted = true; //mute video again
+        currentPlayWrapper.style.opacity = "100"; // set unmute opacity to 100
+        currentPlayWrapper.style.display = "flex"; // display unmute ui
+        //if unmuted, toggle music fade
+        if (fadeMusicToggle && !isMuted()) fadeMusicToggle();
+        videoClickStates.set(currentVideo, "twice"); //update click logic
+    }
+    // THIRD CLICK LOGIC
+    function thirdClickLogic(currentVideo, currentPlayWrapper) {
+        currentVideo.muted = false; //unmute video
+        currentPlayWrapper.style.display = "none"; //hide unmute ui
+        videoClickStates.set(currentVideo, "once"); //update click logic
+        //if unmuted, toggle music fade
+        if (fadeMusicToggle && !isMuted()) fadeMusicToggle();
+        videoOutOfViewStates.set(currentVideo, false); //ensure out of view logic is false
+    }
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["4MuEU","igcvL"], "igcvL", "parcelRequirebfdf")
 
