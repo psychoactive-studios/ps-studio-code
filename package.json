@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel app.js --hmr-port 50619"
+    "start": "parcel app.js --hmr-port 50619",
+    "build": "parcel build app.js"
   },
   "repository": {
     "type": "git",
