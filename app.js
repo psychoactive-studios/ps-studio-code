@@ -22,7 +22,7 @@ const contentHubOuter = currentPage === "/content-hub/";
 const contentHubInner =
   currentPage.startsWith("/content-hub/") && !contentHubOuter;
 
-const aboutPage = currentPage == "/about-new"; // change to just about later
+const isAboutPage = currentPage == "/about-new"; // change to just about later
 
 const onReady = () => {
   readyPreloader(); // hides preloader and add event listener for frog lottie
@@ -43,7 +43,7 @@ const onReady = () => {
     e.target = "_blank";
   });
 
-  if (aboutPage) aboutPage(); // all custom code for about page 
+  if (isAboutPage) aboutPage(); // all custom code for about page 
   stopCmdClick(); // prevent command click from triggering page transition
 };
 

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel app.js --hmr-port 50619",
-    "build": "parcel build app.js --public-url ./"
+    "build": "parcel build app.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/psychoactive-studios/ps-studio-code/issues"
   },
-  "homepage": "https://psychoactive-studios.github.io/ps-studio-code",
+  "homepage": "https://github.com/psychoactive-studios/ps-studio-code#readme",
   "dependencies": {
     "animejs": "^3.2.1",
     "bodymovin": "^4.13.0",
