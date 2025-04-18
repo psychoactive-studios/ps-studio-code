@@ -27,43 +27,25 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: "npm"
+          node-version: 18 # Matches Parcel v2 requirements
 
       - name: Install dependencies
-        run: npm ci --omit=dev
+        run: npm install
 
       - name: Build with Parcel
-        run: |
-          npx parcel build app.js \
-            --dist-dir ./dist \
-            --no-source-maps \
-            --public-url ./
+        run: npm run build # This runs "parcel build app.js" from your package.json
 
-      - name: Clean problematic files
-        run: |
-          # Remove all symlinks and special files
-          find ./dist -type l -delete
-          find ./dist -name ".*" -not -name ".nojekyll" -delete
-          rm -rf ./dist/.cache ./dist/node_modules
+      - name: Remove symlinks (Parcel sometimes creates them)
+        run: find ./dist -type l -delete
 
-      - name: Verify build output
-        run: |
-          echo "Build contents:"
-          ls -la ./dist
-          echo "Total size:"
-          du -sh ./dist
+      - name: Add .nojekyll file
+        run: touch ./dist/.nojekyll
 
-      - name: Add required files
-        run: |
-          touch ./dist/.nojekyll
-          [ -f ./dist/index.html ] || echo "<!DOCTYPE html><html><body><script src='app.js'></script></body></html>" > ./dist/index.html
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
         with:
           path: ./dist
-          name: github-pages
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
