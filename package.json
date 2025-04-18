@@ -2,7 +2,6 @@
   "name": "ps-studio-code",
   "version": "1.0.0",
   "description": "Custom code for psychoactive.co.nz",
-  "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel app.js --hmr-port 50619",
