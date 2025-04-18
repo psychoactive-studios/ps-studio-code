@@ -27,22 +27,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18 # Matches Parcel v2 requirements
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
 
       - name: Build with Parcel
-        run: npm run build # This runs "parcel build app.js" from your package.json
+        run: npm run build
 
-      - name: Remove symlinks (Parcel sometimes creates them)
+      - name: Remove symlinks
         run: find ./dist -type l -delete
 
       - name: Add .nojekyll file
         run: touch ./dist/.nojekyll
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
