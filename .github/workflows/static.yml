@@ -1,3 +1,4 @@
+# Updated static.yml
 name: Deploy static content to Pages
 
 on:
@@ -22,16 +23,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4  # Updated to v4
+        uses: actions/checkout@v4
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4  # Updated to v4
+        uses: actions/configure-pages@v4 # Must be v3+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: "."
+          path: .
+          name: github-pages # Explicit name required
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4  # Updated to v4
+        uses: actions/deploy-pages@v4
