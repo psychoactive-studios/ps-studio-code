@@ -96,8 +96,22 @@ export default loadAnim = () => {
   };
 
   //if page has been visited - don't animate
-  if (hasVisited || $(window).width() <= 1024) {
-    // remove black cover from DOM if user has visited site
+  let navigatedWithBackButton = false;
+
+  // Listen for back/forward navigation
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) {
+      navigatedWithBackButton = true;
+      runVisitedFlow();
+    }
+  });
+
+  // const hasVisited = sessionStorage.getItem("washere") === "true";
+
+  function runVisitedFlow() {
+    // Avoid running twice
+    if ($("#black-cover").length === 0) return;
+
     $("#black-cover").remove();
 
     $(".landing-video-container").css({
@@ -109,26 +123,15 @@ export default loadAnim = () => {
 
     visited(0);
   }
-  // if page not visited - animate
-  else {
+
+  // Main condition check
+  if (hasVisited || $(window).width() <= 1024) {
+    runVisitedFlow();
+  } else {
+    // If page not visited - animate
     $("#preloader").css({ display: "block" });
 
-    // Add visibility change handler to handle back button navigation
-    document.addEventListener("visibilitychange", function () {
-      if (document.visibilityState === "visible" && hasVisited) {
-        $("#black-cover").remove();
-        $(".landing-video-container").css({
-          width: "80vw",
-          height: "40vh",
-          position: "relative",
-          opacity: 0,
-        });
-        visited(0);
-      }
-    });
-
     $("#trigger,#enter-btn").on("click", function () {
-      // remove black cover from DOM if user has visited site
       $("#black-cover").remove();
 
       $(".landing-video-container")
@@ -154,7 +157,6 @@ export default loadAnim = () => {
           }
         );
 
-      // do stuff
       console.log("Welcome, stranger !");
       sessionStorage.setItem("washere", true);
     });
