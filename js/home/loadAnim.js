@@ -107,9 +107,9 @@ export default loadAnim = () => {
     // Shared visited logic
     function runVisitedFlow() {
       // if ($("#black-cover").length === 0) return;
-      console.log("black cover exists", $("#black-cover"));
       $("#black-cover").remove();
-      console.log("removed black cover", $("#black-cover"));
+      $(".menu-transition-cover").remove();
+      
       $(".landing-video-container").css({
         width: "80vw",
         height: "40vh",
