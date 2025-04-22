@@ -119,6 +119,7 @@ export default loadAnim = () => {
 
       visited(0);
     }
+    console.log(hasVisited, isMobile, cameFromBackButton);
 
     // Check if visited, mobile, or back/forward navigation
     if (hasVisited || isMobile || cameFromBackButton) {
