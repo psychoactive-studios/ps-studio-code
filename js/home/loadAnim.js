@@ -98,11 +98,11 @@ export default loadAnim = () => {
   //if page has been visited - don't animate
   window.addEventListener("pageshow", function (event) {
     const isMobile = $(window).width() <= 1024;
-    // Check if document is already loaded and we have session storage
-    const cameFromBackButton = document.readyState === "complete" && hasVisited;
+    const cameFromBackButton = event.persisted; // Checks if page was restored from cache (back/forward navigation)
+
     console.log("cameFromBackButton", cameFromBackButton);
     console.log("document.readyState", document.readyState);
-    console.log("hasVisited", hasVisited);
+    console.log("hasVisited", hasVisited); // Uses the already-declared `hasVisited`
 
     // Shared visited logic
     function runVisitedFlow() {
@@ -120,6 +120,7 @@ export default loadAnim = () => {
       visited(0);
     }
 
+    // Check if visited, mobile, or back/forward navigation
     if (hasVisited || isMobile || cameFromBackButton) {
       runVisitedFlow();
     } else {
@@ -153,7 +154,7 @@ export default loadAnim = () => {
           );
 
         console.log("Welcome, stranger !");
-        sessionStorage.setItem("washere", true);
+        sessionStorage.setItem("washere", "true"); // Ensure this is stored as a string
       });
     }
   });
