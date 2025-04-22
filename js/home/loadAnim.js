@@ -100,9 +100,9 @@ export default loadAnim = () => {
     const isMobile = $(window).width() <= 1024;
     // Check if document is already loaded and we have session storage
     const cameFromBackButton = document.readyState === "complete" && hasVisited;
-    // console.log("cameFromBackButton", cameFromBackButton);
-    // console.log("document.readyState", document.readyState);
-    // console.log("hasVisited", hasVisited);
+    console.log("cameFromBackButton", cameFromBackButton);
+    console.log("document.readyState", document.readyState);
+    console.log("hasVisited", hasVisited);
 
     // Shared visited logic
     function runVisitedFlow() {
