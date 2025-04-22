@@ -109,7 +109,7 @@ export default loadAnim = () => {
       // if ($("#black-cover").length === 0) return;
       $("#black-cover").remove();
       $(".menu-transition-cover").remove();
-      
+
       $(".landing-video-container").css({
         width: "80vw",
         height: "40vh",
@@ -119,6 +119,7 @@ export default loadAnim = () => {
 
       visited(0);
     }
+    // test
     console.log(hasVisited, isMobile, cameFromBackButton);
 
     // Check if visited, mobile, or back/forward navigation
