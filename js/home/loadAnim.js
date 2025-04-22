@@ -96,69 +96,61 @@ export default loadAnim = () => {
   };
 
   //if page has been visited - don't animate
-  let navigatedWithBackButton = false;
-
-  // Listen for back/forward navigation
   window.addEventListener("pageshow", function (event) {
-    if (event.persisted) {
-      navigatedWithBackButton = true;
-      runVisitedFlow();
-    }
-  });
+    const isMobile = $(window).width() <= 1024;
+    const cameFromBackButton = event.persisted;
 
-  // const hasVisited = sessionStorage.getItem("washere") === "true";
+    // Shared visited logic
+    function runVisitedFlow() {
+      if ($("#black-cover").length === 0) return;
 
-  function runVisitedFlow() {
-    // Avoid running twice
-    if ($("#black-cover").length === 0) return;
-
-    $("#black-cover").remove();
-
-    $(".landing-video-container").css({
-      width: "80vw",
-      height: "40vh",
-      position: "relative",
-      opacity: 0,
-    });
-
-    visited(0);
-  }
-
-  // Main condition check
-  if (hasVisited || $(window).width() <= 1024) {
-    runVisitedFlow();
-  } else {
-    // If page not visited - animate
-    $("#preloader").css({ display: "block" });
-
-    $("#trigger,#enter-btn").on("click", function () {
       $("#black-cover").remove();
 
-      $(".landing-video-container")
-        .animate(
-          {
-            width: "100vw",
-            height: "100vh",
-            opacity: 1,
-          },
-          1000
-        )
-        .delay(2000)
-        .animate(
-          {
-            top: topMargin,
-            width: "80vw",
-            height: "40vh",
-            position: "relative",
-          },
-          1000,
-          function () {
-            onOpen(0);
-          }
-        );
+      $(".landing-video-container").css({
+        width: "80vw",
+        height: "40vh",
+        position: "relative",
+        opacity: 0,
+      });
 
-      console.log("Welcome, stranger !");
-      sessionStorage.setItem("washere", true);
-    });
-  }
+      visited(0);
+    }
+
+    if (hasVisited || isMobile || cameFromBackButton) {
+      runVisitedFlow();
+    } else {
+      // First-time visitor animation
+      $("#preloader").css({ display: "block" });
+
+      $("#trigger,#enter-btn").on("click", function () {
+        $("#black-cover").remove();
+
+        $(".landing-video-container")
+          .animate(
+            {
+              width: "100vw",
+              height: "100vh",
+              opacity: 1,
+            },
+            1000
+          )
+          .delay(2000)
+          .animate(
+            {
+              top: topMargin,
+              width: "80vw",
+              height: "40vh",
+              position: "relative",
+            },
+            1000,
+            function () {
+              onOpen(0);
+            }
+          );
+
+        console.log("Welcome, stranger !");
+        sessionStorage.setItem("washere", true);
+      });
+    }
+  });
 };
