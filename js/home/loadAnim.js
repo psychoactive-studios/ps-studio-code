@@ -113,6 +113,20 @@ export default loadAnim = () => {
   else {
     $("#preloader").css({ display: "block" });
 
+    // Add visibility change handler to handle back button navigation
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "visible" && hasVisited) {
+        $("#black-cover").remove();
+        $(".landing-video-container").css({
+          width: "80vw",
+          height: "40vh",
+          position: "relative",
+          opacity: 0,
+        });
+        visited(0);
+      }
+    });
+
     $("#trigger,#enter-btn").on("click", function () {
       // remove black cover from DOM if user has visited site
       $("#black-cover").remove();

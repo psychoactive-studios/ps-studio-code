@@ -25,6 +25,7 @@ const contentHubInner =
 const isAboutPage = currentPage == "/about-new"; // change to just about later
 
 const onReady = () => {
+  // alert("ready");
   readyPreloader(); // hides preloader and add event listener for frog lottie
   const audio = audioImplementation(homePage); // adds music, ui-sounds and mute-lottie functionality
   responsiveNavShowreel(); // make nav showreel load video sources dynamically
@@ -43,7 +44,7 @@ const onReady = () => {
     e.target = "_blank";
   });
 
-  if (isAboutPage) aboutPage(); // all custom code for about page 
+  if (isAboutPage) aboutPage(); // all custom code for about page
   stopCmdClick(); // prevent command click from triggering page transition
 };
 
