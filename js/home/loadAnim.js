@@ -106,10 +106,10 @@ export default loadAnim = () => {
 
     // Shared visited logic
     function runVisitedFlow() {
-      if ($("#black-cover").length === 0) return;
-
+      // if ($("#black-cover").length === 0) return;
+      console.log("black cover exists", $("#black-cover"));
       $("#black-cover").remove();
-
+      console.log("removed black cover", $("#black-cover"));
       $(".landing-video-container").css({
         width: "80vw",
         height: "40vh",
@@ -122,6 +122,7 @@ export default loadAnim = () => {
 
     // Check if visited, mobile, or back/forward navigation
     if (hasVisited || isMobile || cameFromBackButton) {
+      console.log("runVisitedFlow");
       runVisitedFlow();
     } else {
       // First-time visitor animation
