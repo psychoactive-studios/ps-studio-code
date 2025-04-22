@@ -6,7 +6,7 @@ import audioImplementation from "./js/global/audio";
 import aboutPage from "./js/about/aboutPage";
 import { showreelHome, showreelNav } from "./js/global/showreel";
 import { homeVideoAudio } from "./js/global/videoAudio";
-import { stopCmdClick } from "./js/global/bugFixes";
+import { stopCmdClick, removeBlackCover } from "./js/global/bugFixes";
 import {
   setAllHomepageVideoSources,
   responsiveNavShowreel,
@@ -46,6 +46,7 @@ const onReady = () => {
 
   if (isAboutPage) aboutPage(); // all custom code for about page
   stopCmdClick(); // prevent command click from triggering page transition
+  removeBlackCover(); // remove black cover on page load
 };
 
 const onLoading = () => {

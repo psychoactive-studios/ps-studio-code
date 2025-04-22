@@ -100,15 +100,9 @@ export default loadAnim = () => {
     const isMobile = $(window).width() <= 1024;
     const cameFromBackButton = event.persisted; // Checks if page was restored from cache (back/forward navigation)
 
-    console.log("cameFromBackButton", cameFromBackButton);
-    console.log("document.readyState", document.readyState);
-    console.log("hasVisited", hasVisited); // Uses the already-declared `hasVisited`
-
     // Shared visited logic
     function runVisitedFlow() {
-      // if ($("#black-cover").length === 0) return;
       $("#black-cover").remove();
-      $(".menu-transition-cover").remove();
 
       $(".landing-video-container").css({
         width: "80vw",
@@ -116,15 +110,10 @@ export default loadAnim = () => {
         position: "relative",
         opacity: 0,
       });
-
-      visited(0);
     }
-    // test
-    console.log(hasVisited, isMobile, cameFromBackButton);
 
     // Check if visited, mobile, or back/forward navigation
     if (hasVisited || isMobile || cameFromBackButton) {
-      console.log("runVisitedFlow");
       runVisitedFlow();
     } else {
       // First-time visitor animation
