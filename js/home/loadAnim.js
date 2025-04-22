@@ -98,7 +98,11 @@ export default loadAnim = () => {
   //if page has been visited - don't animate
   window.addEventListener("pageshow", function (event) {
     const isMobile = $(window).width() <= 1024;
-    const cameFromBackButton = event.persisted;
+    // Check if document is already loaded and we have session storage
+    const cameFromBackButton = document.readyState === "complete" && hasVisited;
+    // console.log("cameFromBackButton", cameFromBackButton);
+    // console.log("document.readyState", document.readyState);
+    // console.log("hasVisited", hasVisited);
 
     // Shared visited logic
     function runVisitedFlow() {
