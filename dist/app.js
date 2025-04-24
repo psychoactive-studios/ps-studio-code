@@ -575,6 +575,7 @@ const onReady = ()=>{
     });
     if (isAboutPage) (0, _aboutPageDefault.default)(); // all custom code for about page
     (0, _bugFixes.stopCmdClick)(); // prevent command click from triggering page transition
+    (0, _bugFixes.removeBlackCover)(); // remove black cover on page load
 };
 const onLoading = ()=>{
     (0, _preloader.loopLogoLoading)();
@@ -990,23 +991,19 @@ exports.default = loadAnim = ()=>{
     //if page has been visited - don't animate
     window.addEventListener("pageshow", function(event) {
         const isMobile = $(window).width() <= 1024;
-        // Check if document is already loaded and we have session storage
-        const cameFromBackButton = document.readyState === "complete" && hasVisited;
-        // console.log("cameFromBackButton", cameFromBackButton);
-        // console.log("document.readyState", document.readyState);
-        // console.log("hasVisited", hasVisited);
+        const cameFromBackButton = event.persisted; // Checks if page was restored from cache (back/forward navigation)
         // Shared visited logic
         function runVisitedFlow() {
-            if ($("#black-cover").length === 0) return;
             $("#black-cover").remove();
+            visited(0);
             $(".landing-video-container").css({
                 width: "80vw",
                 height: "40vh",
                 position: "relative",
                 opacity: 0
             });
-            visited(0);
         }
+        // Check if visited, mobile, or back/forward navigation
         if (hasVisited || isMobile || cameFromBackButton) runVisitedFlow();
         else {
             // First-time visitor animation
@@ -1028,7 +1025,7 @@ exports.default = loadAnim = ()=>{
                     onOpen(0);
                 });
                 console.log("Welcome, stranger !");
-                sessionStorage.setItem("washere", true);
+                sessionStorage.setItem("washere", "true"); // Ensure this is stored as a string
             });
         }
     });
@@ -2898,11 +2895,27 @@ function showreelNav(audio) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "stopCmdClick", ()=>stopCmdClick);
+parcelHelpers.export(exports, "removeBlackCover", ()=>removeBlackCover);
 function stopCmdClick() {
     document.addEventListener("click", function(e) {
         if (e.ctrlKey || e.metaKey) document.querySelectorAll(".menu-transition-cover").forEach((element)=>{
             element.setAttribute("style", "visibility:hidden !important");
         });
+    });
+}
+//if page has been visited - don't animate
+function removeBlackCover() {
+    var hasVisited = sessionStorage.getItem("washere");
+    window.addEventListener("pageshow", function(event) {
+        const isMobile = $(window).width() <= 1024;
+        const cameFromBackButton = event.persisted; // Checks if page was restored from cache (back/forward navigation)
+        // Shared visited logic
+        function runVisitedFlow() {
+            $(".menu-transition-cover").remove();
+        // visited(0);
+        }
+        // Check if visited, mobile, or back/forward navigation
+        if (hasVisited || isMobile || cameFromBackButton) runVisitedFlow();
     });
 }
 

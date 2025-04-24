@@ -19,7 +19,7 @@ function removeBlackCover() {
     // Shared visited logic
     function runVisitedFlow() {
       $(".menu-transition-cover").remove();
-      visited(0);
+      // visited(0);
     }
 
     // Check if visited, mobile, or back/forward navigation

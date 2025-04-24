@@ -103,7 +103,7 @@ export default loadAnim = () => {
     // Shared visited logic
     function runVisitedFlow() {
       $("#black-cover").remove();
-
+      visited(0);
       $(".landing-video-container").css({
         width: "80vw",
         height: "40vh",
