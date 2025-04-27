@@ -9,19 +9,12 @@ export default loadAnim = () => {
     topMargin = "6vw";
   }
 
-  // let targetQuery = ".landing-text-box";
-  // original
-  // let targetQuery = ".landing-text-box, .project-card-parent";
-
   //get cookies
   var hasVisited = sessionStorage.getItem("washere");
+  // new hamburger blocker
+  $(".navigation-bar").css({ display: "none" });
 
-  // anime.set(targetQuery, {
-  //   opacity: 0,
-  //   translateY: "4vh",
-  // });
-
-  anime.set("#hamburger, .logos-box, #mute-btn-container", {
+  anime.set("#hamburger, .logos-box, #mute-btn-container, .navigation-bar", {
     opacity: 0,
     translateY: "-4vh",
   });
@@ -46,7 +39,7 @@ export default loadAnim = () => {
     $(".navigation-bar").css({ display: "block" });
 
     anime({
-      targets: "#hamburger, .logos-box, #mute-btn-container",
+      targets: "#hamburger, .logos-box, #mute-btn-container, .navigation-bar",
       opacity: { value: 1, duration: 800, easing: "easeOutSine" },
       translateY: {
         value: ["-4vh", "0vh"],
@@ -55,20 +48,14 @@ export default loadAnim = () => {
       },
       delay: anime.stagger(500, { start: delay }),
     });
-
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 800, easing: "easeOutSine" },
-    //   translateY: { value: 0, duration: 1000, easing: "easeOutQuad" },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
   };
+
   const visited = (delay) => {
     $(".body-dark").css({ overflow: "visible" });
     $(".preloader-background").css({ display: "none" });
     $("#preloader").css({ display: "none" });
-    $(".navigation-bar").css({ display: "block;" });
-    $("#mute-btn-container").css({ display: "block;" });
+    $(".navigation-bar").css({ display: "block" });
+    $("#mute-btn-container").css({ display: "block" });
 
     anime({
       targets: ".landing-video-container",
@@ -82,17 +69,6 @@ export default loadAnim = () => {
       translateY: { value: ["0", "0vh"], duration: 0, easing: "easeOutQuad" },
       delay: anime.stagger(500, { start: delay }),
     });
-
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 0, easing: "easeOutSine" },
-    //   translateY: {
-    //     value: ["0vh", "0vh"],
-    //     duration: 1000,
-    //     easing: "easeOutQuad",
-    //   },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
   };
 
   //if page has been visited - don't animate
@@ -102,6 +78,8 @@ export default loadAnim = () => {
 
     // Shared visited logic
     function runVisitedFlow() {
+      console.log("runVisitedFlow");
+
       $("#black-cover").remove();
       visited(0);
       $(".landing-video-container").css({
@@ -116,10 +94,12 @@ export default loadAnim = () => {
     if (hasVisited || isMobile || cameFromBackButton) {
       runVisitedFlow();
     } else {
+      console.log("runFirstTime");
       // First-time visitor animation
       $("#preloader").css({ display: "block" });
 
       $("#trigger,#enter-btn").on("click", function () {
+        console.log("trigger clicked");
         $("#black-cover").remove();
 
         $(".landing-video-container")

@@ -863,16 +863,13 @@ exports.default = loadAnim = ()=>{
     var topMargin;
     if ($(window).width() <= 1024) topMargin = "15vh";
     else topMargin = "6vw";
-    // let targetQuery = ".landing-text-box";
-    // original
-    // let targetQuery = ".landing-text-box, .project-card-parent";
     //get cookies
     var hasVisited = sessionStorage.getItem("washere");
-    // anime.set(targetQuery, {
-    //   opacity: 0,
-    //   translateY: "4vh",
-    // });
-    (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container", {
+    // new hamburger blocker
+    $(".navigation-bar").css({
+        display: "none"
+    });
+    (0, _animejsDefault.default).set("#hamburger, .logos-box, #mute-btn-container, .navigation-bar", {
         opacity: 0,
         translateY: "-4vh"
     });
@@ -908,7 +905,7 @@ exports.default = loadAnim = ()=>{
             display: "block"
         });
         (0, _animejsDefault.default)({
-            targets: "#hamburger, .logos-box, #mute-btn-container",
+            targets: "#hamburger, .logos-box, #mute-btn-container, .navigation-bar",
             opacity: {
                 value: 1,
                 duration: 800,
@@ -926,12 +923,6 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 800, easing: "easeOutSine" },
-    //   translateY: { value: 0, duration: 1000, easing: "easeOutQuad" },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
     };
     const visited = (delay)=>{
         $(".body-dark").css({
@@ -944,10 +935,10 @@ exports.default = loadAnim = ()=>{
             display: "none"
         });
         $(".navigation-bar").css({
-            display: "block;"
+            display: "block"
         });
         $("#mute-btn-container").css({
-            display: "block;"
+            display: "block"
         });
         (0, _animejsDefault.default)({
             targets: ".landing-video-container",
@@ -977,16 +968,6 @@ exports.default = loadAnim = ()=>{
                 start: delay
             })
         });
-    // anime({
-    //   targets: targetQuery,
-    //   opacity: { value: 1, duration: 0, easing: "easeOutSine" },
-    //   translateY: {
-    //     value: ["0vh", "0vh"],
-    //     duration: 1000,
-    //     easing: "easeOutQuad",
-    //   },
-    //   delay: anime.stagger(500, { start: delay + 1000 }),
-    // });
     };
     //if page has been visited - don't animate
     window.addEventListener("pageshow", function(event) {
@@ -994,6 +975,7 @@ exports.default = loadAnim = ()=>{
         const cameFromBackButton = event.persisted; // Checks if page was restored from cache (back/forward navigation)
         // Shared visited logic
         function runVisitedFlow() {
+            console.log("runVisitedFlow");
             $("#black-cover").remove();
             visited(0);
             $(".landing-video-container").css({
@@ -1006,11 +988,13 @@ exports.default = loadAnim = ()=>{
         // Check if visited, mobile, or back/forward navigation
         if (hasVisited || isMobile || cameFromBackButton) runVisitedFlow();
         else {
+            console.log("runFirstTime");
             // First-time visitor animation
             $("#preloader").css({
                 display: "block"
             });
             $("#trigger,#enter-btn").on("click", function() {
+                console.log("trigger clicked");
                 $("#black-cover").remove();
                 $(".landing-video-container").animate({
                     width: "100vw",
