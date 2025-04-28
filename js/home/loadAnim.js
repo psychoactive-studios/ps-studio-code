@@ -64,7 +64,7 @@ export default loadAnim = () => {
     });
 
     anime({
-      targets: "#hamburger, .logos-box, #mute-btn-container",
+      targets: "#hamburger, .logos-box, #mute-btn-container, .navigation-bar",
       opacity: { value: 1, duration: 0, easing: "easeOutSine" },
       translateY: { value: ["0", "0vh"], duration: 0, easing: "easeOutQuad" },
       delay: anime.stagger(500, { start: delay }),

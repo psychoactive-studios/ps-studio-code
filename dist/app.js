@@ -950,7 +950,7 @@ exports.default = loadAnim = ()=>{
             delay: delay
         });
         (0, _animejsDefault.default)({
-            targets: "#hamburger, .logos-box, #mute-btn-container",
+            targets: "#hamburger, .logos-box, #mute-btn-container, .navigation-bar",
             opacity: {
                 value: 1,
                 duration: 0,
