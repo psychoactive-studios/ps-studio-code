@@ -553,7 +553,7 @@ const currentPage = window.location.pathname;
 const homePage = currentPage == "/";
 const contentHubOuter = currentPage === "/content-hub/";
 const contentHubInner = currentPage.startsWith("/content-hub/") && !contentHubOuter;
-const isAboutPage = currentPage == "/about-new"; // change to just about later
+const isAboutPage = currentPage == "/about"; // change to just about later
 const onReady = ()=>{
     // alert("ready");
     (0, _preloader.readyPreloader)(); // hides preloader and add event listener for frog lottie

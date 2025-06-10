@@ -22,7 +22,7 @@ const contentHubOuter = currentPage === "/content-hub/";
 const contentHubInner =
   currentPage.startsWith("/content-hub/") && !contentHubOuter;
 
-const isAboutPage = currentPage == "/about-new"; // change to just about later
+const isAboutPage = currentPage == "/about"; // change to just about later
 
 const onReady = () => {
   // alert("ready");
