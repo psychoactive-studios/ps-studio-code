@@ -18,7 +18,7 @@ function setVideoSource(video) {
     videoSrc = isContentHub
       ? getURLContentHub(videoElem, "mobile")
       : getURL(video, "mobile");
-  } else if (window.innerWidth <= 1680) {
+  } else if (window.innerWidth <= 1279) {
     videoSrc = isContentHub
       ? getURLContentHub(videoElem, "laptop")
       : getURL(video, "laptop");
